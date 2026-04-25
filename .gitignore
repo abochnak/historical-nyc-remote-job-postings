@@ -1,18 +1,16 @@
-# The source repo cloned for scraping — not committed
-repo/
+# Scraper internal checkpoint DB (regenerated on each run)
+data/jobs.db
 
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
 .env
 .venv
 venv/
 
-# Scraper checkpoint (internal, regenerated on re-run)
-nyc_jobs_v2.db
-scraper_checkpoint.txt
-
 # OS
 .DS_Store
 Thumbs.db
+
+# Local SQLite working copy (rebuilt from jobs.sql on first run of update.py)
+data/jobs.db
