@@ -1,0 +1,18 @@
+# The source repo cloned for scraping — not committed
+repo/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv
+venv/
+
+# Scraper checkpoint (internal, regenerated on re-run)
+nyc_jobs_v2.db
+scraper_checkpoint.txt
+
+# OS
+.DS_Store
+Thumbs.db
