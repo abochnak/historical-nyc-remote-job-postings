@@ -1,9 +1,5 @@
 id,company_name,reason,blocked_title,blocked_company,blocked_date
-729044c5-515d-4337-b698-4093c9cfff8a,The New School,Not a tech internship,Student Assistant Specialist J&D Capstone,The New School,2026-04-25T00:01:07Z
-f301da26-1c76-4bd7-a703-7a4a42159c02,Output Biosciences,Research ML not undergrad,"Research Intern, Machine Learning",Output Biosciences,2026-04-25T00:01:07Z
-200d58f3-cae5-46c2-a603-5e289e29b19b,Environmental Defense Fund,Not relevant,Psychological Science Intern,Environmental Defense Fund,2026-04-25T00:01:07Z
-edfe2113-ed48-4671-8583-76fd4a82cbaa,Corebridge Financial,Summer 2027 too far out,Retirement Services Intern,Corebridge Financial,2026-04-25T00:01:07Z
-e3a9f714-561a-45f3-9c22-6873fe4efadd,Amazon,Applied Science not undergrad,Applied Science Internships Intern,Amazon,2026-04-25T00:01:07Z
-9e0c7c74-d962-4dfd-a375-9f08ad8329ae,T. Rowe Price,spans too many future seasons,T. Rowe Price Labs Intern Program,T. Rowe Price,2026-04-25T00:01:07Z
-6ec40ca1-95e5-4505-aee1-11667fbe29f1,Kroll,spans too many future seasons,Intern – Technology - Data Engineering,Kroll,2026-04-25T00:01:07Z
-1f454555-e3ae-4611-a53d-40c8d109d8c8,Kroll,spans too many future seasons,Intern Technology - Cyber Risk & Infrastructure,Kroll,2026-04-25T00:01:07Z
+729044c5-515d-4337-b698-4093c9cfff8a,The New School,not relevant to tech majors,Student Assistant Specialist J&D Capstone,The New School,2026-04-25T00:01:07Z
+200d58f3-cae5-46c2-a603-5e289e29b19b,Environmental Defense Fund,not relevant to tech majors,Psychological Science Intern,Environmental Defense Fund,2026-04-25T00:01:07Z
+edfe2113-ed48-4671-8583-76fd4a82cbaa,Corebridge Financial,not relevant to tech majors,Retirement Services Intern,Corebridge Financial,2026-04-25T00:01:07Z
+e3a9f714-561a-45f3-9c22-6873fe4efadd,Amazon,not relevant to tech majors,Applied Science Internships Intern,Amazon,2026-04-25T00:01:07Z
