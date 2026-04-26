@@ -33,10 +33,11 @@ FILE_PATH = ".github/scripts/listings.json"
 API_BASE  = f"https://api.github.com/repos/{OWNER}/{REPO}"
 RAW_BASE  = f"https://raw.githubusercontent.com/{OWNER}/{REPO}"
 
-ROOT     = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(ROOT, "data")
-NYC_CSV  = os.path.join(DATA_DIR, "nyc_jobs.csv")
-REM_CSV  = os.path.join(DATA_DIR, "remote_jobs.csv")
+ROOT         = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR     = os.path.join(ROOT, "data")
+NYC_CSV      = os.path.join(DATA_DIR, "nyc_jobs.csv")
+REM_CSV      = os.path.join(DATA_DIR, "remote_jobs.csv")
+EXCLUDE_CSV  = os.path.join(DATA_DIR, "excluded_jobs.csv")
 
 CSV_HEADERS = [
     "company_name", "title", "recruiting_season",
@@ -106,6 +107,39 @@ def load_csv(path):
             for row in csv.DictReader(f)
         ]
 
+EXCL_HEADERS = ["id", "company_name", "reason", "blocked_title", "blocked_company", "blocked_date"]
+
+
+def load_exclusions():
+    """
+    Load excluded_jobs.csv. Returns (excluded_ids, all_rows).
+    Only filters by id — title keyword filtering has been removed.
+    """
+    excluded_ids, all_rows = set(), []
+    if not os.path.exists(EXCLUDE_CSV):
+        return excluded_ids, all_rows
+    with open(EXCLUDE_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            jid = (row.get("id") or "").strip()
+            if jid:
+                excluded_ids.add(jid)
+            all_rows.append({h: row.get(h, "") for h in EXCL_HEADERS})
+    return excluded_ids, all_rows
+
+
+def save_exclusions(rows):
+    """Write the exclusion CSV, preserving all columns."""
+    with open(EXCLUDE_CSV, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=EXCL_HEADERS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+
+def is_excluded(job_id, excluded_ids):
+    """Return True if a job's UUID is in the exclusion list."""
+    return job_id in excluded_ids
+
+
 def save_csv(path, rows):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     # Strip None keys and any extra fields not in CSV_HEADERS (from
@@ -114,9 +148,17 @@ def save_csv(path, rows):
         {k: v for k, v in row.items() if k in CSV_HEADERS}
         for row in rows
     ]
+    # Strip None keys and any extra fields not in CSV_HEADERS (from
+    # malformed rows read back from CSV with a trailing comma)
+    clean_rows = [
+        {k: v for k, v in row.items() if k in CSV_HEADERS}
+        for row in rows
+    ]
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=CSV_HEADERS, extrasaction="ignore")
+        w = csv.DictWriter(f, fieldnames=CSV_HEADERS, extrasaction="ignore")
         w.writeheader()
+        w.writerows(clean_rows)
         w.writerows(clean_rows)
 
 
@@ -134,22 +176,32 @@ def main():
     print(f"  Fetch : last {args.commits} commits touching {FILE_PATH}")
     print()
 
-    # 1. Load existing CSVs to get known job IDs and commit SHAs
+    # 1. Load exclusion rules
+    excluded_ids, excl_rows = load_exclusions()
+    existing_excl_ids = {r['id'] for r in excl_rows if r.get('id')}
+    print(f"  Exclusions: {len(excluded_ids):,} IDs")
+
+    # 2. Load existing CSVs
     nyc_rows = load_csv(NYC_CSV)
     rem_rows = load_csv(REM_CSV)
 
-    seen_nyc_ids  = {r["id"] for r in nyc_rows}
-    seen_rem_ids  = {r["id"] for r in rem_rows}
+    # Apply exclusions to existing rows — removes anything added to excluded_jobs.csv
+    # since the last run
+    nyc_before = len(nyc_rows)
+    rem_before  = len(rem_rows)
+    nyc_rows = [r for r in nyc_rows if not is_excluded(r.get("id",""), excluded_ids)]
+    rem_rows = [r for r in rem_rows if not is_excluded(r.get("id",""), excluded_ids)]
+    removed_existing = (nyc_before - len(nyc_rows)) + (rem_before - len(rem_rows))
+    if removed_existing:
+        print(f"  Removed {removed_existing:,} previously stored rows that match exclusion rules")
 
-    # Derive already-processed commit SHAs from the first_seen_date column.
-    # The CSVs store the commit date as first_seen_date; we also store the
-    # commit SHA directly in the source data so we can read it back.
-    # Since we don't store SHA in CSV, we use job IDs as the dedup key —
-    # if a job ID already exists we skip it regardless of commit.
+    seen_nyc_ids = {r["id"] for r in nyc_rows}
+    seen_rem_ids = {r["id"] for r in rem_rows}
+
     print(f"  CSV: {len(nyc_rows):,} NYC jobs  |  {len(rem_rows):,} remote jobs")
     print()
 
-    # 2. Get recent commits from GitHub API (no token)
+    # 3. Get recent commits from GitHub API (no token)
     print("  Fetching recent commits from GitHub API …", flush=True)
     url = f"{API_BASE}/commits?path={FILE_PATH}&per_page={min(args.commits, 100)}&sha=dev"
     try:
@@ -162,7 +214,7 @@ def main():
     print(f"  Got {len(commit_list)} commits from API")
     print()
 
-    # 3. Process each commit oldest-first, skipping if it adds nothing new
+    # 4. Process each commit oldest-first
     new_nyc, new_rem, errors = [], [], 0
 
     for i, (sha, date) in enumerate(reversed(commit_list), 1):
@@ -183,15 +235,20 @@ def main():
 
         added_nyc = added_rem = 0
         for job in listings:
-            jid  = job.get("id", "")
-            locs = job.get("locations", [])
+            jid   = job.get("id", "")
+            locs  = job.get("locations", [])
+            title = job.get("title", "").strip()
             if not jid:
+                continue
+
+            # Skip if ID is in exclusion list
+            if is_excluded(jid, excluded_ids):
                 continue
 
             terms = " | ".join(job.get("terms", []))
             row = {
                 "company_name":      job.get("company_name", "").strip(),
-                "title":             job.get("title", "").strip(),
+                "title":             title,
                 "recruiting_season": terms,
                 "date_posted":       job.get("date_posted", ""),
                 "first_seen_date":   date,
@@ -213,28 +270,29 @@ def main():
         time.sleep(0.05)
 
     print()
-    print(f"  Errors : {errors}")
+    print(f"  Errors          : {errors}")
     print(f"  New NYC jobs    : +{len(new_nyc)}")
     print(f"  New remote jobs : +{len(new_rem)}")
 
-    if not new_nyc and not new_rem:
-        print("  No new jobs — CSVs unchanged.")
+    if not new_nyc and not new_rem and not removed_existing:
+        print("  No changes — CSVs unchanged.")
         return
 
-    # 4. Append new rows and save
+    # 5. Append new rows, sort, and save
     nyc_rows.extend(new_nyc)
     rem_rows.extend(new_rem)
 
-    # Sort by first_seen_date
     nyc_rows.sort(key=lambda r: r.get("first_seen_date", ""))
     rem_rows.sort(key=lambda r: r.get("first_seen_date", ""))
 
     save_csv(NYC_CSV, nyc_rows)
     save_csv(REM_CSV, rem_rows)
+    save_exclusions(excl_rows)
 
     print()
-    print(f"  data/nyc_jobs.csv    → {len(nyc_rows):,} rows total")
-    print(f"  data/remote_jobs.csv → {len(rem_rows):,} rows total")
+    print(f"  data/nyc_jobs.csv       → {len(nyc_rows):,} rows total")
+    print(f"  data/remote_jobs.csv    → {len(rem_rows):,} rows total")
+    print(f"  data/excluded_jobs.csv  → {len(excl_rows):,} rows total")
     print("  Done ✓")
 
 
