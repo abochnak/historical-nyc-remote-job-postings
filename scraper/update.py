@@ -462,8 +462,7 @@ def main():
     if new_nyc or new_rem or removed_existing:
         nyc_rows.extend(new_nyc)
         rem_rows.extend(new_rem)
-        nyc_rows.sort(key=lambda r: r.get("first_seen_date", ""))
-        rem_rows.sort(key=lambda r: r.get("first_seen_date", ""))
+        # New entries are appended at the bottom — no sort needed
         save_csv(NYC_CSV, nyc_rows)
         save_csv(REM_CSV, rem_rows)
         save_exclusions(excl_rows)
