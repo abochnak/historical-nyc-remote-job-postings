@@ -100,14 +100,24 @@ def load_csv(path):
     if not os.path.exists(path):
         return []
     with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        # Filter out None keys that appear from trailing commas in malformed rows
+        return [
+            {k: v for k, v in row.items() if k is not None and k in CSV_HEADERS}
+            for row in csv.DictReader(f)
+        ]
 
 def save_csv(path, rows):
     os.makedirs(os.path.dirname(path), exist_ok=True)
+    # Strip None keys and any extra fields not in CSV_HEADERS (from
+    # malformed rows read back from CSV with a trailing comma)
+    clean_rows = [
+        {k: v for k, v in row.items() if k in CSV_HEADERS}
+        for row in rows
+    ]
     with open(path, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=CSV_HEADERS)
+        w = csv.DictWriter(f, fieldnames=CSV_HEADERS, extrasaction="ignore")
         w.writeheader()
-        w.writerows(rows)
+        w.writerows(clean_rows)
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
