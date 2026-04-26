@@ -141,7 +141,7 @@ def main():
 
     # 2. Get recent commits from GitHub API (no token)
     print("  Fetching recent commits from GitHub API …", flush=True)
-    url = f"{API_BASE}/commits?path={FILE_PATH}&per_page={min(args.commits, 100)}&sha=main"
+    url = f"{API_BASE}/commits?path={FILE_PATH}&per_page={min(args.commits, 100)}&sha=dev"
     try:
         commits = api_get(url)
     except RuntimeError as e:
