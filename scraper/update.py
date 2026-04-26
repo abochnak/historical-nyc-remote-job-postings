@@ -46,7 +46,7 @@ DETAILS_HEADERS = [
     "archive_url", "archive_source",
     "archive_status",   # success | excluded | failed
     "scrape_status",    # success | failed | blocked | skipped
-    "scraped_text", "category", "date_archived",
+    "category", "date_archived",
 ]
 
 EXCL_HEADERS = [
@@ -103,7 +103,7 @@ def fetch_raw(sha):
 
 
 # ── Archiving ──────────────────────────────────────────────────────────────────
-def archive_wayback(url, retries=2):
+def archive_wayback(url, retries=1):
     """
     Submit URL to Wayback Machine. Returns (archive_url, status).
     status: 'success' | 'excluded' | 'failed'
@@ -116,31 +116,22 @@ def archive_wayback(url, retries=2):
     )
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=60) as r:
-                # Archive URL is in Content-Location header
+            with urllib.request.urlopen(req, timeout=20) as r:
                 content_loc = r.headers.get("Content-Location", "")
                 if content_loc:
-                    archive_url = f"https://web.archive.org{content_loc}"
-                    return archive_url, "success"
-                # Fallback: construct URL from response URL
+                    return f"https://web.archive.org{content_loc}", "success"
                 return r.url, "success"
         except urllib.error.HTTPError as e:
             body = e.read().decode(errors="replace")
             if "excluded" in body.lower() or e.code == 403:
                 return "", "excluded"
-            if attempt < retries - 1:
-                time.sleep(5)
-                continue
             return "", "failed"
         except Exception:
-            if attempt < retries - 1:
-                time.sleep(5)
-                continue
             return "", "failed"
     return "", "failed"
 
 
-def archive_ph(url, retries=2):
+def archive_ph(url, retries=1):
     """
     Submit URL to archive.ph. Returns (archive_url, status).
     """
@@ -155,11 +146,8 @@ def archive_ph(url, retries=2):
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
             )
-            # archive.ph redirects to the archived page
-            opener = urllib.request.build_opener(
-                urllib.request.HTTPRedirectHandler()
-            )
-            with opener.open(req, timeout=60) as r:
+            opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+            with opener.open(req, timeout=20) as r:
                 archive_url = r.url
                 if "archive.ph" in archive_url or "archive.today" in archive_url:
                     return archive_url, "success"
@@ -173,14 +161,8 @@ def archive_ph(url, retries=2):
             loc = e.headers.get("Location", "")
             if loc and ("archive.ph" in loc or "archive.today" in loc):
                 return loc, "success"
-            if e.code == 429 and attempt < retries - 1:
-                time.sleep(10)
-                continue
             return "", "failed"
         except Exception:
-            if attempt < retries - 1:
-                time.sleep(5)
-                continue
             return "", "failed"
     return "", "failed"
 
@@ -384,14 +366,19 @@ def main():
     # 6. Archive and scrape new jobs
     if new_details and not args.skip_archive:
         print()
-        print(f"  Archiving {len(new_details)} new jobs …")
-        for job in new_details:
+        MAX_ARCHIVE_PER_RUN = 10  # cap to keep Actions runs under ~5 min
+        to_archive = new_details[:MAX_ARCHIVE_PER_RUN]
+        if len(new_details) > MAX_ARCHIVE_PER_RUN:
+            print(f"  Archiving {MAX_ARCHIVE_PER_RUN} of {len(new_details)} new jobs (capped per run) …")
+        else:
+            print(f"  Archiving {len(new_details)} new jobs …")
+        for job in to_archive:
             jid     = job["id"]
             job_url = job["url"]
             print(f"  → {job['company_name']}: {job['title'][:50]}")
 
             arc_url, arc_source, arc_status = archive_url(job_url)
-            time.sleep(3)  # be polite between archive requests
+            time.sleep(1)  # be polite between archive requests
 
             details_map[jid] = {
                 "id":             jid,
@@ -402,7 +389,6 @@ def main():
                 "archive_source": arc_source,
                 "archive_status": arc_status,
                 "scrape_status":  "",
-                "scraped_text":   "",
                 "category":       "",
                 "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
