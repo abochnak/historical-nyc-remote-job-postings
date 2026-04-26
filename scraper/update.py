@@ -52,22 +52,27 @@ def is_remote(locations):
 
 
 # ── HTTP helpers ──────────────────────────────────────────────────────────────
-def _headers():
+def _headers(include_token=False):
     h = {
         "User-Agent": "historical-job-scraper/2.0",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
     }
-    token = os.environ.get("GITHUB_TOKEN", "").strip()
-    if token:
-        h["Authorization"] = f"Bearer {token}"
+    # Never forward a token to an external repo — the Actions GITHUB_TOKEN is
+    # scoped to your repo only and causes 404s when sent to other repos.
+    # Pass include_token=True only if you have a personal token with explicit
+    # read access to the target repo and want higher rate limits.
+    if include_token:
+        token = os.environ.get("GITHUB_TOKEN", "").strip()
+        if token:
+            h["Authorization"] = f"Bearer {token}"
     return h
 
 
 def api_get(url, retries=3):
     """GET a GitHub API URL, return parsed JSON. Raises on rate-limit or error."""
     for attempt in range(retries):
-        req = urllib.request.Request(url, headers=_headers())
+        req = urllib.request.Request(url, headers=_headers(include_token=False))
         try:
             with urllib.request.urlopen(req, timeout=15) as r:
                 remaining = int(r.headers.get("X-RateLimit-Remaining", 60))
@@ -268,7 +273,7 @@ def main():
     print("=" * 60)
 
     token = os.environ.get("GITHUB_TOKEN", "")
-    print(f"  Auth  : {'token set ✓' if token else 'unauthenticated (60 req/hr limit)'}")
+    print(f"  Auth  : unauthenticated (API calls to SimplifyJobs repo are always token-free)")
     print(f"  Fetch : last {args.commits} commits touching {FILE_PATH}")
     print()
 
