@@ -13,10 +13,8 @@ Usage
 
 import argparse
 import csv
-import html
 import json
 import os
-import re
 import sys
 import time
 import urllib.error
@@ -218,48 +216,6 @@ def archive_url(job_url):
             return "", "none", "failed"
 
 
-# ── Scraping ───────────────────────────────────────────────────────────────────
-def scrape_text(archive_url_str):
-    """
-    Fetch and extract readable text from an archived URL.
-    Returns (text, status) where status is 'success' | 'failed' | 'blocked'.
-    """
-    if not archive_url_str:
-        return "", "skipped"
-    try:
-        req = urllib.request.Request(
-            archive_url_str,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; job-scraper/1.0)"},
-        )
-        with urllib.request.urlopen(req, timeout=30) as r:
-            raw_html = r.read().decode(errors="replace")
-    except Exception as e:
-        return "", "failed"
-
-    # Strip scripts, styles, nav boilerplate
-    raw_html = re.sub(r"<script[^>]*>.*?</script>", " ", raw_html, flags=re.DOTALL | re.IGNORECASE)
-    raw_html = re.sub(r"<style[^>]*>.*?</style>",  " ", raw_html, flags=re.DOTALL | re.IGNORECASE)
-    raw_html = re.sub(r"<!--.*?-->", " ", raw_html, flags=re.DOTALL)
-
-    # Remove all remaining tags
-    text = re.sub(r"<[^>]+>", " ", raw_html)
-
-    # Decode HTML entities and normalise whitespace
-    text = html.unescape(text)
-    text = re.sub(r"[ \t]+", " ", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    text = text.strip()
-
-    if len(text) < 200:
-        return text, "blocked"
-
-    # Trim to ~8000 chars to keep CSV manageable
-    if len(text) > 8000:
-        text = text[:8000] + " … [truncated]"
-
-    return text, "success"
-
-
 # ── CSV helpers ────────────────────────────────────────────────────────────────
 def load_csv(path):
     if not os.path.exists(path):
@@ -437,13 +393,6 @@ def main():
             arc_url, arc_source, arc_status = archive_url(job_url)
             time.sleep(3)  # be polite between archive requests
 
-            scraped_text = scrape_status = ""
-            if arc_status == "success" and arc_url:
-                scraped_text, scrape_status = scrape_text(arc_url)
-                print(f"    scrape: {scrape_status}")
-            else:
-                scrape_status = "skipped"
-
             details_map[jid] = {
                 "id":             jid,
                 "company_name":   job["company_name"],
@@ -452,8 +401,8 @@ def main():
                 "archive_url":    arc_url,
                 "archive_source": arc_source,
                 "archive_status": arc_status,
-                "scrape_status":  scrape_status,
-                "scraped_text":   scraped_text,
+                "scrape_status":  "",
+                "scraped_text":   "",
                 "category":       "",
                 "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
@@ -480,14 +429,10 @@ def main():
     # 8. Print archiving flags
     if details_map:
         failed_archive = [r for r in details_map.values() if r.get("archive_status") == "failed"]
-        failed_scrape  = [r for r in details_map.values() if r.get("scrape_status") in ("failed","blocked")]
         if failed_archive:
             print(f"\n  ⚠️  {len(failed_archive)} jobs failed to archive:")
             for r in failed_archive[-5:]:
                 print(f"     {r['company_name']}: {r['title'][:50]}")
-        if failed_scrape:
-            print(f"\n  ⚠️  {len(failed_scrape)} jobs failed/blocked on scrape:")
-            for r in failed_scrape[-5:]:
                 print(f"     [{r['scrape_status']}] {r['company_name']}: {r['title'][:50]}")
 
     print("\n  Done ✓")

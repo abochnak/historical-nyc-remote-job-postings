@@ -36,17 +36,7 @@ st.markdown("""
         word-break: break-all;
         margin-bottom: 12px;
     }
-    .job-text {
-        background: #0f0f1a;
-        border: 1px solid #1e1e2e;
-        border-radius: 4px;
-        padding: 14px;
-        font-size: 11px;
-        color: #94a3b8;
-        white-space: pre-wrap;
-        max-height: 400px;
-        overflow-y: auto;
-    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -208,7 +198,6 @@ for _, job in df.iterrows():
     archive_src  = str(job.get("archive_source", ""))
     archive_stat = str(job.get("archive_status", ""))
     scrape_stat  = str(job.get("scrape_status", ""))
-    scraped_text = str(job.get("scraped_text", ""))
     current_cat  = str(job.get("category", "") or "")
     is_excl      = bool(job.get("excluded", False))
 
@@ -234,12 +223,7 @@ for _, job in df.iterrows():
                     unsafe_allow_html=True,
                 )
 
-            # Scraped text
-            if scraped_text and scraped_text not in ("nan", ""):
-                st.markdown("**Scraped job text:**")
-                st.markdown(f'<div class="job-text">{scraped_text}</div>', unsafe_allow_html=True)
-            else:
-                st.caption(f"No scraped text — scrape status: {scrape_stat}")
+            st.caption(f"Scrape status: {scrape_stat}")
 
             # Original link
             if job_url and job_url != "nan":
