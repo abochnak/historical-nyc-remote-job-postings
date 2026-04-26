@@ -1,6 +1,3 @@
-# Scraper internal checkpoint DB (regenerated on each run)
-data/jobs.db
-
 # Python
 __pycache__/
 *.py[cod]
@@ -8,9 +5,13 @@ __pycache__/
 .venv
 venv/
 
+# SQLite working copy (not needed — update.py now uses CSVs only)
+data/jobs.db
+data/jobs.sql
+
+# Local clone of source repo used by scrape.py (full historical build)
+repo/
+
 # OS
 .DS_Store
 Thumbs.db
-
-# Local SQLite working copy (rebuilt from jobs.sql on first run of update.py)
-data/jobs.db
