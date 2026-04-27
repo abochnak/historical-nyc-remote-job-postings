@@ -2,15 +2,15 @@ name: Update job data
 
 on:
   schedule:
-    - cron: "0 * * * *"   # every hour on the hour
-  workflow_dispatch:        # allow manual trigger from the Actions tab
+    - cron: "*/30 * * * *"  # every 30 min (use cron-job.org to guarantee timing)
+  workflow_dispatch:         # triggered by cron-job.org and manual runs
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write       # needed to push the data commit back
+      contents: write
 
     steps:
       - name: Checkout
@@ -22,7 +22,7 @@ jobs:
           python-version: "3.12"
 
       - name: Run updater
-        run: python scraper/update.py --commits 30
+        run: python scraper/update.py --commits 5
 
       - name: Commit updated data (if changed)
         run: |
