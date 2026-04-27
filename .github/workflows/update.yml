@@ -13,25 +13,67 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout
+      - name: Checkout main branch (for scraper code)
         uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout data branch (orphan — single commit, no history)
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data-branch
+        # If the data branch doesn't exist yet this step will fail —
+        # the bootstrap step below handles first-time setup.
+        continue-on-error: true
+
+      - name: Bootstrap data branch if it doesn't exist yet
+        run: |
+          if [ ! -d "data-branch/.git" ] && [ ! -f "data-branch/nyc_jobs.csv" ]; then
+            echo "Data branch not found — creating orphan branch from main/data/"
+            cd main
+            git checkout --orphan data
+            git rm -rf --cached .
+            # Keep only the data/ folder
+            git add data/
+            git config user.name  "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "init: bootstrap data branch"
+            git push origin data
+            cd ..
+            # Re-checkout now that it exists
+            git clone --branch data --single-branch \
+              https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git \
+              data-branch-new
+            rm -rf data-branch
+            mv data-branch-new data-branch
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Run updater
-        run: python scraper/update.py --commits 5
-
-      - name: Commit updated data (if changed)
+      - name: Copy scraper into data branch workspace and run
         run: |
+          # Run updater from main, pointing DATA_DIR at the data-branch folder
+          cp -r main/scraper data-branch/scraper
+          cd data-branch
+          python scraper/update.py --commits 5
+
+      - name: Amend the single data branch commit (no history accumulation)
+        run: |
+          cd data-branch
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/
           if git diff --cached --quiet; then
-            echo "No new jobs found — nothing to commit."
+            echo "No new jobs — nothing to commit."
           else
-            git commit -m "chore: update job data $(date -u '+%Y-%m-%d %H:%M UTC')"
-            git push
+            # Amend instead of new commit — keeps branch at exactly 1 commit forever
+            git commit --amend --no-edit \
+              -m "data: latest job data $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push --force-with-lease origin data
+            echo "Data branch updated (single commit amended, no history growth)"
           fi
