@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-historical-nyc-remote-job-postings — Incremental Updater
-=========================================================
-Fetches the most recent commits to listings.json via the GitHub API,
-appends new NYC/remote jobs to the CSVs, and archives job URLs via
-the Wayback Machine (falling back to archive.ph if excluded).
+historical-nyc-remote-job-postings -- Incremental Updater
+==========================================================
+Fetches recent commits to listings.json, appends new NYC/remote jobs,
+archives job URLs via Wayback Machine (falling back to archive.ph),
+and maintains a persistent pending_archive.csv queue so no job is
+ever lost due to the per-run archive cap.
 
 Usage
 -----
@@ -24,19 +25,22 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
-# ── Config ─────────────────────────────────────────────────────────────────────
+# -- Config --------------------------------------------------------------------
 OWNER     = "SimplifyJobs"
 REPO      = "Summer2026-Internships"
 FILE_PATH = ".github/scripts/listings.json"
 API_BASE  = f"https://api.github.com/repos/{OWNER}/{REPO}"
 RAW_BASE  = f"https://raw.githubusercontent.com/{OWNER}/{REPO}"
 
-ROOT         = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR     = os.path.join(ROOT, "data")
-NYC_CSV      = os.path.join(DATA_DIR, "nyc_jobs.csv")
-REM_CSV      = os.path.join(DATA_DIR, "remote_jobs.csv")
-EXCLUDE_CSV  = os.path.join(DATA_DIR, "excluded_jobs.csv")
-DETAILS_CSV  = os.path.join(DATA_DIR, "job_details.csv")
+ROOT        = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR    = os.path.join(ROOT, "data")
+NYC_CSV     = os.path.join(DATA_DIR, "nyc_jobs.csv")
+REM_CSV     = os.path.join(DATA_DIR, "remote_jobs.csv")
+EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
+DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
+QUEUE_CSV   = os.path.join(DATA_DIR, "pending_archive.csv")
+
+MAX_ARCHIVE_PER_RUN = 5   # matches 30-min cron; typical window has 1-3 new jobs
 
 CSV_HEADERS = [
     "company_name", "title", "recruiting_season",
@@ -46,8 +50,7 @@ CSV_HEADERS = [
 DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
-    "archive_status",   # success | excluded | failed
-    "scrape_status",
+    "archive_status", "scrape_status",
     "category", "date_archived",
 ]
 
@@ -56,9 +59,9 @@ EXCL_HEADERS = [
     "blocked_title", "blocked_company", "blocked_date",
 ]
 
-MAX_ARCHIVE_PER_RUN = 10  # cap to keep Actions runs under ~5 min
+QUEUE_HEADERS = ["id", "company_name", "title", "job_url", "first_seen_date"]
 
-# ── Filters ────────────────────────────────────────────────────────────────────
+# -- Filters -------------------------------------------------------------------
 NYC_KEYWORDS = ["new york, ny", "new york city", "nyc", "new york"]
 
 def is_nyc(locations):
@@ -68,7 +71,7 @@ def is_remote(locations):
     return bool(locations) and all("remote" in loc.lower() for loc in locations)
 
 
-# ── HTTP helpers ───────────────────────────────────────────────────────────────
+# -- HTTP helpers --------------------------------------------------------------
 HEADERS = {
     "User-Agent": "historical-job-scraper/2.0",
     "Accept": "application/vnd.github+json",
@@ -106,86 +109,99 @@ def fetch_raw(sha):
         return None
 
 
-# ── Archiving ──────────────────────────────────────────────────────────────────
-def archive_wayback(url):
-    """Try Wayback Machine. Returns (archive_url, status)."""
+# -- Archiving -----------------------------------------------------------------
+def archive_wayback(url, retries=2):
     req = urllib.request.Request(
         f"https://web.archive.org/save/{url}",
         headers={"User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)"},
         method="GET",
     )
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            loc = r.headers.get("Content-Location", "")
-            if loc:
-                return f"https://web.archive.org{loc}", "success"
-            return r.url, "success"
-    except urllib.error.HTTPError as e:
-        body = e.read().decode(errors="replace")
-        if "excluded" in body.lower() or e.code == 403:
-            return "", "excluded"
-        return "", "failed"
-    except Exception:
-        return "", "failed"
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                loc = r.headers.get("Content-Location", "")
+                if loc:
+                    return f"https://web.archive.org{loc}", "success"
+                return r.url, "success"
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="replace")
+            if "excluded" in body.lower() or e.code == 403:
+                return "", "excluded"
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+    return "", "failed"
 
 
-def archive_ph(url):
-    """Try archive.ph. Returns (archive_url, status)."""
-    try:
-        data = urllib.parse.urlencode({"url": url, "anyway": "1"}).encode()
-        req = urllib.request.Request(
-            "https://archive.ph/submit/",
-            data=data,
-            headers={
-                "User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)",
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-        )
-        opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
-        with opener.open(req, timeout=20) as r:
-            arc = r.url
-            if "archive.ph" in arc or "archive.today" in arc:
-                return arc, "success"
-            refresh = r.headers.get("Refresh", "")
-            if refresh and ("archive.ph" in refresh or "archive.today" in refresh):
-                import re
-                m = re.search(r"url=(.+)", refresh)
-                if m:
-                    return m.group(1).strip(), "success"
-        return "", "failed"
-    except urllib.error.HTTPError as e:
-        loc = e.headers.get("Location", "")
-        if loc and ("archive.ph" in loc or "archive.today" in loc):
-            return loc, "success"
-        return "", "failed"
-    except Exception:
-        return "", "failed"
+def archive_ph(url, retries=2):
+    for attempt in range(retries):
+        try:
+            data = urllib.parse.urlencode({"url": url, "anyway": "1"}).encode()
+            req = urllib.request.Request(
+                "https://archive.ph/submit/",
+                data=data,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            )
+            opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+            with opener.open(req, timeout=60) as r:
+                arc = r.url
+                if "archive.ph" in arc or "archive.today" in arc:
+                    return arc, "success"
+                refresh = r.headers.get("Refresh", "")
+                if refresh and ("archive.ph" in refresh or "archive.today" in refresh):
+                    import re
+                    m = re.search(r"url=(.+)", refresh)
+                    if m:
+                        return m.group(1).strip(), "success"
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+        except urllib.error.HTTPError as e:
+            loc = e.headers.get("Location", "")
+            if loc and ("archive.ph" in loc or "archive.today" in loc):
+                return loc, "success"
+            if e.code == 429 and attempt < retries - 1:
+                time.sleep(15)
+                continue
+            return "", "failed"
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+    return "", "failed"
 
 
 def do_archive(job_url):
-    """
-    Try Wayback Machine first. If excluded, fall back to archive.ph.
-    Returns (archive_url, archive_source, archive_status).
-    """
-    print(f"    archiving … ", end="", flush=True)
+    print(f"    archiving ... ", end="", flush=True)
     wb_url, wb_status = archive_wayback(job_url)
     if wb_status == "success":
-        print("wayback ✓")
+        print("wayback OK")
         return wb_url, "wayback", "success"
     if wb_status == "excluded":
-        print("wayback excluded → archive.ph … ", end="", flush=True)
+        print("wayback excluded -> archive.ph ... ", end="", flush=True)
     else:
-        print("wayback failed → archive.ph … ", end="", flush=True)
+        print("wayback failed -> archive.ph ... ", end="", flush=True)
     ph_url, ph_status = archive_ph(job_url)
     if ph_status == "success":
-        print("✓")
+        print("OK")
         return ph_url, "archive.ph", "success"
     print("failed")
     src = "archive.ph" if wb_status == "excluded" else "none"
     return "", src, "failed"
 
 
-# ── CSV helpers ────────────────────────────────────────────────────────────────
+# -- CSV helpers ---------------------------------------------------------------
 def load_csv(path):
     if not os.path.exists(path):
         return []
@@ -216,6 +232,23 @@ def save_details(details_map):
         w.writeheader()
         w.writerows(rows)
 
+def load_queue():
+    if not os.path.exists(QUEUE_CSV):
+        return []
+    with open(QUEUE_CSV, encoding="utf-8") as f:
+        return [row for row in csv.DictReader(f) if row.get("id")]
+
+def save_queue(rows):
+    """Persist queue. Removes file entirely when queue is empty."""
+    if not rows:
+        if os.path.exists(QUEUE_CSV):
+            os.remove(QUEUE_CSV)
+        return
+    with open(QUEUE_CSV, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=QUEUE_HEADERS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
 def load_exclusions():
     excluded_ids, all_rows = set(), []
     if not os.path.exists(EXCLUDE_CSV):
@@ -238,18 +271,18 @@ def is_excluded(job_id, excluded_ids):
     return job_id in excluded_ids
 
 
-# ── Main ───────────────────────────────────────────────────────────────────────
+# -- Main ----------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--commits", type=int, default=5)
     parser.add_argument("--skip-archive", action="store_true",
-                        help="Skip archiving (for testing)")
+                        help="Skip archiving; new jobs still added to queue")
     args = parser.parse_args()
 
     print("=" * 60)
-    print("historical-nyc-remote-job-postings — Updater")
+    print("historical-nyc-remote-job-postings -- Updater")
     print("=" * 60)
-    print(f"  Auth    : unauthenticated (public repo, no token needed)")
+    print(f"  Auth    : unauthenticated (public repo)")
     print(f"  Fetch   : last {args.commits} commits touching {FILE_PATH}")
     print(f"  Archive : {'skipped (--skip-archive)' if args.skip_archive else 'enabled'}")
     print()
@@ -258,10 +291,9 @@ def main():
     excluded_ids, excl_rows = load_exclusions()
     print(f"  Exclusions : {len(excluded_ids):,} IDs")
 
-    # 2. Load existing CSVs
+    # 2. Load existing CSVs and apply exclusions
     nyc_rows = load_csv(NYC_CSV)
     rem_rows  = load_csv(REM_CSV)
-
     nyc_before, rem_before = len(nyc_rows), len(rem_rows)
     nyc_rows = [r for r in nyc_rows if not is_excluded(r.get("id", ""), excluded_ids)]
     rem_rows  = [r for r in rem_rows  if not is_excluded(r.get("id", ""), excluded_ids)]
@@ -273,34 +305,38 @@ def main():
     seen_rem_ids = {r["id"] for r in rem_rows}
     print(f"  CSV     : {len(nyc_rows):,} NYC  |  {len(rem_rows):,} remote")
 
-    # 3. Load job_details
-    details_map = load_details()
+    # 3. Load job_details and persistent queue
+    details_map   = load_details()
+    pending_queue = load_queue()
+    # Clean queue: remove already-archived or newly excluded jobs
+    pending_queue = [
+        j for j in pending_queue
+        if j["id"] not in details_map and not is_excluded(j["id"], excluded_ids)
+    ]
+    queued_ids = {j["id"] for j in pending_queue}
     print(f"  Details : {len(details_map):,} archived entries")
+    print(f"  Queue   : {len(pending_queue):,} jobs pending archive")
     print()
 
-    # 4. Get recent commits
-    print("  Fetching recent commits from GitHub API …", flush=True)
+    # 4. Fetch recent commits
+    print("  Fetching recent commits from GitHub API ...", flush=True)
     url = f"{API_BASE}/commits?path={FILE_PATH}&per_page={min(args.commits, 100)}&sha=dev"
     try:
         commits = api_get(url)
     except RuntimeError as e:
         print(f"  ERROR: {e}")
         sys.exit(1)
-
     commit_list = [(c["sha"], c["commit"]["author"]["date"]) for c in commits]
     print(f"  Got {len(commit_list)} commits")
     print()
 
     # 5. Process commits oldest-first
-    new_nyc, new_rem, new_details, errors = [], [], [], 0
-
+    new_nyc, new_rem, errors = [], [], 0
     for i, (sha, date) in enumerate(reversed(commit_list), 1):
-        print(f"  [{i:>2}/{len(commit_list)}] {sha[:10]}  {date} … ", end="", flush=True)
-
+        print(f"  [{i:>2}/{len(commit_list)}] {sha[:10]}  {date} ... ", end="", flush=True)
         raw = fetch_raw(sha)
         if raw is None:
             print("FETCH FAILED"); errors += 1; continue
-
         try:
             listings = json.loads(raw)
         except json.JSONDecodeError:
@@ -331,8 +367,16 @@ def main():
             if jid not in seen_rem_ids and is_remote(locs):
                 seen_rem_ids.add(jid); new_rem.append(row); added_rem += 1; is_new = True
 
-            if is_new and jid not in details_map:
-                new_details.append(row)
+            # Add to persistent queue immediately -- survives across runs
+            if is_new and jid not in details_map and jid not in queued_ids:
+                pending_queue.append({
+                    "id":              jid,
+                    "company_name":    row["company_name"],
+                    "title":           row["title"],
+                    "job_url":         row["url"],
+                    "first_seen_date": row["first_seen_date"],
+                })
+                queued_ids.add(jid)
 
         print(f"+{added_nyc} NYC  +{added_rem} remote")
         time.sleep(0.05)
@@ -341,27 +385,26 @@ def main():
     print(f"  Errors          : {errors}")
     print(f"  New NYC jobs    : +{len(new_nyc)}")
     print(f"  New remote jobs : +{len(new_rem)}")
-    print(f"  To archive      : {len(new_details)}")
+    print(f"  Queue total     : {len(pending_queue):,} jobs pending archive")
 
-    # 6. Archive new jobs
-    if new_details and not args.skip_archive:
-        to_archive = new_details[:MAX_ARCHIVE_PER_RUN]
+    # 6. Archive from persistent queue
+    if pending_queue and not args.skip_archive:
+        to_archive = pending_queue[:MAX_ARCHIVE_PER_RUN]
+        carry_over = len(pending_queue) - len(to_archive)
         print()
-        if len(new_details) > MAX_ARCHIVE_PER_RUN:
-            print(f"  Archiving {MAX_ARCHIVE_PER_RUN} of {len(new_details)} new jobs (capped per run) …")
-        else:
-            print(f"  Archiving {len(new_details)} new jobs …")
+        print(f"  Archiving {len(to_archive)} jobs | {carry_over} carry over to next run")
 
+        archived_ids = set()
         for job in to_archive:
             jid = job["id"]
-            print(f"  → {job['company_name']}: {job['title'][:55]}")
-            arc_url, arc_src, arc_status = do_archive(job["url"])
-            time.sleep(1)
+            print(f"  -> {job['company_name']}: {job['title'][:55]}")
+            arc_url, arc_src, arc_status = do_archive(job["job_url"])
+            time.sleep(3)
             details_map[jid] = {
                 "id":             jid,
                 "company_name":   job["company_name"],
                 "title":          job["title"],
-                "job_url":        job["url"],
+                "job_url":        job["job_url"],
                 "archive_url":    arc_url,
                 "archive_source": arc_src,
                 "archive_status": arc_status,
@@ -369,8 +412,12 @@ def main():
                 "category":       "",
                 "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
+            archived_ids.add(jid)
 
-    # 7. Save
+        # Remove archived jobs from queue; rest carry over
+        pending_queue = [j for j in pending_queue if j["id"] not in archived_ids]
+
+    # 7. Save everything
     if new_nyc or new_rem or removed_existing:
         nyc_rows.extend(new_nyc)
         rem_rows.extend(new_rem)
@@ -378,22 +425,27 @@ def main():
         save_csv(REM_CSV, rem_rows)
         save_exclusions(excl_rows)
         print()
-        print(f"  data/nyc_jobs.csv    → {len(nyc_rows):,} rows")
-        print(f"  data/remote_jobs.csv → {len(rem_rows):,} rows")
+        print(f"  data/nyc_jobs.csv    -> {len(nyc_rows):,} rows")
+        print(f"  data/remote_jobs.csv -> {len(rem_rows):,} rows")
 
-    if new_details and not args.skip_archive:
+    # Always save queue -- zero data loss guarantee
+    save_queue(pending_queue)
+    if pending_queue:
+        print(f"  data/pending_archive.csv -> {len(pending_queue):,} jobs still queued")
+
+    if not args.skip_archive and details_map:
         save_details(details_map)
         failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
-        print(f"  data/job_details.csv → {len(details_map):,} entries")
+        print(f"  data/job_details.csv -> {len(details_map):,} entries")
         if failed:
-            print(f"\n  ⚠️  {len(failed)} jobs failed to archive:")
+            print(f"  Warning: {len(failed)} jobs failed to archive:")
             for r in failed[-5:]:
                 print(f"     {r['company_name']}: {r['title'][:50]}")
 
     if not new_nyc and not new_rem and not removed_existing:
         print("  No changes to job CSVs.")
 
-    print("\n  Done ✓")
+    print("\n  Done OK")
 
 
 if __name__ == "__main__":
