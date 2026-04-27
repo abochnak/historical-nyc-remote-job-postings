@@ -8,7 +8,7 @@ the Wayback Machine (falling back to archive.ph if excluded).
 
 Usage
 -----
-    python scraper/update.py              # check last 30 commits (default)
+    python scraper/update.py              # check last 5 commits (default)
     python scraper/update.py --commits 10
     python scraper/update.py --skip-archive
 """
@@ -241,7 +241,7 @@ def is_excluded(job_id, excluded_ids):
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--commits", type=int, default=30)
+    parser.add_argument("--commits", type=int, default=5)
     parser.add_argument("--skip-archive", action="store_true",
                         help="Skip archiving (for testing)")
     args = parser.parse_args()
