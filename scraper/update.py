@@ -39,7 +39,6 @@ REM_CSV     = os.path.join(DATA_DIR, "remote_jobs.csv")
 EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
 DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
 QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
-WATERMARK_CSV  = os.path.join(DATA_DIR, "last_processed.txt")  # timestamp watermark
 
 MAX_ARCHIVE_PER_RUN = 5   # matches 30-min cron; typical window has 1-3 new jobs
 
@@ -52,7 +51,7 @@ DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status",
-    "category", "date_archived", "status",
+    "category", "date_archived", "status", "first_seen_date",
 ]
 
 EXCL_HEADERS = [
@@ -246,19 +245,6 @@ def save_queue(rows):
         w.writeheader()
         w.writerows(rows)
 
-def load_watermark():
-    """Load the last processed first_seen_date from disk. Returns '' if not set."""
-    if not os.path.exists(WATERMARK_CSV):
-        return ""
-    with open(WATERMARK_CSV, encoding="utf-8") as f:
-        return f.read().strip()
-
-def save_watermark(timestamp):
-    """Save the most recent first_seen_date we processed into job_details."""
-    with open(WATERMARK_CSV, "w", encoding="utf-8") as f:
-        f.write(timestamp)
-
-
 def load_exclusions():
     excluded_ids, all_rows = set(), []
     if not os.path.exists(EXCLUDE_CSV):
@@ -318,7 +304,11 @@ def main():
     # 3. Load job_details and persistent queue
     details_map   = load_details()
     pending_queue = load_queue()
-    watermark     = load_watermark()  # last first_seen_date added to job_details
+    # Derive watermark from max first_seen_date already in job_details
+    watermark = max(
+        (r.get("first_seen_date", "") for r in details_map.values()),
+        default=""
+    )
     # Clean queue: remove already-archived or newly excluded jobs
     pending_queue = [
         j for j in pending_queue
@@ -326,7 +316,6 @@ def main():
     ]
     queued_ids = {j["id"] for j in pending_queue}
     print(f"  Details : {len(details_map):,} archived entries")
-    print(f"  Watermark: {watermark or 'none (will process all new jobs)'}") 
     print(f"  Queue   : {len(pending_queue):,} jobs pending archive")
     print()
 
@@ -400,16 +389,17 @@ def main():
                 # Pre-add to job_details as unreviewed so it shows in review queue
                 # immediately, even before archiving completes
                 details_map[jid] = {
-                    "id":             jid,
-                    "company_name":   row["company_name"],
-                    "title":          row["title"],
-                    "job_url":        row["url"],
-                    "archive_url":    "",
-                    "archive_source": "",
-                    "archive_status": "pending",
-                    "category":       "",
-                    "date_archived":  "",
-                    "status":         "unreviewed",
+                    "id":               jid,
+                    "company_name":     row["company_name"],
+                    "title":            row["title"],
+                    "job_url":          row["url"],
+                    "archive_url":      "",
+                    "archive_source":   "",
+                    "archive_status":   "pending",
+                    "category":         "",
+                    "date_archived":    "",
+                    "status":           "unreviewed",
+                    "first_seen_date":  row["first_seen_date"],
                 }
 
         print(f"+{added_nyc} NYC  +{added_rem} remote")
@@ -437,16 +427,17 @@ def main():
             # Update existing entry preserving status and category
             existing = details_map.get(jid, {})
             details_map[jid] = {
-                "id":             jid,
-                "company_name":   job["company_name"],
-                "title":          job["title"],
-                "job_url":        job["job_url"],
-                "archive_url":    arc_url,
-                "archive_source": arc_src,
-                "archive_status": arc_status,
-                "category":       existing.get("category", ""),
-                "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "status":         existing.get("status", "unreviewed"),
+                "id":              jid,
+                "company_name":    job["company_name"],
+                "title":           job["title"],
+                "job_url":         job["job_url"],
+                "archive_url":     arc_url,
+                "archive_source":  arc_src,
+                "archive_status":  arc_status,
+                "category":        existing.get("category", ""),
+                "date_archived":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "status":          existing.get("status", "unreviewed"),
+                "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
             }
             if arc_status == "success":
                 archived_ids.add(jid)  # success — remove from queue
@@ -482,9 +473,6 @@ def main():
     # Always save job_details when new jobs were added or archiving ran
     if details_map and (new_nyc or new_rem or not args.skip_archive):
         save_details(details_map)
-        if watermark:
-            save_watermark(watermark)
-            print(f"  data/last_processed.txt -> {watermark}")
         failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
         print(f"  data/job_details.csv -> {len(details_map):,} entries")
         if failed:
