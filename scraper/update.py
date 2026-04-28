@@ -3,7 +3,7 @@
 historical-nyc-remote-job-postings -- Incremental Updater
 ==========================================================
 Fetches recent commits to listings.json, appends new NYC/remote jobs,
-archives job URLs via Wayback Machine (falling back to archive.ph),
+archives job URLs via Wayback Machine (falling back to ghostarchive.org),
 and maintains a persistent pending_archive.csv queue so no job is
 ever lost due to the per-run archive cap.
 
@@ -140,12 +140,13 @@ def archive_wayback(url, retries=2):
     return "", "failed"
 
 
-def archive_ph(url, retries=2):
+def archive_ghostarchive(url, retries=2):
+    """Submit URL to ghostarchive.org. Returns (archive_url, status)."""
     for attempt in range(retries):
         try:
-            data = urllib.parse.urlencode({"url": url, "anyway": "1"}).encode()
+            data = urllib.parse.urlencode({"url": url}).encode()
             req = urllib.request.Request(
-                "https://archive.ph/submit/",
+                "https://ghostarchive.org/archive2",
                 data=data,
                 headers={
                     "User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)",
@@ -155,21 +156,15 @@ def archive_ph(url, retries=2):
             opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
             with opener.open(req, timeout=60) as r:
                 arc = r.url
-                if "archive.ph" in arc or "archive.today" in arc:
+                if "ghostarchive.org" in arc:
                     return arc, "success"
-                refresh = r.headers.get("Refresh", "")
-                if refresh and ("archive.ph" in refresh or "archive.today" in refresh):
-                    import re
-                    m = re.search(r"url=(.+)", refresh)
-                    if m:
-                        return m.group(1).strip(), "success"
             if attempt < retries - 1:
                 time.sleep(10)
                 continue
             return "", "failed"
         except urllib.error.HTTPError as e:
             loc = e.headers.get("Location", "")
-            if loc and ("archive.ph" in loc or "archive.today" in loc):
+            if loc and "ghostarchive.org" in loc:
                 return loc, "success"
             if e.code == 429 and attempt < retries - 1:
                 time.sleep(15)
@@ -190,16 +185,15 @@ def do_archive(job_url):
         print("wayback OK")
         return wb_url, "wayback", "success"
     if wb_status == "excluded":
-        print("wayback excluded -> archive.ph ... ", end="", flush=True)
+        print("wayback excluded -> ghostarchive ... ", end="", flush=True)
     else:
-        print("wayback failed -> archive.ph ... ", end="", flush=True)
-    ph_url, ph_status = archive_ph(job_url)
-    if ph_status == "success":
+        print("wayback failed -> ghostarchive ... ", end="", flush=True)
+    ga_url, ga_status = archive_ghostarchive(job_url)
+    if ga_status == "success":
         print("OK")
-        return ph_url, "archive.ph", "success"
+        return ga_url, "ghostarchive", "success"
     print("failed")
-    src = "archive.ph" if wb_status == "excluded" else "none"
-    return "", src, "failed"
+    return "", "none", "failed"
 
 
 # -- CSV helpers ---------------------------------------------------------------
