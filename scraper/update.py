@@ -25,6 +25,46 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
+# -- URL deduplication --------------------------------------------------------
+def extract_job_id(url):
+    """Extract the most unique identifier from a job URL for fuzzy deduplication."""
+    import re
+    if not url:
+        return None
+    patterns = [
+        r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',  # UUID
+        r'/jobs?/(\d{7,})',           # Greenhouse
+        r'/(\d{15,})',                # TikTok-style long IDs
+        r'/jobs/(\d{4,})/job',        # iCIMS
+        r'/jobs/(\d{7,})/',           # Amazon
+        r'/(\d{8,})$',               # Long numeric at end
+        r'/(JR\d+)',                  # Workday JR codes
+        r'/(R-\d+)',                  # Workday R- codes
+        r'/(REQ[-_][\w]+)',           # REQ codes
+        r'search/(\d{10,})',          # TikTok search
+    ]
+    for pattern in patterns:
+        m = re.search(pattern, url, re.IGNORECASE)
+        if m:
+            return m.group(1) if m.lastindex else m.group(0)
+    # Fallback: strip query params, use last path segment
+    import urllib.parse
+    path = urllib.parse.urlparse(url).path.rstrip("/")
+    return path.split("/")[-1] if path else url
+
+def url_matches(url1, url2):
+    """Return True if two URLs refer to the same job via ID matching."""
+    if not url1 or not url2:
+        return False
+    if url1.rstrip("/") == url2.rstrip("/"):
+        return True
+    id1 = extract_job_id(url1)
+    id2 = extract_job_id(url2)
+    if id1 and id2 and len(id1) >= 4:
+        return id1 == id2
+    return False
+
+
 # -- Config --------------------------------------------------------------------
 OWNER     = "SimplifyJobs"
 REPO      = "Summer2026-Internships"
@@ -335,6 +375,13 @@ def main():
                 # Update watermark to track latest date processed
                 if not watermark or job_date > watermark:
                     watermark = job_date
+                # Skip if URL already exists in details (manual add dedup)
+                existing_urls = [r.get("job_url", "") for r in details_map.values()]
+                if any(url_matches(row["url"], eu) for eu in existing_urls):
+                    print(f"     skipping duplicate URL: {row['url'][:60]}")
+                    queued_ids.add(jid)  # prevent re-checking
+                    continue
+
                 # Pre-add to job_details as unreviewed so it shows in review queue
                 # immediately, even before archiving completes
                 details_map[jid] = {
