@@ -57,7 +57,7 @@ DETAILS_HEADERS = [
 
 EXCL_HEADERS = [
     "id", "company_name", "reason",
-    "blocked_title", "blocked_company", "blocked_date",
+    "blocked_title", "blocked_company", "blocked_date", "job_url", "archive_url",
 ]
 
 QUEUE_HEADERS = ["id", "company_name", "title", "job_url", "first_seen_date"]
@@ -456,7 +456,10 @@ def main():
         rem_rows.extend(new_rem)
         save_csv(NYC_CSV, nyc_rows)
         save_csv(REM_CSV, rem_rows)
-        save_exclusions(excl_rows)
+        if removed_existing:
+            # Only rewrite excluded_jobs.csv when rows were actually removed
+            # to avoid overwriting manual edits made via the Flask app
+            save_exclusions(excl_rows)
         print()
         print(f"  data/nyc_jobs.csv    -> {len(nyc_rows):,} rows")
         print(f"  data/remote_jobs.csv -> {len(rem_rows):,} rows")
