@@ -51,7 +51,7 @@ DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status", "scrape_status",
-    "category", "date_archived",
+    "category", "date_archived", "status",
 ]
 
 EXCL_HEADERS = [
@@ -377,6 +377,21 @@ def main():
                     "first_seen_date": row["first_seen_date"],
                 })
                 queued_ids.add(jid)
+                # Pre-add to job_details as unreviewed so it shows in review queue
+                # immediately, even before archiving completes
+                details_map[jid] = {
+                    "id":             jid,
+                    "company_name":   row["company_name"],
+                    "title":          row["title"],
+                    "job_url":        row["url"],
+                    "archive_url":    "",
+                    "archive_source": "",
+                    "archive_status": "pending",
+                    "scrape_status":  "",
+                    "category":       "",
+                    "date_archived":  "",
+                    "status":         "unreviewed",
+                }
 
         print(f"+{added_nyc} NYC  +{added_rem} remote")
         time.sleep(0.05)
@@ -400,6 +415,8 @@ def main():
             print(f"  -> {job['company_name']}: {job['title'][:55]}")
             arc_url, arc_src, arc_status = do_archive(job["job_url"])
             time.sleep(3)
+            # Update existing entry preserving status and category
+            existing = details_map.get(jid, {})
             details_map[jid] = {
                 "id":             jid,
                 "company_name":   job["company_name"],
@@ -409,8 +426,9 @@ def main():
                 "archive_source": arc_src,
                 "archive_status": arc_status,
                 "scrape_status":  "",
-                "category":       "",
+                "category":       existing.get("category", ""),
                 "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "status":         existing.get("status", "unreviewed"),
             }
             archived_ids.add(jid)
 
