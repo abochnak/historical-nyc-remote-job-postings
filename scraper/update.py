@@ -239,11 +239,7 @@ def load_queue():
         return [row for row in csv.DictReader(f) if row.get("id")]
 
 def save_queue(rows):
-    """Persist queue. Removes file entirely when queue is empty."""
-    if not rows:
-        if os.path.exists(QUEUE_CSV):
-            os.remove(QUEUE_CSV)
-        return
+    """Persist queue. Always writes the file even when empty to avoid git churn."""
     with open(QUEUE_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=QUEUE_HEADERS, extrasaction="ignore")
         w.writeheader()
