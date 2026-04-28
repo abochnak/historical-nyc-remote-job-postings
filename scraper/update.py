@@ -40,7 +40,8 @@ EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
 DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
 QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
 
-MAX_ARCHIVE_PER_RUN = 5   # matches 30-min cron; typical window has 1-3 new jobs
+MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
+MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
 
 CSV_HEADERS = [
     "company_name", "title", "recruiting_season",
