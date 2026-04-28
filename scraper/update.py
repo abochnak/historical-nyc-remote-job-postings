@@ -420,7 +420,8 @@ def main():
 
         archived_ids = set()
         for job in to_archive:
-            jid = job["id"]
+            jid      = job["id"]
+            attempts = int(job.get("archive_attempts", 0))
             print(f"  -> {job['company_name']}: {job['title'][:55]}")
             arc_url, arc_src, arc_status = do_archive(job["job_url"])
             time.sleep(3)
