@@ -424,7 +424,17 @@ def main():
                 "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "status":         existing.get("status", "unreviewed"),
             }
-            archived_ids.add(jid)
+            if arc_status == "success":
+                archived_ids.add(jid)  # success — remove from queue
+            else:
+                # Failed — increment attempt count, keep in queue for retry
+                job["archive_attempts"] = str(attempts + 1)
+                remaining = MAX_ARCHIVE_ATTEMPTS - (attempts + 1)
+                if remaining > 0:
+                    print(f"     will retry ({remaining} attempt(s) remaining)")
+                else:
+                    print(f"     max attempts reached — flagged for manual archive")
+                    archived_ids.add(jid)  # remove from queue after final failure
 
         # Remove archived jobs from queue; rest carry over
         pending_queue = [j for j in pending_queue if j["id"] not in archived_ids]
