@@ -150,44 +150,6 @@ def do_archive(job_url):
     return "", "none", "failed"
 
 
-# -- Discord notification ------------------------------------------------------
-def notify_discord(new_nyc, new_rem):
-    """Send a single Discord notification when new jobs are found."""
-    webhook_url = os.environ.get("DISCORD_WEBHOOK_URL", "")
-    if not webhook_url or (not new_nyc and not new_rem):
-        return
-    total = len(new_nyc) + len(new_rem)
-    parts = []
-    if new_nyc:
-        parts.append("NYC (%d)" % len(new_nyc))
-        for j in new_nyc[:10]:
-            parts.append("  -> %s: %s" % (j["company_name"], j["title"][:60]))
-        if len(new_nyc) > 10:
-            parts.append("  ...and %d more" % (len(new_nyc) - 10))
-    if new_rem:
-        parts.append("Remote (%d)" % len(new_rem))
-        for j in new_rem[:10]:
-            parts.append("  -> %s: %s" % (j["company_name"], j["title"][:60]))
-        if len(new_rem) > 10:
-            parts.append("  ...and %d more" % (len(new_rem) - 10))
-    parts.append("")
-    parts.append("Review: https://nyc-job-review-app.vercel.app/")
-    plural = "s" if total > 1 else ""
-    message = ("New %d job%s posted\n" % (total, plural)) + "\n".join(parts)
-    payload = json.dumps({"content": message}).encode()
-    req = urllib.request.Request(
-        webhook_url,
-        data=payload,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=10):
-            print("  Discord notified -- %d new job(s)" % total)
-    except Exception as e:
-        print("  Discord notification failed: %s" % e)
-
-
 # -- CSV helpers ---------------------------------------------------------------
 def load_csv(path):
     if not os.path.exists(path):
@@ -470,10 +432,6 @@ def main():
             print(f"  Warning: {len(failed)} jobs failed to archive:")
             for r in failed[-5:]:
                 print(f"     {r['company_name']}: {r['title'][:50]}")
-
-    # Notify Discord if new jobs were found
-    if new_nyc or new_rem:
-        notify_discord(new_nyc, new_rem)
 
     # Notify Discord if new jobs were found
     if new_nyc or new_rem:
