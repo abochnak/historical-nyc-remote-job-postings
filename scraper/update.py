@@ -483,10 +483,6 @@ def main():
             for r in failed[-5:]:
                 print(f"     {r['company_name']}: {r['title'][:50]}")
 
-    # Notify Discord if new jobs were found
-    if new_nyc or new_rem:
-        notify_discord(new_nyc, new_rem)
-
     if not new_nyc and not new_rem and not removed_existing:
         print("  No changes to job CSVs.")
 
