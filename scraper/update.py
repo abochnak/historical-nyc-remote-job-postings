@@ -1,53 +1,52 @@
+#!/usr/bin/env python3
 """
-NYC Job Review Flask App
-========================
-Security features:
-  - Rate limiting (5 failed attempts -> 15 min lockout per IP)
-  - CSRF protection on all forms (Flask-WTF)
-  - Secure session cookies (HttpOnly, SameSite=Strict, 8hr expiry)
-  - Constant-time password comparison (prevents timing attacks)
+historical-nyc-remote-job-postings -- Incremental Updater
+==========================================================
+Fetches recent commits to listings.json, appends new NYC/remote jobs,
+archives job URLs via Wayback Machine (falling back to ghostarchive.org),
+and maintains a persistent pending_archive.csv queue so no job is
+ever lost due to the per-run archive cap.
+
+Usage
+-----
+    python scraper/update.py              # check last 5 commits (default)
+    python scraper/update.py --commits 10
+    python scraper/update.py --skip-archive
 """
 
-import base64
+import argparse
 import csv
-import hmac
-import io
+import json
 import os
+import sys
 import time
-from collections import defaultdict
+import urllib.error
+import urllib.parse
+import urllib.request
 from datetime import datetime, timezone
-from functools import wraps
-
-import requests
-from dotenv import load_dotenv
-from flask import (Flask, flash, redirect, render_template,
-                   request, session, url_for)
-from flask_wtf import CSRFProtect
-from flask_wtf.csrf import CSRFError
-
-load_dotenv()
-
-# -- App setup -----------------------------------------------------------------
-_here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-app = Flask(__name__, template_folder=os.path.join(_here, 'templates'))
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "change-me-in-production")
-
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='Strict',
-    PERMANENT_SESSION_LIFETIME=28800,  # 8 hours
-    WTF_CSRF_TIME_LIMIT=3600,          # 1 hour
-)
-
-csrf = CSRFProtect(app)
 
 # -- Config --------------------------------------------------------------------
-REVIEW_PASSWORD = os.environ.get("REVIEW_PASSWORD", "changeme")
-GITHUB_TOKEN    = os.environ.get("GITHUB_TOKEN", "")
-GITHUB_USER     = os.environ.get("GITHUB_USER", "")
-GITHUB_REPO     = os.environ.get("GITHUB_REPO", "historical-nyc-remote-job-postings")
-GITHUB_BRANCH   = os.environ.get("GITHUB_BRANCH", "data")
+OWNER     = "SimplifyJobs"
+REPO      = "Summer2026-Internships"
+FILE_PATH = ".github/scripts/listings.json"
+API_BASE  = f"https://api.github.com/repos/{OWNER}/{REPO}"
+RAW_BASE  = f"https://raw.githubusercontent.com/{OWNER}/{REPO}"
+
+ROOT        = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR    = os.path.join(ROOT, "data")
+NYC_CSV     = os.path.join(DATA_DIR, "nyc_jobs.csv")
+REM_CSV     = os.path.join(DATA_DIR, "remote_jobs.csv")
+EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
+DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
+QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
+
+MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
+MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
+
+CSV_HEADERS = [
+    "company_name", "title", "recruiting_season",
+    "date_posted", "first_seen_date", "url", "id",
+]
 
 DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
@@ -61,267 +60,427 @@ EXCL_HEADERS = [
     "blocked_title", "blocked_company", "blocked_date",
 ]
 
-ROLE_CATEGORIES = [
-    "Software Engineering",
-    "Data Engineering",
-    "Data Analysis",
-    "Machine Learning / AI",
-    "Cybersecurity",
-    "Product Management",
-    "Quant / Finance",
-    "IT Support",
-    "Other",
-]
+QUEUE_HEADERS = ["id", "company_name", "title", "job_url", "first_seen_date"]
 
-CLASS_YEARS = [
-    "Open to All",
-    "Freshman",
-    "Sophomore",
-    "Junior",
-    "Grad Student",
-]
+# -- Filters -------------------------------------------------------------------
+NYC_KEYWORDS = ["new york, ny", "new york city", "nyc", "new york"]
 
-LANGUAGES = [
-    "English",
-    "Chinese (Mandarin)",
-    "Chinese (Cantonese)",
-    "Spanish",
-    "French",
-    "German",
-    "Japanese",
-    "Korean",
-    "Portuguese",
-    "Arabic",
-    "Hindi",
-    "Russian",
-    "Other",
-]
+def is_nyc(locations):
+    return any(kw in loc.lower() for loc in locations for kw in NYC_KEYWORDS)
 
-EXCLUSION_REASONS = [
-    "Not relevant to tech majors",
-    "Non-US position",
-    "PhD students only",
-    "Non-English speaking role",
-]
+def is_remote(locations):
+    return bool(locations) and all("remote" in loc.lower() for loc in locations)
 
-# -- Rate limiting -------------------------------------------------------------
-MAX_ATTEMPTS = 5
-LOCKOUT_SECS = 900  # 15 minutes
-_failed: dict = defaultdict(list)
 
-def get_ip():
-    return (request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
-            or request.remote_addr or "unknown")
+# -- HTTP helpers --------------------------------------------------------------
+HEADERS = {
+    "User-Agent": "historical-job-scraper/2.0",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+}
 
-def is_locked(ip):
-    now = time.time()
-    _failed[ip] = [t for t in _failed[ip] if now - t < LOCKOUT_SECS]
-    return len(_failed[ip]) >= MAX_ATTEMPTS
+def api_get(url, retries=3):
+    for attempt in range(retries):
+        req = urllib.request.Request(url, headers=HEADERS)
+        try:
+            with urllib.request.urlopen(req, timeout=15) as r:
+                remaining = int(r.headers.get("X-RateLimit-Remaining", 99))
+                if remaining < 5:
+                    wait = max(0, int(r.headers.get("X-RateLimit-Reset", time.time()+61)) - time.time()) + 2
+                    print(f"  [rate limit] waiting {wait:.0f}s", flush=True)
+                    time.sleep(wait)
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="replace")
+            if e.code == 403 and "rate limit" in body.lower():
+                wait = max(0, int(e.headers.get("X-RateLimit-Reset", time.time()+61)) - time.time()) + 2
+                time.sleep(wait)
+                continue
+            raise RuntimeError(f"GitHub API error {e.code}: {body[:300]}") from e
+    raise RuntimeError(f"Failed after {retries} retries: {url}")
 
-def lockout_remaining(ip):
-    if not _failed[ip]:
-        return 0
-    return max(0, int(LOCKOUT_SECS - (time.time() - min(_failed[ip]))))
 
-# -- GitHub API ----------------------------------------------------------------
-def gh_headers():
-    return {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
+def fetch_raw(sha):
+    url = f"{RAW_BASE}/{sha}/{FILE_PATH}"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "historical-job-scraper/2.0"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            return r.read()
+    except Exception:
+        return None
 
-def get_file(path):
-    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{path}"
-    r = requests.get(url, headers=gh_headers(), params={"ref": GITHUB_BRANCH})
-    if r.status_code == 404:
-        return "", None
-    r.raise_for_status()
-    data = r.json()
-    return base64.b64decode(data["content"]).decode("utf-8"), data["sha"]
 
-def put_file(path, content, sha, message):
-    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{path}"
-    payload = {
-        "message": message,
-        "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
-        "branch":  GITHUB_BRANCH,
-    }
-    if sha:
-        payload["sha"] = sha
-    requests.put(url, headers=gh_headers(), json=payload).raise_for_status()
-
-def load_csv_gh(path, fieldnames):
-    content, sha = get_file(path)
-    if not content.strip():
-        return [], sha
-    return list(csv.DictReader(io.StringIO(content))), sha
-
-def save_csv_gh(path, rows, fieldnames, sha, msg):
-    buf = io.StringIO()
-    w = csv.DictWriter(buf, fieldnames=fieldnames, extrasaction="ignore", lineterminator="\n")
-    w.writeheader()
-    w.writerows(rows)
-    put_file(path, buf.getvalue(), sha, msg)
-
-# -- Auth ----------------------------------------------------------------------
-def login_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not session.get("logged_in"):
-            return redirect(url_for("login"))
-        return f(*args, **kwargs)
-    return decorated
-
-@app.errorhandler(CSRFError)
-def csrf_error(e):
-    flash("Session expired or invalid request — please try again.")
-    return redirect(url_for("review")), 400
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    ip = get_ip()
-    if request.method == "POST":
-        if is_locked(ip):
-            mins = lockout_remaining(ip) // 60
-            secs = lockout_remaining(ip) % 60
-            flash(f"Too many failed attempts. Try again in {mins}m {secs}s.")
-            return render_template("login.html"), 429
-
-        submitted = request.form.get("password", "")
-        if hmac.compare_digest(submitted, REVIEW_PASSWORD):
-            _failed.pop(ip, None)
-            session.permanent = True
-            session["logged_in"] = True
-            return redirect(url_for("review"))
-        else:
-            _failed[ip].append(time.time())
-            left = MAX_ATTEMPTS - len(_failed[ip])
-            if left > 0:
-                flash(f"Incorrect password. {left} attempt(s) remaining.")
-            else:
-                flash("Too many failed attempts. Locked out for 15 minutes.")
-            return render_template("login.html"), 401
-
-    return render_template("login.html")
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
-
-# -- Review queue --------------------------------------------------------------
-@app.route("/")
-@login_required
-def review():
-    details, _ = load_csv_gh("data/job_details.csv", DETAILS_HEADERS)
-    excl, _    = load_csv_gh("data/excluded_jobs.csv", EXCL_HEADERS)
-    excl_ids   = {r["id"] for r in excl}
-    unreviewed = [j for j in details
-                  if j.get("status") == "unreviewed" and j.get("id") not in excl_ids]
-    return render_template(
-        "review.html",
-        job=unreviewed[0] if unreviewed else None,
-        unreviewed_count=len(unreviewed),
-        reviewed_count=sum(1 for j in details if j.get("status") == "reviewed"),
-        excluded_count=len(excl),
-        exclusion_reasons=EXCLUSION_REASONS,
-        languages=LANGUAGES,
-        role_categories=ROLE_CATEGORIES,
-        class_years=CLASS_YEARS,
+# -- Archiving -----------------------------------------------------------------
+def archive_wayback(url, retries=2):
+    req = urllib.request.Request(
+        f"https://web.archive.org/save/{url}",
+        headers={"User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)"},
+        method="GET",
     )
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                loc = r.headers.get("Content-Location", "")
+                if loc:
+                    return f"https://web.archive.org{loc}", "success"
+                return r.url, "success"
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="replace")
+            if "excluded" in body.lower() or e.code == 403:
+                return "", "excluded"
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+    return "", "failed"
 
-@app.route("/action", methods=["POST"])
-@login_required
-def action():
-    job_id      = request.form.get("job_id", "").strip()
-    act         = request.form.get("action", "")
-    archive_url = request.form.get("archive_url", "").strip()
 
-    if not job_id:
-        flash("No job ID provided.")
-        return redirect(url_for("review"))
+def archive_ghostarchive(url, retries=2):
+    """Submit URL to ghostarchive.org. Returns (archive_url, status)."""
+    for attempt in range(retries):
+        try:
+            data = urllib.parse.urlencode({"url": url}).encode()
+            req = urllib.request.Request(
+                "https://ghostarchive.org/archive2",
+                data=data,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            )
+            opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+            with opener.open(req, timeout=60) as r:
+                arc = r.url
+                if "ghostarchive.org" in arc:
+                    return arc, "success"
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+        except urllib.error.HTTPError as e:
+            loc = e.headers.get("Location", "")
+            if loc and "ghostarchive.org" in loc:
+                return loc, "success"
+            if e.code == 429 and attempt < retries - 1:
+                time.sleep(15)
+                continue
+            return "", "failed"
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+    return "", "failed"
 
-    details, d_sha = load_csv_gh("data/job_details.csv", DETAILS_HEADERS)
-    excl, e_sha    = load_csv_gh("data/excluded_jobs.csv", EXCL_HEADERS)
-    job = next((j for j in details if j.get("id") == job_id), None)
 
-    if not job:
-        flash("Job not found.")
-        return redirect(url_for("review"))
+def do_archive(job_url):
+    print(f"    archiving ... ", end="", flush=True)
+    wb_url, wb_status = archive_wayback(job_url)
+    if wb_status == "success":
+        print("wayback OK")
+        return wb_url, "wayback", "success"
+    if wb_status == "excluded":
+        print("wayback excluded -> ghostarchive ... ", end="", flush=True)
+    else:
+        print("wayback failed -> ghostarchive ... ", end="", flush=True)
+    ga_url, ga_status = archive_ghostarchive(job_url)
+    if ga_status == "success":
+        print("OK")
+        return ga_url, "ghostarchive", "success"
+    print("failed")
+    return "", "none", "failed"
 
-    if act == "save_archive":
-        # Save archive URL without changing review status
-        if archive_url:
-            for j in details:
-                if j.get("id") == job_id:
-                    j["archive_url"] = archive_url
-                    j["archive_source"] = (
-                        "wayback"      if "web.archive.org" in archive_url else
-                        "ghostarchive" if "ghostarchive.org" in archive_url else
-                        "archive.ph"   if "archive.ph" in archive_url or "archive.today" in archive_url else
-                        "manual"
-                    )
-                    j["archive_status"] = "success"
-                    if not j.get("date_archived"):
-                        j["date_archived"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-                    break
-            save_csv_gh("data/job_details.csv", details, DETAILS_HEADERS, d_sha,
-                        f"review: save archive URL for {job.get('company_name')} — {job.get('title')[:50]}")
-            flash(f"Archive URL saved for {job.get('company_name')} — {job.get('title')}")
-        else:
-            flash("No archive URL provided.")
-        return redirect(url_for("review"))
 
-    if act == "exclude":
-        reason = request.form.get("exclusion_reason", EXCLUSION_REASONS[0])
-        if reason not in EXCLUSION_REASONS:
-            reason = EXCLUSION_REASONS[0]
-        excl.append({
-            "id":              job_id,
-            "company_name":    job.get("company_name", ""),
-            "reason":          reason,
-            "blocked_title":   job.get("title", ""),
-            "blocked_company": job.get("company_name", ""),
-            "blocked_date":    datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        })
-        details = [j for j in details if j.get("id") != job_id]
-        save_csv_gh("data/excluded_jobs.csv", excl, EXCL_HEADERS, e_sha,
-                    f"review: exclude {job.get('company_name')} — {job.get('title')[:50]}")
-        save_csv_gh("data/job_details.csv", details, DETAILS_HEADERS, d_sha,
-                    f"review: remove excluded job {job_id[:8]} from details")
-        flash(f"Excluded: {job.get('company_name')} — {job.get('title')}")
+# -- CSV helpers ---------------------------------------------------------------
+def load_csv(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        return [
+            {k: v for k, v in row.items() if k is not None and k in CSV_HEADERS}
+            for row in csv.DictReader(f)
+        ]
 
-    elif act == "reviewed":
-        # Combine role and year categories as pipe-separated string
-        role_cats  = [c for c in request.form.getlist("role_categories") if c in ROLE_CATEGORIES]
-        class_year = request.form.get("class_year", "Open to All")
-        if class_year not in CLASS_YEARS:
-            class_year = "Open to All"
-        category          = " | ".join(role_cats) if role_cats else ""
-        additional_skills = request.form.get("additional_skills", "").strip()
-        language_skills   = " | ".join(request.form.getlist("language_skills"))
-        for j in details:
-            if j.get("id") == job_id:
-                j["status"]            = "reviewed"
-                j["category"]          = category
-                j["class_year"]        = class_year
-                j["additional_skills"] = additional_skills
-                j["language_skills"]   = language_skills
-                if archive_url:
-                    j["archive_url"] = archive_url
-                    j["archive_source"] = (
-                        "wayback"      if "web.archive.org" in archive_url else
-                        "ghostarchive" if "ghostarchive.org" in archive_url else
-                        "archive.ph"   if "archive.ph" in archive_url or "archive.today" in archive_url else
-                        "manual"
-                    )
-                    j["archive_status"] = "success"
-                    if not j.get("date_archived"):
-                        j["date_archived"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-                break
-        save_csv_gh("data/job_details.csv", details, DETAILS_HEADERS, d_sha,
-                    f"review: approve {job.get('company_name')} — {job.get('title')[:50]}")
-        flash(f"Approved: {job.get('company_name')} — {job.get('title')}")
+def save_csv(path, rows):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    clean = [{k: v for k, v in r.items() if k in CSV_HEADERS} for r in rows]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=CSV_HEADERS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(clean)
 
-    return redirect(url_for("review"))
+def load_details():
+    if not os.path.exists(DETAILS_CSV):
+        return {}
+    with open(DETAILS_CSV, encoding="utf-8") as f:
+        return {row["id"]: row for row in csv.DictReader(f) if row.get("id")}
+
+def save_details(details_map):
+    rows = sorted(details_map.values(), key=lambda r: r.get("first_seen_date", ""))
+    with open(DETAILS_CSV, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=DETAILS_HEADERS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+def load_queue():
+    if not os.path.exists(QUEUE_CSV):
+        return []
+    with open(QUEUE_CSV, encoding="utf-8") as f:
+        return [row for row in csv.DictReader(f) if row.get("id")]
+
+def save_queue(rows):
+    """Persist queue. Always writes the file even when empty to avoid git churn."""
+    with open(QUEUE_CSV, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=QUEUE_HEADERS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+def load_exclusions():
+    excluded_ids, all_rows = set(), []
+    if not os.path.exists(EXCLUDE_CSV):
+        return excluded_ids, all_rows
+    with open(EXCLUDE_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            jid = (row.get("id") or "").strip()
+            if jid:
+                excluded_ids.add(jid)
+            all_rows.append({h: row.get(h, "") for h in EXCL_HEADERS})
+    return excluded_ids, all_rows
+
+def save_exclusions(rows):
+    with open(EXCLUDE_CSV, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=EXCL_HEADERS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+def is_excluded(job_id, excluded_ids):
+    return job_id in excluded_ids
+
+
+# -- Main ----------------------------------------------------------------------
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--commits", type=int, default=5)
+    parser.add_argument("--skip-archive", action="store_true",
+                        help="Skip archiving; new jobs still added to queue")
+    args = parser.parse_args()
+
+    print("=" * 60)
+    print("historical-nyc-remote-job-postings -- Updater")
+    print("=" * 60)
+    print(f"  Auth    : unauthenticated (public repo)")
+    print(f"  Fetch   : last {args.commits} commits touching {FILE_PATH}")
+    print(f"  Archive : {'skipped (--skip-archive)' if args.skip_archive else 'enabled'}")
+    print()
+
+    # 1. Load exclusions
+    excluded_ids, excl_rows = load_exclusions()
+    print(f"  Exclusions : {len(excluded_ids):,} IDs")
+
+    # 2. Load existing CSVs and apply exclusions
+    nyc_rows = load_csv(NYC_CSV)
+    rem_rows  = load_csv(REM_CSV)
+    nyc_before, rem_before = len(nyc_rows), len(rem_rows)
+    nyc_rows = [r for r in nyc_rows if not is_excluded(r.get("id", ""), excluded_ids)]
+    rem_rows  = [r for r in rem_rows  if not is_excluded(r.get("id", ""), excluded_ids)]
+    removed_existing = (nyc_before - len(nyc_rows)) + (rem_before - len(rem_rows))
+    if removed_existing:
+        print(f"  Removed {removed_existing:,} rows matching exclusion rules")
+
+    seen_nyc_ids = {r["id"] for r in nyc_rows}
+    seen_rem_ids = {r["id"] for r in rem_rows}
+    print(f"  CSV     : {len(nyc_rows):,} NYC  |  {len(rem_rows):,} remote")
+
+    # 3. Load job_details and persistent queue
+    details_map   = load_details()
+    pending_queue = load_queue()
+    # Derive watermark from max first_seen_date already in job_details
+    watermark = max(
+        (r.get("first_seen_date", "") for r in details_map.values()),
+        default=""
+    )
+    # Clean queue: remove already-archived or newly excluded jobs
+    pending_queue = [
+        j for j in pending_queue
+        if j["id"] not in details_map and not is_excluded(j["id"], excluded_ids)
+    ]
+    queued_ids = {j["id"] for j in pending_queue}
+    print(f"  Details : {len(details_map):,} archived entries")
+    print(f"  Queue   : {len(pending_queue):,} jobs pending archive")
+    print()
+
+    # 4. Fetch recent commits
+    print("  Fetching recent commits from GitHub API ...", flush=True)
+    url = f"{API_BASE}/commits?path={FILE_PATH}&per_page={min(args.commits, 100)}&sha=dev"
+    try:
+        commits = api_get(url)
+    except RuntimeError as e:
+        print(f"  ERROR: {e}")
+        sys.exit(1)
+    commit_list = [(c["sha"], c["commit"]["author"]["date"]) for c in commits]
+    print(f"  Got {len(commit_list)} commits")
+    print()
+
+    # 5. Process commits oldest-first
+    new_nyc, new_rem, errors = [], [], 0
+    for i, (sha, date) in enumerate(reversed(commit_list), 1):
+        print(f"  [{i:>2}/{len(commit_list)}] {sha[:10]}  {date} ... ", end="", flush=True)
+        raw = fetch_raw(sha)
+        if raw is None:
+            print("FETCH FAILED"); errors += 1; continue
+        try:
+            listings = json.loads(raw)
+        except json.JSONDecodeError:
+            print("JSON ERROR"); errors += 1; continue
+
+        added_nyc = added_rem = 0
+        for job in listings:
+            jid   = job.get("id", "")
+            locs  = job.get("locations", [])
+            title = job.get("title", "").strip()
+            if not jid or is_excluded(jid, excluded_ids):
+                continue
+
+            terms = " | ".join(job.get("terms", []))
+            row = {
+                "company_name":      job.get("company_name", "").strip(),
+                "title":             title,
+                "recruiting_season": terms,
+                "date_posted":       job.get("date_posted", ""),
+                "first_seen_date":   date,
+                "url":               job.get("url", ""),
+                "id":                jid,
+            }
+
+            is_new = False
+            if jid not in seen_nyc_ids and is_nyc(locs):
+                seen_nyc_ids.add(jid); new_nyc.append(row); added_nyc += 1; is_new = True
+            if jid not in seen_rem_ids and is_remote(locs):
+                seen_rem_ids.add(jid); new_rem.append(row); added_rem += 1; is_new = True
+
+            # Add to job_details if:
+            # - job is new to the CSVs AND
+            # - not already in details AND
+            # - its first_seen_date is after the watermark (or no watermark set)
+            job_date = row["first_seen_date"]
+            after_watermark = (not watermark) or (job_date >= watermark)
+            if is_new and jid not in details_map and jid not in queued_ids and after_watermark:
+                pending_queue.append({
+                    "id":              jid,
+                    "company_name":    row["company_name"],
+                    "title":           row["title"],
+                    "job_url":         row["url"],
+                    "first_seen_date": row["first_seen_date"],
+                })
+                queued_ids.add(jid)
+                # Update watermark to track latest date processed
+                if not watermark or job_date > watermark:
+                    watermark = job_date
+                # Pre-add to job_details as unreviewed so it shows in review queue
+                # immediately, even before archiving completes
+                details_map[jid] = {
+                    "id":               jid,
+                    "company_name":     row["company_name"],
+                    "title":            row["title"],
+                    "job_url":          row["url"],
+                    "archive_url":      "",
+                    "archive_source":   "",
+                    "archive_status":   "pending",
+                    "category":         "",
+                    "date_archived":    "",
+                    "status":           "unreviewed",
+                    "first_seen_date":  row["first_seen_date"],
+                }
+
+        print(f"+{added_nyc} NYC  +{added_rem} remote")
+        time.sleep(0.05)
+
+    print()
+    print(f"  Errors          : {errors}")
+    print(f"  New NYC jobs    : +{len(new_nyc)}")
+    print(f"  New remote jobs : +{len(new_rem)}")
+    print(f"  Queue total     : {len(pending_queue):,} jobs pending archive")
+
+    # 6. Archive from persistent queue
+    if pending_queue and not args.skip_archive:
+        to_archive = pending_queue[:MAX_ARCHIVE_PER_RUN]
+        carry_over = len(pending_queue) - len(to_archive)
+        print()
+        print(f"  Archiving {len(to_archive)} jobs | {carry_over} carry over to next run")
+
+        archived_ids = set()
+        for job in to_archive:
+            jid      = job["id"]
+            attempts = int(job.get("archive_attempts", 0))
+            print(f"  -> {job['company_name']}: {job['title'][:55]}")
+            arc_url, arc_src, arc_status = do_archive(job["job_url"])
+            time.sleep(3)
+            # Update existing entry preserving status and category
+            existing = details_map.get(jid, {})
+            details_map[jid] = {
+                "id":              jid,
+                "company_name":    job["company_name"],
+                "title":           job["title"],
+                "job_url":         job["job_url"],
+                "archive_url":     arc_url,
+                "archive_source":  arc_src,
+                "archive_status":  arc_status,
+                "category":        existing.get("category", ""),
+                "date_archived":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "status":          existing.get("status", "unreviewed"),
+                "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
+            }
+            if arc_status == "success":
+                archived_ids.add(jid)  # success — remove from queue
+            else:
+                # Failed — increment attempt count, keep in queue for retry
+                job["archive_attempts"] = str(attempts + 1)
+                remaining = MAX_ARCHIVE_ATTEMPTS - (attempts + 1)
+                if remaining > 0:
+                    print(f"     will retry ({remaining} attempt(s) remaining)")
+                else:
+                    print(f"     max attempts reached — flagged for manual archive")
+                    archived_ids.add(jid)  # remove from queue after final failure
+
+        # Remove archived jobs from queue; rest carry over
+        pending_queue = [j for j in pending_queue if j["id"] not in archived_ids]
+
+    # 7. Save everything
+    if new_nyc or new_rem or removed_existing:
+        nyc_rows.extend(new_nyc)
+        rem_rows.extend(new_rem)
+        save_csv(NYC_CSV, nyc_rows)
+        save_csv(REM_CSV, rem_rows)
+        save_exclusions(excl_rows)
+        print()
+        print(f"  data/nyc_jobs.csv    -> {len(nyc_rows):,} rows")
+        print(f"  data/remote_jobs.csv -> {len(rem_rows):,} rows")
+
+    # Always save queue -- zero data loss guarantee
+    save_queue(pending_queue)
+    if pending_queue:
+        print(f"  data/pending_archive.csv -> {len(pending_queue):,} jobs still queued")
+
+    # Always save job_details when new jobs were added or archiving ran
+    if details_map and (new_nyc or new_rem or not args.skip_archive):
+        save_details(details_map)
+        failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
+        print(f"  data/job_details.csv -> {len(details_map):,} entries")
+        if failed:
+            print(f"  Warning: {len(failed)} jobs failed to archive:")
+            for r in failed[-5:]:
+                print(f"     {r['company_name']}: {r['title'][:50]}")
+
+    if not new_nyc and not new_rem and not removed_existing:
+        print("  No changes to job CSVs.")
+
+    print("\n  Done OK")
+
+
+if __name__ == "__main__":
+    main()
