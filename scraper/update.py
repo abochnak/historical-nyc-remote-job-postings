@@ -50,7 +50,7 @@ CSV_HEADERS = [
 DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
-    "archive_status", "scrape_status",
+    "archive_status",
     "category", "date_archived", "status",
 ]
 
@@ -383,8 +383,7 @@ def main():
                     "archive_url":    "",
                     "archive_source": "",
                     "archive_status": "pending",
-                    "scrape_status":  "",
-                    "category":       "",
+                        "category":       "",
                     "date_archived":  "",
                     "status":         "unreviewed",
                 }
@@ -421,7 +420,6 @@ def main():
                 "archive_url":    arc_url,
                 "archive_source": arc_src,
                 "archive_status": arc_status,
-                "scrape_status":  "",
                 "category":       existing.get("category", ""),
                 "date_archived":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "status":         existing.get("status", "unreviewed"),
