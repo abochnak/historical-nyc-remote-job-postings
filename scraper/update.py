@@ -226,7 +226,7 @@ def load_details():
         return {row["id"]: row for row in csv.DictReader(f) if row.get("id")}
 
 def save_details(details_map):
-    rows = sorted(details_map.values(), key=lambda r: r.get("date_archived", ""))
+    rows = sorted(details_map.values(), key=lambda r: r.get("first_seen_date", ""))
     with open(DETAILS_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=DETAILS_HEADERS, extrasaction="ignore")
         w.writeheader()
