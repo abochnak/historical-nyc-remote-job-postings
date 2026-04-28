@@ -85,14 +85,14 @@ MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
 
 CSV_HEADERS = [
     "company_name", "title", "recruiting_season",
-    "date_posted", "first_seen_date", "url", "id",
+    "date_posted", "first_seen_date", "url", "id", "source",
 ]
 
 DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status",
-    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived", "status", "first_seen_date",
+    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived", "status", "source", "first_seen_date",
 ]
 
 EXCL_HEADERS = [
@@ -349,6 +349,7 @@ def main():
                 "first_seen_date":   date,
                 "url":               job.get("url", ""),
                 "id":                jid,
+                "source":            "simplify",
             }
 
             is_new = False
@@ -395,6 +396,7 @@ def main():
                     "category":         "",
                     "date_archived":    "",
                     "status":           "unreviewed",
+                    "source":           "simplify",
                     "first_seen_date":  row["first_seen_date"],
                 }
 
@@ -434,6 +436,7 @@ def main():
                 "category":        existing.get("category", ""),
                 "date_archived":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "status":          existing.get("status", "unreviewed"),
+                "source":          existing.get("source", "simplify"),
                 "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
             }
             if arc_status == "success":
