@@ -52,7 +52,7 @@ DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status",
-    "category", "class_year", "degree_type", "additional_skills", "language_requirements", "date_archived", "status", "first_seen_date",
+    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived", "status", "first_seen_date",
 ]
 
 EXCL_HEADERS = [
