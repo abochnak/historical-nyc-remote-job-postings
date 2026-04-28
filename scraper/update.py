@@ -38,7 +38,8 @@ NYC_CSV     = os.path.join(DATA_DIR, "nyc_jobs.csv")
 REM_CSV     = os.path.join(DATA_DIR, "remote_jobs.csv")
 EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
 DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
-QUEUE_CSV   = os.path.join(DATA_DIR, "pending_archive.csv")
+QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
+WATERMARK_CSV  = os.path.join(DATA_DIR, "last_processed.txt")  # timestamp watermark
 
 MAX_ARCHIVE_PER_RUN = 5   # matches 30-min cron; typical window has 1-3 new jobs
 
@@ -245,6 +246,19 @@ def save_queue(rows):
         w.writeheader()
         w.writerows(rows)
 
+def load_watermark():
+    """Load the last processed first_seen_date from disk. Returns '' if not set."""
+    if not os.path.exists(WATERMARK_CSV):
+        return ""
+    with open(WATERMARK_CSV, encoding="utf-8") as f:
+        return f.read().strip()
+
+def save_watermark(timestamp):
+    """Save the most recent first_seen_date we processed into job_details."""
+    with open(WATERMARK_CSV, "w", encoding="utf-8") as f:
+        f.write(timestamp)
+
+
 def load_exclusions():
     excluded_ids, all_rows = set(), []
     if not os.path.exists(EXCLUDE_CSV):
@@ -304,6 +318,7 @@ def main():
     # 3. Load job_details and persistent queue
     details_map   = load_details()
     pending_queue = load_queue()
+    watermark     = load_watermark()  # last first_seen_date added to job_details
     # Clean queue: remove already-archived or newly excluded jobs
     pending_queue = [
         j for j in pending_queue
@@ -311,6 +326,7 @@ def main():
     ]
     queued_ids = {j["id"] for j in pending_queue}
     print(f"  Details : {len(details_map):,} archived entries")
+    print(f"  Watermark: {watermark or 'none (will process all new jobs)'}") 
     print(f"  Queue   : {len(pending_queue):,} jobs pending archive")
     print()
 
@@ -363,8 +379,13 @@ def main():
             if jid not in seen_rem_ids and is_remote(locs):
                 seen_rem_ids.add(jid); new_rem.append(row); added_rem += 1; is_new = True
 
-            # Add to persistent queue immediately -- survives across runs
-            if is_new and jid not in details_map and jid not in queued_ids:
+            # Add to job_details if:
+            # - job is new to the CSVs AND
+            # - not already in details AND
+            # - its first_seen_date is after the watermark (or no watermark set)
+            job_date = row["first_seen_date"]
+            after_watermark = (not watermark) or (job_date >= watermark)
+            if is_new and jid not in details_map and jid not in queued_ids and after_watermark:
                 pending_queue.append({
                     "id":              jid,
                     "company_name":    row["company_name"],
@@ -373,6 +394,9 @@ def main():
                     "first_seen_date": row["first_seen_date"],
                 })
                 queued_ids.add(jid)
+                # Update watermark to track latest date processed
+                if not watermark or job_date > watermark:
+                    watermark = job_date
                 # Pre-add to job_details as unreviewed so it shows in review queue
                 # immediately, even before archiving completes
                 details_map[jid] = {
@@ -383,7 +407,7 @@ def main():
                     "archive_url":    "",
                     "archive_source": "",
                     "archive_status": "pending",
-                        "category":       "",
+                    "category":       "",
                     "date_archived":  "",
                     "status":         "unreviewed",
                 }
@@ -455,8 +479,12 @@ def main():
     if pending_queue:
         print(f"  data/pending_archive.csv -> {len(pending_queue):,} jobs still queued")
 
-    if not args.skip_archive and details_map:
+    # Always save job_details when new jobs were added or archiving ran
+    if details_map and (new_nyc or new_rem or not args.skip_archive):
         save_details(details_map)
+        if watermark:
+            save_watermark(watermark)
+            print(f"  data/last_processed.txt -> {watermark}")
         failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
         print(f"  data/job_details.csv -> {len(details_map):,} entries")
         if failed:
