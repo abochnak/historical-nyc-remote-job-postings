@@ -202,7 +202,10 @@ def load_csv(path):
 
 def save_csv(path, rows):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    clean = [{k: v for k, v in r.items() if k in CSV_HEADERS} for r in rows]
+    clean = sorted(
+        [{k: v for k, v in r.items() if k in CSV_HEADERS} for r in rows],
+        key=lambda r: r.get("first_seen_date", ""), reverse=True
+    )
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=CSV_HEADERS, extrasaction="ignore")
         w.writeheader()
@@ -215,7 +218,7 @@ def load_details():
         return {row["id"]: row for row in csv.DictReader(f) if row.get("id")}
 
 def save_details(details_map):
-    rows = sorted(details_map.values(), key=lambda r: r.get("first_seen_date", ""))
+    rows = sorted(details_map.values(), key=lambda r: r.get("first_seen_date", ""), reverse=True)
     with open(DETAILS_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=DETAILS_HEADERS, extrasaction="ignore")
         w.writeheader()
@@ -247,6 +250,7 @@ def load_exclusions():
     return excluded_ids, all_rows
 
 def save_exclusions(rows):
+    rows = sorted(rows, key=lambda r: r.get("blocked_date", ""), reverse=True)
     with open(EXCLUDE_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=EXCL_HEADERS, extrasaction="ignore")
         w.writeheader()
