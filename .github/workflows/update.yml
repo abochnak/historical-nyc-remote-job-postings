@@ -13,7 +13,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # prevent stuck runs blocking the next schedule
+    timeout-minutes: 15
 
     permissions:
       contents: write
@@ -30,17 +30,15 @@ jobs:
         with:
           ref: data
           path: data-branch
-          # No continue-on-error — fail loudly if data branch is missing
-          # so we never run with an empty details_map and wipe job_details.csv
 
       - name: Verify data files exist before running
         run: |
           if [ ! -f "data-branch/data/nyc_jobs.csv" ]; then
-            echo "ERROR: data/nyc_jobs.csv missing from data branch — aborting to prevent data loss"
+            echo "ERROR: data/nyc_jobs.csv missing — aborting to prevent data loss"
             exit 1
           fi
           if [ ! -f "data-branch/data/job_details.csv" ]; then
-            echo "ERROR: data/job_details.csv missing from data branch — aborting to prevent data loss"
+            echo "ERROR: data/job_details.csv missing — aborting to prevent data loss"
             exit 1
           fi
           echo "Data files verified OK"
@@ -60,17 +58,49 @@ jobs:
           echo "Checking last $COMMITS commits"
           python scraper/update.py --commits $COMMITS
 
-      - name: Amend the single data branch commit (no history accumulation)
+      - name: Merge Flask edits and amend data branch
         run: |
           cd data-branch
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Fetch latest remote — picks up any Flask edits made since checkout
+          git fetch origin data
+
+          LOCAL=$(git rev-parse HEAD)
+          REMOTE=$(git rev-parse origin/data)
+
+          if [ "$LOCAL" != "$REMOTE" ]; then
+            echo "Flask edits detected on remote — merging into current state"
+            # Copy our updated data files to a temp location
+            cp -r data/ /tmp/action-data/
+
+            # Reset to latest remote (which has Flask edits)
+            git reset --hard origin/data
+
+            # Overwrite with our action-updated files
+            # This preserves Flask edits to files the action didn't touch
+            # and uses action output for files the action did update
+            cp /tmp/action-data/nyc_jobs.csv      data/nyc_jobs.csv
+            cp /tmp/action-data/remote_jobs.csv   data/remote_jobs.csv
+            cp /tmp/action-data/pending_archive.csv data/pending_archive.csv
+            # Preserve Flask edits to job_details and excluded_jobs
+            # by only overwriting if action made changes
+            if ! diff -q /tmp/action-data/job_details.csv data/job_details.csv > /dev/null 2>&1; then
+              cp /tmp/action-data/job_details.csv data/job_details.csv
+            fi
+            if ! diff -q /tmp/action-data/excluded_jobs.csv data/excluded_jobs.csv > /dev/null 2>&1; then
+              cp /tmp/action-data/excluded_jobs.csv data/excluded_jobs.csv
+            fi
+          fi
+
+          # Amend the single commit with final merged state
           git add data/
           if git diff --cached --quiet; then
-            echo "No new jobs — nothing to commit."
+            echo "No changes — nothing to commit."
           else
             git commit --amend --no-edit \
               -m "data: latest job data $(date -u '+%Y-%m-%d %H:%M UTC')"
             git push --force origin data
-            echo "Data branch updated"
+            echo "Data branch updated — Flask edits preserved"
           fi
