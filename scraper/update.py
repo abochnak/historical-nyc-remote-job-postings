@@ -313,6 +313,25 @@ def load_details():
 
 def save_details(details_map):
     rows = sorted(details_map.values(), key=lambda r: r.get("first_seen_date", ""), reverse=True)
+
+    # raw_text is not in DETAILS_HEADERS so it's stripped from the CSV.
+    # Read the existing JSONL to restore it before overwriting.
+    if os.path.exists(DETAILS_JSONL):
+        preserved = {}
+        with open(DETAILS_JSONL, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        entry = json.loads(line)
+                        if entry.get("id") and entry.get("raw_text"):
+                            preserved[entry["id"]] = entry["raw_text"]
+                    except Exception:
+                        pass
+        for row in rows:
+            if not row.get("raw_text") and row.get("id") in preserved:
+                row["raw_text"] = preserved[row["id"]]
+
     with open(DETAILS_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=DETAILS_HEADERS, extrasaction="ignore")
         w.writeheader()
