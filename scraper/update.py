@@ -18,17 +18,18 @@ import argparse
 import csv
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+from html.parser import HTMLParser
 
 # -- URL deduplication --------------------------------------------------------
 def extract_job_id(url):
     """Extract the most unique identifier from a job URL for fuzzy deduplication."""
-    import re
     if not url:
         return None
     patterns = [
@@ -48,7 +49,6 @@ def extract_job_id(url):
         if m:
             return m.group(1) if m.lastindex else m.group(0)
     # Fallback: strip query params, use last path segment
-    import urllib.parse
     path = urllib.parse.urlparse(url).path.rstrip("/")
     return path.split("/")[-1] if path else url
 
@@ -77,7 +77,8 @@ DATA_DIR    = os.path.join(ROOT, "data")
 NYC_CSV     = os.path.join(DATA_DIR, "nyc_jobs.csv")
 REM_CSV     = os.path.join(DATA_DIR, "remote_jobs.csv")
 EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
-DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
+DETAILS_CSV  = os.path.join(DATA_DIR, "job_details.csv")
+DETAILS_JSONL = os.path.join(DATA_DIR, "job_details.jsonl")
 QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
 
 MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
@@ -150,6 +151,45 @@ def fetch_raw(sha):
         return None
 
 
+# -- Text extraction -----------------------------------------------------------
+class _TextExtractor(HTMLParser):
+    _SKIP = {"script", "style", "head", "noscript", "iframe", "nav", "footer"}
+
+    def __init__(self):
+        super().__init__()
+        self._depth = 0
+        self.parts = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() in self._SKIP:
+            self._depth += 1
+
+    def handle_endtag(self, tag):
+        if tag.lower() in self._SKIP:
+            self._depth = max(0, self._depth - 1)
+
+    def handle_data(self, data):
+        if not self._depth:
+            s = data.strip()
+            if s:
+                self.parts.append(s)
+
+
+def fetch_page_text(url, timeout=30):
+    """Fetch a URL and return its visible text with HTML tags stripped."""
+    try:
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)"}
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            html = r.read().decode(errors="replace")
+        p = _TextExtractor()
+        p.feed(html)
+        return "\n".join(p.parts)
+    except Exception:
+        return ""
+
+
 # -- Archiving -----------------------------------------------------------------
 def archive_wayback(url, retries=2):
     req = urllib.request.Request(
@@ -180,14 +220,68 @@ def archive_wayback(url, retries=2):
     return "", "failed"
 
 
+def archive_archiveph(url, retries=2):
+    for attempt in range(retries):
+        try:
+            data = urllib.parse.urlencode({"url": url}).encode()
+            req = urllib.request.Request(
+                "https://archive.ph/submit/",
+                data=data,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            )
+            with urllib.request.urlopen(req, timeout=60) as r:
+                arc_url = r.url
+            if arc_url and re.search(r"archive\.(ph|today|is)/\w", arc_url):
+                return arc_url, "success"
+            return "", "failed"
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+    return "", "failed"
+
+
+def archive_ghostarchive(url, retries=2):
+    quoted = urllib.parse.quote(url, safe="")
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(
+                f"https://ghostarchive.org/archive2?url={quoted}",
+                headers={"User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)"},
+            )
+            with urllib.request.urlopen(req, timeout=60) as r:
+                arc_url = r.url
+            if arc_url and "ghostarchive.org/archive/" in arc_url:
+                return arc_url, "success"
+            return "", "failed"
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(10)
+                continue
+            return "", "failed"
+    return "", "failed"
+
+
 def do_archive(job_url):
     print(f"    archiving ... ", end="", flush=True)
-    wb_url, wb_status = archive_wayback(job_url)
-    if wb_status == "success":
-        print("wayback OK")
-        return wb_url, "wayback", "success"
-    print("wayback failed -- flagged for manual archive")
-    return "", "none", "failed"
+
+    for fn, label in [
+        (archive_wayback,     "wayback"),
+        (archive_archiveph,   "archive.ph"),
+        (archive_ghostarchive, "ghostarchive"),
+    ]:
+        arc_url, status = fn(job_url)
+        if status == "success":
+            text = fetch_page_text(arc_url)
+            print(f"{label} OK ({len(text):,} chars)")
+            return arc_url, label, "success", text
+
+    print("all archives failed -- flagged for manual archive")
+    return "", "none", "failed", ""
 
 
 # -- CSV helpers ---------------------------------------------------------------
@@ -223,6 +317,20 @@ def save_details(details_map):
         w = csv.DictWriter(f, fieldnames=DETAILS_HEADERS, extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)
+    save_jsonl(rows)
+
+def save_jsonl(rows):
+    archived = [r for r in rows if r.get("archive_url")]
+    with open(DETAILS_JSONL, "w", encoding="utf-8") as f:
+        for row in archived:
+            f.write(json.dumps({
+                "id":            row.get("id", ""),
+                "company_name":  row.get("company_name", ""),
+                "title":         row.get("title", ""),
+                "date_archived": row.get("date_archived", ""),
+                "archive_url":   row.get("archive_url", ""),
+                "raw_text":      row.get("raw_text", ""),
+            }) + "\n")
 
 def load_queue():
     if not os.path.exists(QUEUE_CSV):
@@ -425,7 +533,7 @@ def main():
             jid      = job["id"]
             attempts = int(job.get("archive_attempts", 0))
             print(f"  -> {job['company_name']}: {job['title'][:55]}")
-            arc_url, arc_src, arc_status = do_archive(job["job_url"])
+            arc_url, arc_src, arc_status, raw_text = do_archive(job["job_url"])
             time.sleep(3)
             # Update existing entry preserving status and category
             existing = details_map.get(jid, {})
@@ -442,6 +550,7 @@ def main():
                 "status":          existing.get("status", "unreviewed"),
                 "source":          existing.get("source", "simplify"),
                 "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
+                "raw_text":        raw_text,
             }
             if arc_status == "success":
                 archived_ids.add(jid)  # success — remove from queue
@@ -481,7 +590,9 @@ def main():
     if details_map and (new_nyc or new_rem or not args.skip_archive):
         save_details(details_map)
         failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
-        print(f"  data/job_details.csv -> {len(details_map):,} entries")
+        archived_count = sum(1 for r in details_map.values() if r.get("archive_url"))
+        print(f"  data/job_details.csv  -> {len(details_map):,} entries")
+        print(f"  data/job_details.jsonl -> {archived_count:,} entries (with archive URL)")
         if failed:
             print(f"  Warning: {len(failed)} jobs failed to archive:")
             for r in failed[-5:]:
