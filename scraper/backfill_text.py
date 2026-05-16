@@ -78,7 +78,10 @@ def load_jsonl():
 def save_jsonl(entries):
     with open(JSONL, "w", encoding="utf-8") as f:
         for entry in entries:
-            f.write(json.dumps(entry) + "\n")
+            f.write(json.dumps({
+                "id":       entry.get("id", ""),
+                "raw_text": entry.get("raw_text", ""),
+            }) + "\n")
 
 
 def main():
