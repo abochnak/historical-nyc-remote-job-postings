@@ -266,9 +266,17 @@ def archive_ghostarchive(url, retries=2):
     return "", "failed"
 
 
-def do_archive(job_url):
-    print(f"    archiving ... ", end="", flush=True)
+def fetch_or_archive(job_url):
+    """Try to fetch text from live URL first. If that fails, archive and extract from archive."""
+    # Try live URL first
+    print(f"    fetching live ... ", end="", flush=True)
+    text = fetch_page_text(job_url)
+    if text.strip():
+        print(f"OK ({len(text):,} chars)")
+        return "", "live", "success", text
 
+    # Live fetch failed, archive and try archives
+    print("no text from live, archiving ... ", end="", flush=True)
     for fn, label in [
         (archive_wayback,     "wayback"),
         (archive_archiveph,   "archive.ph"),
@@ -282,6 +290,11 @@ def do_archive(job_url):
 
     print("all archives failed -- flagged for manual archive")
     return "", "none", "failed", ""
+
+
+def do_archive(job_url):
+    """Deprecated: use fetch_or_archive() instead."""
+    return fetch_or_archive(job_url)
 
 
 # -- CSV helpers ---------------------------------------------------------------
@@ -548,7 +561,7 @@ def main():
             jid      = job["id"]
             attempts = int(job.get("archive_attempts", 0))
             print(f"  -> {job['company_name']}: {job['title'][:55]}")
-            arc_url, arc_src, arc_status, raw_text = do_archive(job["job_url"])
+            arc_url, arc_src, arc_status, raw_text = fetch_or_archive(job["job_url"])
             time.sleep(3)
             # Update existing entry preserving status and category
             existing = details_map.get(jid, {})
