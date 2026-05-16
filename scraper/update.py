@@ -339,16 +339,12 @@ def save_details(details_map):
     save_jsonl(rows)
 
 def save_jsonl(rows):
-    archived = [r for r in rows if r.get("archive_url")]
+    archived = [r for r in rows if r.get("archive_url") and r.get("raw_text", "").strip()]
     with open(DETAILS_JSONL, "w", encoding="utf-8") as f:
         for row in archived:
             f.write(json.dumps({
-                "id":            row.get("id", ""),
-                "company_name":  row.get("company_name", ""),
-                "title":         row.get("title", ""),
-                "date_archived": row.get("date_archived", ""),
-                "archive_url":   row.get("archive_url", ""),
-                "raw_text":      row.get("raw_text", ""),
+                "id":       row.get("id", ""),
+                "raw_text": row.get("raw_text", ""),
             }) + "\n")
 
 def load_queue():
