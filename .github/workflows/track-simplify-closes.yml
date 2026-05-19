@@ -33,7 +33,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add simplify_transitions.csv simplify_job_state.json
+          git add --ignore-missing simplify_transitions.csv simplify_job_state.json
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
