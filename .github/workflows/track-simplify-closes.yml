@@ -16,6 +16,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: data
+
+      - name: Checkout scripts from main
+        run: |
+          git fetch origin main
+          git checkout origin/main -- simplify_close_tracker.py backfill_closes_from_simplify.py
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,7 +31,10 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run Simplify close time tracker
+      - name: Backfill past postings
+        run: python3 backfill_closes_from_simplify.py
+
+      - name: Track future transitions
         run: python3 simplify_close_tracker.py
 
       - name: Configure git
@@ -35,11 +44,12 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          git add data/nyc_jobs.csv data/remote_jobs.csv
           [ -f simplify_transitions.csv ] && git add simplify_transitions.csv || true
           [ -f simplify_job_state.json ] && git add simplify_job_state.json || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore: update Simplify job tracking data"
-            git push
+            git commit -m "chore: update Simplify close times"
+            git push origin data
           fi
