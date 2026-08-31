@@ -16,8 +16,11 @@ Nothing here needs a human. The three scripts share one extractor
 listings.json commit
         │
         ▼
-  update.py  (every 30 min)  ── new NYC/remote jobs → CSVs
-        │                       tries live fetch, then creates an archive
+  update.py  (every 30 min)
+        │
+        ├─ new NYC/remote jobs → CSVs
+        ├─ capture description text for EVERY new posting, immediately
+        └─ create an archive for up to 5 of them per run
         ▼
   job_details.csv + job_details.jsonl
         ▲
@@ -26,17 +29,26 @@ listings.json commit
                                   live URL → stored archive → Wayback capture
 ```
 
-`update.py` gets one attempt per posting as it's discovered. Whatever it misses
-— a slow page, a brief block, a posting only archived later — is picked up by
-the nightly backfill. The review app's "Scrape Text" button runs the same code
-on one job, for when you want a retry immediately rather than tomorrow.
+**Text is captured the moment a posting is discovered.** A posting is at its
+most fetchable the minute it goes up and may be gone within days, so text
+capture is deliberately *not* gated on the archive queue: archiving is
+rate-limited to 5 per run and can lag by hours, which is long enough to lose a
+posting. One GET per job is cheap; the Wayback save is what isn't.
+
+`MAX_TEXT_PER_RUN` (80) exists only so a catch-up run (`--commits 200`) can't
+fetch thousands of pages at once. Anything over it falls to the nightly job.
+
+The nightly backfill is the safety net for whatever the first attempt missed —
+a slow page, a brief block, a posting only archived later. The review app's
+"Scrape Text" button runs the same code on one job, for when you want a retry
+immediately rather than tomorrow.
 
 ## Scripts
 
 | File | What it does |
 |---|---|
 | `scraper/jobtext.py` | Shared extraction: fetch, JSON-LD/container/body extraction, quality gate. The one place this logic lives. |
-| `scraper/update.py` | Incremental updater. New commits → new jobs → CSVs, archives, first text attempt. |
+| `scraper/update.py` | Incremental updater. New commits → new jobs → CSVs, immediate text capture, archives. |
 | `scraper/backfill_text.py` | Bulk backfill of missing `raw_text`. Resumable, checkpointed, safe to re-run. |
 | `scraper/scrape.py` | Full historical build from scratch (rarely needed). |
 

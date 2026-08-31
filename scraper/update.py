@@ -24,6 +24,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -85,6 +86,18 @@ QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
 
 MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
 MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
+
+# Description text is captured for *every* newly discovered posting, not just
+# the handful that get archived this run. A posting is at its most fetchable
+# the moment it appears and may be gone within days, so waiting for a slot in
+# the archive queue is how postings get lost. One GET per job is cheap; the
+# Wayback save that MAX_ARCHIVE_PER_RUN throttles is what isn't.
+#
+# The cap here only exists so a catch-up run (--commits 200) can't fetch
+# thousands of pages in one go. Anything over it is left to backfill-text.yml.
+MAX_TEXT_PER_RUN = 80
+TEXT_WORKERS     = 6   # concurrent fetches, throttled per host by jobtext
+TEXT_HOST_DELAY  = 2.0
 
 CSV_HEADERS = [
     "company_name", "title", "recruiting_season",
@@ -248,8 +261,29 @@ def archive_ghostarchive(url, retries=2):
     return "", "failed"
 
 
-def fetch_or_archive(job_url):
-    """Try to fetch text from live URL first. If that fails, archive and extract from archive."""
+def fetch_or_archive(job_url, have_text=False):
+    """
+    Archive a job URL, extracting text along the way.
+
+    have_text=True means step 5b already captured the description from the live
+    posting, so the live fetch here is skipped and we go straight to creating an
+    archive -- the archive still matters for provenance even when the text is
+    already in hand.
+    """
+    if have_text:
+        print("    text already captured, archiving ... ", end="", flush=True)
+        for fn, label in [
+            (archive_wayback,      "wayback"),
+            (archive_archiveph,    "archive.ph"),
+            (archive_ghostarchive, "ghostarchive"),
+        ]:
+            arc_url, status = fn(job_url)
+            if status == "success":
+                print(f"{label} OK")
+                return arc_url, label, "success", ""
+        print("all archives failed -- flagged for manual archive")
+        return "", "none", "failed", ""
+
     # Try live URL first
     print(f"    fetching live ... ", end="", flush=True)
     text = fetch_page_text(job_url)
@@ -535,6 +569,43 @@ def main():
     print(f"  New remote jobs : +{len(new_rem)}")
     print(f"  Queue total     : {len(pending_queue):,} jobs pending archive")
 
+    # 5b. Capture description text for every posting discovered this run, now,
+    #     while it is still live. This is deliberately not gated on the archive
+    #     queue: archiving is rate-limited and can lag by hours, but by then the
+    #     posting may be gone. Wayback is skipped here -- a posting minutes old
+    #     has no capture yet, and the lookup would only add latency.
+    fresh = [j for j in pending_queue
+             if not details_map.get(j["id"], {}).get("raw_text", "").strip()]
+    if fresh:
+        batch = fresh[:MAX_TEXT_PER_RUN]
+        deferred = len(fresh) - len(batch)
+        print()
+        print(f"  Capturing text for {len(batch)} new posting(s)"
+              + (f" | {deferred} left to the nightly backfill" if deferred else ""))
+
+        throttle = jobtext.HostThrottle(TEXT_HOST_DELAY)
+
+        def grab(job):
+            return job, jobtext.best_effort_text(
+                job["job_url"], "", throttle=throttle, use_wayback=False
+            )
+
+        captured = 0
+        with ThreadPoolExecutor(max_workers=TEXT_WORKERS) as ex:
+            for job, res in ex.map(grab, batch):
+                jid = job["id"]
+                if jid not in details_map:
+                    continue
+                if res["status"] == "ok":
+                    details_map[jid]["raw_text"] = res["text"]
+                    captured += 1
+                    print(f"    OK   {job['company_name'][:24]}: {len(res['text']):,} chars")
+                else:
+                    label = {"gone": "GONE", "empty": "THIN",
+                             "error": "ERR "}.get(res["status"], "ERR ")
+                    print(f"    {label} {job['company_name'][:24]}: {res['note'][:44]}")
+        print(f"  Captured text for {captured}/{len(batch)}")
+
     # 6. Archive from persistent queue
     if pending_queue and not args.skip_archive:
         to_archive = pending_queue[:MAX_ARCHIVE_PER_RUN]
@@ -547,7 +618,8 @@ def main():
             jid      = job["id"]
             attempts = int(job.get("archive_attempts", 0))
             print(f"  -> {job['company_name']}: {job['title'][:55]}")
-            arc_url, arc_src, arc_status, raw_text = fetch_or_archive(job["job_url"])
+            have_text = bool(details_map.get(jid, {}).get("raw_text", "").strip())
+            arc_url, arc_src, arc_status, raw_text = fetch_or_archive(job["job_url"], have_text)
             time.sleep(3)
             # Update existing entry preserving status and category
             existing = details_map.get(jid, {})
@@ -564,7 +636,10 @@ def main():
                 "status":          existing.get("status", "unreviewed"),
                 "source":          existing.get("source", "simplify"),
                 "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
-                "raw_text":        raw_text,
+                # Step 5b already captured this from the live posting, which is
+                # a better source than an archive rendering of it. Only take the
+                # archive's text if we don't already have some.
+                "raw_text":        existing.get("raw_text", "").strip() or raw_text,
             }
             if arc_status == "success":
                 archived_ids.add(jid)  # success — remove from queue
@@ -604,9 +679,9 @@ def main():
     if details_map and (new_nyc or new_rem or not args.skip_archive):
         save_details(details_map)
         failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
-        archived_count = sum(1 for r in details_map.values() if r.get("archive_url"))
+        with_text = sum(1 for r in details_map.values() if r.get("raw_text", "").strip())
         print(f"  data/job_details.csv  -> {len(details_map):,} entries")
-        print(f"  data/job_details.jsonl -> {archived_count:,} entries (with archive URL)")
+        print(f"  data/job_details.jsonl -> {with_text:,} entries (with description text)")
         if failed:
             print(f"  Warning: {len(failed)} jobs failed to archive:")
             for r in failed[-5:]:
