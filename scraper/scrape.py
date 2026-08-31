@@ -57,7 +57,7 @@ REM_CSV  = os.path.join(DATA_DIR, "remote_jobs.csv")
 
 # ── Source ─────────────────────────────────────────────────────────────────────
 OWNER     = "SimplifyJobs"
-REPO      = "Summer2026-Internships"
+REPO      = "Summer2027-Internships"
 FILE_PATH = ".github/scripts/listings.json"
 API_BASE  = f"https://api.github.com/repos/{OWNER}/{REPO}"
 RAW_BASE  = f"https://raw.githubusercontent.com/{OWNER}/{REPO}"
