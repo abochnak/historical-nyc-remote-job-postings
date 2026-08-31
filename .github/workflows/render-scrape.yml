@@ -5,10 +5,11 @@ name: Rendered scrape (headless browser)
 # urllib gets literally 0 characters from those pages; a real browser gets the
 # whole posting.
 #
-# Deliberately separate from backfill-text.yml and not on a frequent schedule:
-# it installs a ~150 MB browser and takes seconds per posting, where the cheap
-# path takes milliseconds. Weekly picks up whatever the nightly job could not
-# read, and workflow_dispatch is there for a deliberate catch-up.
+# update.yml handles the steady state: it renders up to 12 postings every 30
+# minutes, newest first, so anything discovered today is attempted while it is
+# still live. This workflow is the wider sweep -- a bigger batch, the option to
+# include non-JS hosts, and the option to retry postings already marked failed.
+# Run it by hand after a long outage, or let the weekly schedule mop up.
 
 on:
   schedule:
@@ -18,7 +19,7 @@ on:
       limit:
         description: "Max postings this run (0 = all missing)"
         required: false
-        default: "60"
+        default: "150"
       only_js:
         description: "Only hosts known to render client-side (faster, higher hit rate)"
         type: boolean
@@ -80,7 +81,7 @@ jobs:
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch
-          LIMIT="${{ github.event.inputs.limit || '60' }}"
+          LIMIT="${{ github.event.inputs.limit || '150' }}"
           ARGS="--limit $LIMIT"
           # Default true on the schedule, where inputs are empty.
           if [ "${{ github.event.inputs.only_js }}" != "false" ]; then

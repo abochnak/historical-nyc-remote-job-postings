@@ -19,7 +19,9 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Was 15. The render step adds ~75s, and the first run on a cold cache
+    # spends ~2 min downloading the browser.
+    timeout-minutes: 25
 
     permissions:
       contents: write
@@ -66,6 +68,45 @@ jobs:
           echo "Checking last $COMMITS commits"
           python scraper/update.py --commits $COMMITS
 
+      # Postings on Workday, Ashby, Oracle Cloud and iCIMS cannot be read over
+      # plain HTTP at all -- update.py's capture step gets 0 characters from
+      # them. A browser reads them, and doing it now rather than on a weekly
+      # sweep is the whole point: a posting discovered minutes ago is still
+      # live. Rendering the historical backlog hits 42%; the failures are
+      # expired pages that render "job not found".
+      #
+      # Cached so the ~150 MB browser is downloaded once, not 48 times a day.
+      - name: Cache Playwright browser
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}
+
+      - name: Install Playwright
+        run: |
+          pip install -r main/scraper/requirements-render.txt
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
+            # Browser binaries are cached; only the OS deps need installing.
+            python -m playwright install-deps chromium
+          else
+            python -m playwright install --with-deps chromium
+          fi
+
+      - name: Render postings plain HTTP could not read
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        # Never fail the run over this. The cheap paths have already done their
+        # work and been committed by this point; a browser crash or a slow board
+        # must not cost the CSV updates.
+        continue-on-error: true
+        run: |
+          cd data-branch
+          # Newest first, so fresh postings are attempted before the backlog.
+          # 12 per cycle is ~75s at the measured 6s each, and drains the
+          # remaining backlog over about a week alongside new arrivals.
+          python scraper/render_scrape.py --only-js --limit 12
+
       - name: Merge Flask edits and amend data branch
         run: |
           cd data-branch
@@ -95,6 +136,9 @@ jobs:
             # The Discord announcement ledger. Losing it means every posting
             # queued at the time gets announced a second time.
             cp /tmp/action-data/notified_ids.txt   data/notified_ids.txt 2>/dev/null || true
+            # Written by the render step. Losing it means re-attempting pages
+            # already known to be unreadable, every cycle, forever.
+            cp /tmp/action-data/render_status.csv  data/render_status.csv 2>/dev/null || true
             # Preserve Flask edits to job_details and excluded_jobs
             # by only overwriting if action made changes
             if ! diff -q /tmp/action-data/job_details.csv data/job_details.csv > /dev/null 2>&1; then

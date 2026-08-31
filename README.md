@@ -189,10 +189,18 @@ python scraper/render_scrape.py --only-js --limit 20  # try 20
 python scraper/render_scrape.py --headed              # watch it work
 ```
 
-Runs weekly via `render-scrape.yml`, or on demand from the Actions tab. It is
-**not** part of the nightly job: it installs a ~150 MB browser and takes seconds
-per posting where the cheap path takes milliseconds. Run order is
-`backfill_text.py` first, this second.
+**It runs in the 30-minute cycle**, as the last step of `update.yml`: up to 12
+postings per run, newest first, so a posting discovered minutes ago is rendered
+while it is still live. That ordering matters — rendering the historical backlog
+hits 42%, and nearly all the failures are expired pages that render "job not
+found" in a handful of lines. A live posting reads cleanly.
+
+The browser is cached between runs, so the ~150 MB download happens once rather
+than 48 times a day, and the step is `continue-on-error` — the CSV updates are
+already committed by then, and a slow board must not cost them.
+
+`render-scrape.yml` is the wider sweep: a bigger batch, optionally non-JS hosts,
+optionally retrying known failures. Weekly, or on demand from the Actions tab.
 
 Outcomes are recorded per posting in `data/render_status.csv`, including which
 pages are hard blocks (`blocked (cookie/JS wall)`) rather than transient

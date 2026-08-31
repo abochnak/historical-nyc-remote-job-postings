@@ -37,6 +37,7 @@ Usage
     python scraper/render_scrape.py --limit 20      # try 20
     python scraper/render_scrape.py                 # everything missing text
     python scraper/render_scrape.py --only-js       # only known JS-rendered hosts
+    python scraper/render_scrape.py --limit 12      # what update.yml runs each cycle
     python scraper/render_scrape.py --headed        # watch it work
 """
 
@@ -246,6 +247,8 @@ def main():
     ap.add_argument("--headed", action="store_true", help="show the browser")
     ap.add_argument("--retry-failed", action="store_true",
                     help="also retry postings this script already failed on")
+    ap.add_argument("--oldest-first", action="store_true",
+                    help="work through the backlog oldest-first instead of newest-first")
     ap.add_argument("--dry-run", action="store_true", help="report the work list only")
     args = ap.parse_args()
 
@@ -259,6 +262,17 @@ def main():
         todo = [r for r in todo if is_js_host(r["job_url"])]
     if not args.retry_failed:
         todo = [r for r in todo if r["id"] not in status]
+
+    # Newest first. This is what makes a small per-run limit work on the
+    # 30-minute cycle: a posting discovered minutes ago is still live and reads
+    # cleanly, while the historical backlog is mostly expired -- measured at 42%
+    # on 57 archived postings, where the failures are pages that render "job not
+    # found" in a handful of lines. Attempting fresh postings first spends the
+    # budget where it pays.
+    if args.oldest_first:
+        todo.sort(key=lambda r: r.get("first_seen_date", ""))
+    else:
+        todo.sort(key=lambda r: r.get("first_seen_date", ""), reverse=True)
 
     print("=" * 70)
     print("  Rendered scrape (headless browser)")
