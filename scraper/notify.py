@@ -182,21 +182,26 @@ def format_posting(job):
     """
     One posting, as two lines:
 
-        💼  Web Development Engineer Intern (Summer 2026)
-        🔗 https://job-boards.greenhouse.io/eulerity/jobs/4689194006
+        💼   American Express - 2027 Software Engineer, Technology - NYC
+        🔗 https://careers.americanexpress.com/en/sites/CX_1/job/26010970
 
-    The season is omitted when it is missing or "N/A" rather than printing an
-    empty or literal-N/A parenthetical -- 106 postings in the archive have no
-    usable term.
+    Company, title and location are joined with " - ", and any of the three that
+    is missing drops out along with its separator rather than leaving a dangling
+    dash. Location is Simplify's own normalisation -- "NYC", "Remote in USA" --
+    not the employer's wording, and only the first is shown when a posting lists
+    several.
     """
-    title = (job.get("title") or "").strip() or "(untitled posting)"
-    season = (job.get("recruiting_season") or "").strip()
+    company = (job.get("company_name") or "").strip()
+    title   = (job.get("title") or "").strip()
 
-    head = f"💼  {title}"
-    if season and season.upper() not in ("N/A", "NA", "NONE"):
-        head += f" ({season})"
+    # Multi-location postings ("SF | NYC") show the first; the rest is noise on
+    # one line, and the full value is in the CSV.
+    locations = (job.get("locations") or "").strip()
+    location = locations.split("|")[0].strip() if locations else ""
 
-    lines = [head]
+    parts = [p for p in (company, title or "(untitled posting)", location) if p]
+    lines = [f"💼   {' - '.join(parts)}"]
+
     url = (job.get("url") or "").strip()
     if url:
         lines.append(f"🔗 {url}")

@@ -110,12 +110,12 @@ TEXT_WORKERS     = 6   # concurrent fetches, throttled per host by jobtext
 TEXT_HOST_DELAY  = 2.0
 
 CSV_HEADERS = [
-    "company_name", "title", "recruiting_season",
+    "company_name", "title", "locations", "recruiting_season",
     "date_posted", "first_seen_date", "url", "id", "source",
 ]
 
 DETAILS_HEADERS = [
-    "id", "company_name", "title", "job_url",
+    "id", "company_name", "title", "locations", "job_url",
     "archive_url", "archive_source",
     "archive_status",
     "recruiting_season",
@@ -133,6 +133,8 @@ EXCL_HEADERS = [
 ]
 
 QUEUE_HEADERS = ["id", "company_name", "title", "job_url", "first_seen_date"]
+
+MULTI_SEP = " | "   # how multi-value columns are joined, matching the CSVs
 
 # -- Filters -------------------------------------------------------------------
 NYC_KEYWORDS = ["new york, ny", "new york city", "nyc", "new york"]
@@ -538,6 +540,12 @@ def main():
             row = {
                 "company_name":      job.get("company_name", "").strip(),
                 "title":             title,
+                # Simplify's own normalisation ("NYC", "Remote in USA"), joined
+                # with the same " | " the other multi-value columns use. Until
+                # now this was read to decide the NYC/remote split and then
+                # thrown away, so the archive recorded which bucket a posting
+                # fell into but never where the job actually was.
+                "locations":         MULTI_SEP.join(l.strip() for l in locs if l.strip()),
                 "recruiting_season": terms,
                 "date_posted":       job.get("date_posted", ""),
                 "first_seen_date":   date,
@@ -567,6 +575,7 @@ def main():
                     "id":              jid,
                     "company_name":    row["company_name"],
                     "title":           row["title"],
+                    "locations":       row.get("locations", ""),
                     "job_url":         row["url"],
                     "first_seen_date": row["first_seen_date"],
                 })
@@ -588,6 +597,7 @@ def main():
                     "company_name":     row["company_name"],
                     "title":            row["title"],
                     "job_url":          row["url"],
+                    "locations":         row.get("locations", ""),
                     "recruiting_season": row.get("recruiting_season", ""),
                     "archive_url":      "",
                     "archive_source":   "",
@@ -707,6 +717,7 @@ def main():
                 announce.append({
                     "company_name":      row["company_name"],
                     "title":             row["title"],
+                    "locations":         row.get("locations", ""),
                     "url":               row["url"],
                     "recruiting_season": season,
                     "degree_level":      level,
