@@ -673,9 +673,11 @@ def main():
                     except Exception:
                         level = None
                 announce.append({
-                    "company_name": row["company_name"],
-                    "title":        row["title"],
-                    "degree_level": level,
+                    "company_name":      row["company_name"],
+                    "title":             row["title"],
+                    "url":               row["url"],
+                    "recruiting_season": row.get("recruiting_season", ""),
+                    "degree_level":      level,
                 })
             with_text = sum(1 for a in announce if a["degree_level"])
             if notify.notify_new_postings(announce, with_text, len(announce)):

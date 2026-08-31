@@ -41,6 +41,7 @@ MAX_EMBED_DESC   = 4096
 MAX_EMBED_TITLE  = 256
 MAX_FIELD_VALUE  = 1024
 MAX_EMBEDS       = 10
+MAX_CONTENT      = 2000   # plain-message limit
 
 COLOR_NEW     = 0x3BA55D   # green -- new postings found
 COLOR_CLOSED   = 0xED4245  # red -- postings closed
@@ -89,6 +90,20 @@ def post_embed(title, lines, color=COLOR_INFO, footer=None):
     return _send(url, payload)
 
 
+def post_message(content):
+    """
+    Send a plain-text message. Returns True if Discord accepted it.
+
+    Used for job postings, whose format is deliberately plain: Discord renders
+    a preview card for the link, which an embed would suppress.
+    """
+    url = webhook_url()
+    if not url:
+        return False
+    return _send(url, {"username": USERNAME,
+                       "content": _truncate(content, MAX_CONTENT)})
+
+
 def _send(url, payload):
     body = json.dumps(payload).encode("utf-8")
     for attempt in range(MAX_RETRIES):
@@ -126,41 +141,61 @@ def _send(url, payload):
 
 
 # -- Message builders ----------------------------------------------------------
+def format_posting(job):
+    """
+    One posting, as two lines:
+
+        💼  Web Development Engineer Intern (Summer 2026)
+        🔗 https://job-boards.greenhouse.io/eulerity/jobs/4689194006
+
+    The season is omitted when it is missing or "N/A" rather than printing an
+    empty or literal-N/A parenthetical -- 106 postings in the archive have no
+    usable term.
+    """
+    title = (job.get("title") or "").strip() or "(untitled posting)"
+    season = (job.get("recruiting_season") or "").strip()
+
+    head = f"💼  {title}"
+    if season and season.upper() not in ("N/A", "NA", "NONE"):
+        head += f" ({season})"
+
+    lines = [head]
+    url = (job.get("url") or "").strip()
+    if url:
+        lines.append(f"🔗 {url}")
+    return "\n".join(lines)
+
+
+# One message per posting up to this many; beyond it, postings are grouped so a
+# large catch-up run can't fire dozens of requests at a webhook that allows
+# about 30 a minute.
+PER_MESSAGE_LIMIT = 10
+GROUP_SIZE        = 8
+SEND_SPACING      = 1.0   # seconds between messages
+
+
 def notify_new_postings(jobs, captured=0, attempted=0):
     """
-    jobs: list of dicts with company_name, title, and optionally degree_level.
+    Post each new posting. Returns True if every message was accepted.
 
-    Degree level is labelled as approximate on purpose. The classifier runs at
-    70% precision on the grad call, and a line in a Discord message reads as
-    fact unless it says otherwise.
+    jobs: dicts with title, url, and recruiting_season.
     """
     if not enabled() or not jobs:
         return False
 
-    lines = []
-    for j in jobs[:20]:
-        company = _truncate(j.get("company_name", "?"), 40)
-        title = _truncate(j.get("title", "?"), 70)
-        level = j.get("degree_level")
-        suffix = f"  · {level}" if level else ""
-        lines.append(f"**{company}** — {title}{suffix}")
-    if len(jobs) > 20:
-        lines.append(f"_…and {len(jobs) - 20} more_")
+    if len(jobs) <= PER_MESSAGE_LIMIT:
+        groups = [[j] for j in jobs]
+    else:
+        groups = [jobs[i:i + GROUP_SIZE] for i in range(0, len(jobs), GROUP_SIZE)]
 
-    # `captured` is how many of *these* postings we could read a description
-    # for. It is deliberately not a capture rate: most new postings have their
-    # text fetched later by the nightly backfill, so dividing by everything
-    # announced would report a failure that never happened.
-    footer = None
-    if attempted and captured < attempted:
-        footer = f"{captured} of {len(jobs)} readable so far; the rest are queued"
-    elif attempted:
-        footer = "description text captured for all of them"
-    if any(j.get("degree_level") for j in jobs):
-        footer = ((footer + " · ") if footer else "") + "degree level is an estimate (~70% precision)"
-
-    plural = "posting" if len(jobs) == 1 else "postings"
-    return post_embed(f"{len(jobs)} new {plural}", lines, COLOR_NEW, footer)
+    all_ok = True
+    for i, group in enumerate(groups):
+        content = "\n\n".join(format_posting(j) for j in group)
+        if not post_message(content):
+            all_ok = False
+        if i < len(groups) - 1:
+            time.sleep(SEND_SPACING)
+    return all_ok
 
 
 def notify_closes(transitions):

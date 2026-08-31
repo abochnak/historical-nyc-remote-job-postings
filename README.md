@@ -113,9 +113,20 @@ Only `degree_enrollment` is written. The other review fields are left alone.
 The pipeline runs unattended, so it can report to a Discord channel instead of
 you checking the data branch:
 
+Each new posting is posted as:
+
+```
+💼  Web Development Engineer Intern (Summer 2026)
+🔗 https://job-boards.greenhouse.io/eulerity/jobs/4689194006
+```
+
+One message per posting, up to ten; beyond that they are grouped so a catch-up
+run can't fire dozens of requests at a webhook that allows about thirty a
+minute. The season is dropped when the posting has none.
+
 | Event | When | Message |
 |---|---|---|
-| New postings found | every 30 min (`update.yml`) | company, title, estimated degree level |
+| New postings found | every 30 min (`update.yml`) | title, season, link |
 | Posting closed or reopened | daily (`track-simplify-closes.yml`) | which ones |
 | Backfill run | nightly (`backfill-text.yml`) | how many descriptions were recovered |
 
