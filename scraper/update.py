@@ -85,6 +85,7 @@ EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
 DETAILS_CSV  = os.path.join(DATA_DIR, "job_details.csv")
 DETAILS_JSONL = os.path.join(DATA_DIR, "job_details.jsonl")
 QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
+NOTIFIED_TXT   = os.path.join(DATA_DIR, "notified_ids.txt")
 
 MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
 MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
@@ -387,6 +388,21 @@ def save_jsonl(rows):
                 "raw_text": row.get("raw_text", ""),
             }) + "\n")
 
+def load_notified():
+    """Job ids already announced to Discord. Append-only, one id per line."""
+    if not os.path.exists(NOTIFIED_TXT):
+        return set()
+    with open(NOTIFIED_TXT, encoding="utf-8") as f:
+        return {line.strip() for line in f if line.strip()}
+
+
+def save_notified(ids):
+    os.makedirs(DATA_DIR, exist_ok=True)
+    with open(NOTIFIED_TXT, "a", encoding="utf-8") as f:
+        for jid in ids:
+            f.write(jid + "\n")
+
+
 def load_queue():
     if not os.path.exists(QUEUE_CSV):
         return []
@@ -489,6 +505,7 @@ def main():
 
     # 5. Process commits oldest-first
     new_nyc, new_rem, errors = [], [], 0
+    discovered_now = {}      # id -> row, for the Discord announcement
     for i, (sha, date) in enumerate(reversed(commit_list), 1):
         print(f"  [{i:>2}/{len(commit_list)}] {sha[:10]}  {date} ... ", end="", flush=True)
         raw = fetch_raw(sha)
@@ -524,6 +541,10 @@ def main():
                 seen_nyc_ids.add(jid); new_nyc.append(row); added_nyc += 1; is_new = True
             if jid not in seen_rem_ids and is_remote(locs):
                 seen_rem_ids.add(jid); new_rem.append(row); added_rem += 1; is_new = True
+            if is_new:
+                # Keyed by id: a posting that is both NYC and remote lands in
+                # both lists and must still be announced once.
+                discovered_now[jid] = row
 
             # Add to job_details if:
             # - job is new to the CSVs AND
@@ -613,13 +634,38 @@ def main():
                     print(f"    {label} {job['company_name'][:24]}: {res['note'][:44]}")
         print(f"  Captured text for {captured}/{len(batch)}")
 
-        # Announce the new postings, with the degree level where we managed to
-        # read the description. No-op when DISCORD_WEBHOOK_URL isn't set.
-        if notify.enabled():
+
+
+    # 5c. Announce newly discovered postings to Discord.
+    #
+    #     Based on what this run actually discovered -- NOT on the pending
+    #     queue. The queue carries jobs over between runs, so announcing from
+    #     it re-posted the same posting every 30 minutes for as long as its text
+    #     capture kept failing, which for older postings is indefinitely.
+    #
+    #     The ledger makes it exactly-once even if a run dies after notifying
+    #     but before committing the CSVs, which would otherwise make the job
+    #     look new again on the next run.
+    if notify.enabled() and discovered_now:
+        first_run = not os.path.exists(NOTIFIED_TXT)
+        already = load_notified()
+        to_announce = {jid: row for jid, row in discovered_now.items() if jid not in already}
+
+        # The first run with notifications on establishes a baseline instead of
+        # announcing. Without this, switching the webhook on -- or any catch-up
+        # run like --commits 200 -- dumps the entire backlog into the channel as
+        # "new", which is both wrong and unreadable. Same convention as
+        # simplify_closes.py's first run.
+        if first_run and len(to_announce) > 25:
+            save_notified(to_announce)
+            print(f"  Discord: baseline set from {len(to_announce):,} existing postings "
+                  "(not announced). New postings from the next run on will be.")
+            to_announce = {}
+
+        if to_announce:
             announce = []
-            for job in batch:
-                entry = details_map.get(job["id"], {})
-                text = entry.get("raw_text", "").strip()
+            for jid, row in to_announce.items():
+                text = details_map.get(jid, {}).get("raw_text", "").strip()
                 level = None
                 if text:
                     try:
@@ -627,11 +673,17 @@ def main():
                     except Exception:
                         level = None
                 announce.append({
-                    "company_name": job["company_name"],
-                    "title":        job["title"],
+                    "company_name": row["company_name"],
+                    "title":        row["title"],
                     "degree_level": level,
                 })
-            notify.notify_new_postings(announce, captured, len(batch))
+            with_text = sum(1 for a in announce if a["degree_level"])
+            if notify.notify_new_postings(announce, with_text, len(announce)):
+                save_notified(to_announce)
+                print(f"  Announced {len(to_announce)} new posting(s) to Discord")
+            else:
+                # Not recorded as notified, so the next run tries again.
+                print("  Discord announcement failed — will retry next run")
 
     # 6. Archive from persistent queue
     if pending_queue and not args.skip_archive:

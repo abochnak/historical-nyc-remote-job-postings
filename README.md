@@ -113,11 +113,19 @@ Only `degree_enrollment` is written. The other review fields are left alone.
 The pipeline runs unattended, so it can report to a Discord channel instead of
 you checking the data branch:
 
-| Event | Message |
-|---|---|
-| New postings found | company, title, and estimated degree level |
-| Posting closed or reopened | which ones |
-| Backfill run | how many descriptions were recovered |
+| Event | When | Message |
+|---|---|---|
+| New postings found | every 30 min (`update.yml`) | company, title, estimated degree level |
+| Posting closed or reopened | daily (`track-simplify-closes.yml`) | which ones |
+| Backfill run | nightly (`backfill-text.yml`) | how many descriptions were recovered |
+
+Each posting is announced **exactly once**. The announcement is driven by what
+a run actually discovered, and `data/notified_ids.txt` records what has been
+sent, so a run that dies between notifying and committing doesn't repost.
+
+The **first** run with a webhook configured sets a baseline instead of
+announcing, so switching notifications on doesn't dump the whole backlog into
+the channel. New postings are announced from the run after that.
 
 ### Setup
 

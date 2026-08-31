@@ -147,9 +147,15 @@ def notify_new_postings(jobs, captured=0, attempted=0):
     if len(jobs) > 20:
         lines.append(f"_…and {len(jobs) - 20} more_")
 
+    # `captured` is how many of *these* postings we could read a description
+    # for. It is deliberately not a capture rate: most new postings have their
+    # text fetched later by the nightly backfill, so dividing by everything
+    # announced would report a failure that never happened.
     footer = None
-    if attempted:
-        footer = f"description text captured for {captured}/{attempted}"
+    if attempted and captured < attempted:
+        footer = f"{captured} of {len(jobs)} readable so far; the rest are queued"
+    elif attempted:
+        footer = "description text captured for all of them"
     if any(j.get("degree_level") for j in jobs):
         footer = ((footer + " · ") if footer else "") + "degree level is an estimate (~70% precision)"
 

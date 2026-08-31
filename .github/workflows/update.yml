@@ -92,6 +92,9 @@ jobs:
             cp /tmp/action-data/nyc_jobs.csv      data/nyc_jobs.csv
             cp /tmp/action-data/remote_jobs.csv   data/remote_jobs.csv
             cp /tmp/action-data/pending_archive.csv data/pending_archive.csv
+            # The Discord announcement ledger. Losing it means every posting
+            # queued at the time gets announced a second time.
+            cp /tmp/action-data/notified_ids.txt   data/notified_ids.txt 2>/dev/null || true
             # Preserve Flask edits to job_details and excluded_jobs
             # by only overwriting if action made changes
             if ! diff -q /tmp/action-data/job_details.csv data/job_details.csv > /dev/null 2>&1; then
