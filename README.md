@@ -72,11 +72,11 @@ Outcomes are recorded per job in `data/backfill_status.csv`:
 | `empty` | pages loaded, no posting text (JS-rendered board) | only with `--retry-failed` |
 | `gone` | a page said the posting was taken down | only with `--retry-failed` |
 
-## Degree classification
+## Degree level classification
 
-`classify.py` reads the posting text and fills `degree_enrollment` — whether a
-posting needs a graduate student, an undergraduate, or is open to any student.
-Rules only: no API key, no network, standard library.
+`classify.py` reads the posting text and answers one question: does this
+posting need a graduate student, or can an undergraduate apply? Rules only —
+no API key, no network, standard library.
 
 ```bash
 python scraper/classify.py --eval      # score against hand labels; writes nothing
@@ -85,13 +85,27 @@ python scraper/classify.py             # fill in degree_enrollment
 python scraper/classify.py --explain ID
 ```
 
-**It is currently 67% accurate on the three-bucket question** (grad only /
-undergrad / any student), measured against 106 hand-labelled postings. That is
-not good enough to run unattended — see the header of `classify.py` for the
-per-bucket numbers and the three measured reasons it plateaus there. Treat it
-as a starting point that needs review, not as a replacement for judgement.
+Measured against 106 postings with both a hand label and text:
 
-It only writes `degree_enrollment`. The other review fields are left alone.
+| | |
+|---|---|
+| binary accuracy (needs a grad student) | **91%** |
+| grad recall | 84% |
+| grad precision | 70% |
+| undergrad precision | 96% |
+
+**Read the grad precision honestly:** about three in ten postings flagged
+grad-only are not. Good for narrowing a list; not for settling an individual
+posting.
+
+The narrow question is what makes this work. An earlier version assigned all
+four `degree_enrollment` values and managed 67% — largely because
+"Bachelor's or Master's degree" is genuinely ambiguous as a *label* (the hand
+labels call it "Open to All Degrees" on some postings and
+"BS/BA Required | MS Required" on others) while being completely unambiguous as
+a binary: either way, an undergraduate can apply.
+
+Only `degree_enrollment` is written. The other review fields are left alone.
 
 ## What can't be recovered
 
