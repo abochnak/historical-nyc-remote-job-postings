@@ -121,6 +121,39 @@ UNDERGRAD_RE = re.compile(
 )
 
 
+# Framing that marks a sentence as stating a requirement rather than mentioning
+# a credential in passing.
+REQUIRED_CUES = [
+    "minimum qualification", "basic qualification", "required qualification",
+    "requirements:", "required:", "must be", "must have", "you must",
+    "qualifications:",
+]
+
+# Oracle, Workday and iCIMS render a block of structured fields near the
+# posting -- "Posting Date ... Degree Level Bachelor's Degree Job Schedule Full
+# time". A degree named there is metadata, not a requirement, and it sits beside
+# these unmistakable neighbours.
+FIELD_BLOCK_CUES = [
+    "posting date", "job schedule", "job type", "job shift", "req id",
+    "requisition", "employee type", "time type", "job family",
+]
+
+
+def sentences(text):
+    return [x for x in re.split(r"(?<=[.!?;:\n])\s+", text) if x.strip()]
+
+
+def in_field_block(sentence):
+    """True when this looks like the structured-metadata block, not prose."""
+    low = sentence.lower()
+    return sum(1 for cue in FIELD_BLOCK_CUES if cue in low) >= 2
+
+
+def states_requirement(sentence):
+    low = sentence.lower()
+    return any(cue in low for cue in REQUIRED_CUES)
+
+
 def trim_form_boilerplate(text):
     """Cut the application form off the end so its field labels aren't read as requirements."""
     cut = len(text)
@@ -150,9 +183,30 @@ def classify_text(text):
             start, end = max(0, m.start() - 90), min(len(body), m.end() + 90)
             evidence.append((kind, re.sub(r"\s+", " ", body[start:end]).strip()))
 
-    # An undergraduate route named anywhere wins. This was 36/36 correct on the
-    # eval set: postings mentioning a bachelor's accept undergraduates, even
-    # when they also mention a master's.
+    # Where a degree is named matters, not just whether it is named.
+    #
+    # An Amex posting read "Minimum Qualifications: Currently enrolled in
+    # full-time graduate degree program" and, separately, "Degree Level
+    # Bachelor's Degree" inside Oracle's structured field block, next to
+    # "Posting Date" and "Job Schedule". Treating any undergraduate mention as
+    # decisive let that metadata field overrule the stated requirement, and the
+    # posting was classified as open to undergraduates.
+    grad_required = under_required = False
+    for sentence in sentences(body):
+        if in_field_block(sentence):
+            continue                       # structured metadata, not a requirement
+        if not states_requirement(sentence):
+            continue
+        if GRAD_RE.search(sentence):
+            grad_required = True
+        if UNDERGRAD_RE.search(sentence):
+            under_required = True
+
+    if grad_required and not under_required:
+        return MS, evidence
+
+    # Otherwise an undergraduate route named anywhere wins: postings mentioning
+    # a bachelor's accept undergraduates even when they also mention a master's.
     if under:
         return BS, evidence
     if grad:

@@ -139,9 +139,20 @@ the existing behaviour of simply omitting the parenthetical.
 
 | Event | When | Message |
 |---|---|---|
-| New postings found | every 30 min (`update.yml`) | title, season, link |
+| New postings found | every 30 min (`update.yml`) | company, role, season, link |
 | Posting closed or reopened | daily (`track-simplify-closes.yml`) | which ones |
 | Backfill run | nightly (`backfill-text.yml`) | how many descriptions were recovered |
+
+**Grad-only postings are not announced.** An undergraduate cannot apply to them,
+so the alert is noise. Only a positive grad call suppresses — a posting whose
+text could not be captured is still announced, because "we don't know" must not
+become "don't tell them".
+
+This is a real trade, and worth understanding before relying on it: the grad
+call runs at **70% precision**, so roughly three of every ten suppressed
+postings are ones an undergraduate could have applied to. Every suppression is
+printed in the run log with the posting's name, so the cost is visible rather
+than silent.
 
 Each posting is announced **exactly once**. The announcement is driven by what
 a run actually discovered, and `data/notified_ids.txt` records what has been
