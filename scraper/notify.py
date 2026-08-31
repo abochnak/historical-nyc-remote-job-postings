@@ -42,7 +42,7 @@ ENV_VAR      = "DISCORD_WEBHOOK_URL"
 ENV_VAR_TEST = "DISCORD_WEBHOOK_URL_TEST"
 TARGET_VAR   = "NOTIFY_TARGET"
 
-USERNAME = "job archive"
+USERNAME = "TTP Job Bot"
 
 # Discord's documented limits. Exceeding any of them is a 400, so the payload
 # is trimmed to fit rather than risking a rejected post.
