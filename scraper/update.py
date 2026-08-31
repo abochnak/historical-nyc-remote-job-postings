@@ -680,6 +680,7 @@ def main():
 
         if to_announce:
             announce = []
+            suppressed = []
             for jid, row in to_announce.items():
                 text = details_map.get(jid, {}).get("raw_text", "").strip()
                 level = None
@@ -688,6 +689,24 @@ def main():
                         level, _ = classify.classify_text(text)
                     except Exception:
                         level = None
+
+                # Grad-only postings are not announced -- an undergraduate
+                # cannot apply to them, so the alert is noise.
+                #
+                # Only a positive grad call suppresses. A posting whose text
+                # could not be captured is announced, because "we don't know"
+                # must not silently become "don't tell them": text capture fails
+                # often on JS-rendered boards, and suppressing everything
+                # unclassifiable would hide most of them.
+                #
+                # This is a real trade. The grad call runs at 70% precision, so
+                # roughly three of every ten suppressed postings are ones an
+                # undergraduate could have applied to. That is why the count is
+                # printed rather than dropped quietly, and why the ledger still
+                # records them -- a suppressed posting is not announced later.
+                if level and classify.needs_grad(level):
+                    suppressed.append((row, level))
+                    continue
                 # listings.json is authoritative for the term. Only when it
                 # says nothing (or "N/A" -- 11% of the archive) is the term read
                 # out of the description, and only when the description states
@@ -711,13 +730,26 @@ def main():
                     "recruiting_season": season,
                     "degree_level":      level,
                 })
-            with_text = sum(1 for a in announce if a["degree_level"])
-            if notify.notify_new_postings(announce, with_text, len(announce)):
+            for row, level in suppressed:
+                print(f"  Not announced ({level}): {row['company_name'][:26]} — "
+                      f"{row['title'][:44]}")
+
+            if not announce:
+                # Everything discovered was grad-only. Still record them, or the
+                # next run treats them as new and re-evaluates them forever.
                 save_notified(to_announce)
-                print(f"  Announced {len(to_announce)} new posting(s) to Discord")
+                print(f"  Nothing to announce — all {len(suppressed)} new "
+                      "posting(s) are grad-only")
             else:
-                # Not recorded as notified, so the next run tries again.
-                print("  Discord announcement failed — will retry next run")
+                with_text = sum(1 for a in announce if a["degree_level"])
+                if notify.notify_new_postings(announce, with_text, len(announce)):
+                    save_notified(to_announce)
+                    print(f"  Announced {len(announce)} new posting(s) to Discord"
+                          + (f", suppressed {len(suppressed)} grad-only"
+                             if suppressed else ""))
+                else:
+                    # Not recorded as notified, so the next run tries again.
+                    print("  Discord announcement failed — will retry next run")
 
     # 6. Archive from persistent queue
     if pending_queue and not args.skip_archive:
