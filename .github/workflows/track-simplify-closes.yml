@@ -16,6 +16,13 @@ on:
   schedule:
     - cron: "0 1 * * *"
   workflow_dispatch:
+    inputs:
+      notify_target:
+        description: "Discord channel to post to"
+        type: choice
+        options: ["test", "prod"]
+        required: false
+        default: "test"
 
 # Shares the lock with update.yml and backfill-text.yml — every workflow that
 # writes the data branch force-pushes it.
@@ -53,6 +60,11 @@ jobs:
       - name: Track close times
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
+          # A scheduled run has no inputs, so it resolves to prod. A
+          # hand-triggered run defaults to test, because a manual run is
+          # usually an experiment.
+          NOTIFY_TARGET: ${{ github.event.inputs.notify_target || 'prod' }}
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch

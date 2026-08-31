@@ -153,21 +153,51 @@ the channel. New postings are announced from the run after that.
 
 ### Setup
 
-1. In Discord: **Server Settings → Integrations → Webhooks → New Webhook**,
-   pick the channel, and copy the URL.
-2. In GitHub: **Settings → Secrets and variables → Actions → New repository
-   secret**, named exactly `DISCORD_WEBHOOK_URL`.
-3. Check it, locally:
+Make two webhooks in Discord (**Server Settings → Integrations → Webhooks**) —
+one on the channel you actually watch, one on a scratch channel — and add both
+as repository secrets under **Settings → Secrets and variables → Actions**:
+
+| Secret | Channel |
+|---|---|
+| `DISCORD_WEBHOOK_URL` | the real one |
+| `DISCORD_WEBHOOK_URL_TEST` | the scratch one |
+
+Check them locally:
 
 ```bash
+export DISCORD_WEBHOOK_URL_TEST='https://discord.com/api/webhooks/...'
+python scraper/notify.py --test              # -> test channel
+
 export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'
-python scraper/notify.py --test
+python scraper/notify.py --test --prod       # -> the real channel, deliberately
 ```
 
-That's all — the three workflows already pass the secret through.
+That's all — all four workflows already pass both secrets through.
 
-**Treat the webhook URL as a credential.** Anyone holding it can post to your
-channel. It belongs in the repository secret and nowhere else: not in a file,
+### Which channel a run uses
+
+`NOTIFY_TARGET` decides: `test` picks the scratch channel, anything else picks
+the real one.
+
+- **Scheduled runs** have no inputs, so they resolve to `prod`.
+- **Hand-triggered runs** default to `test`, because a manual run is usually an
+  experiment. Every workflow's *Run workflow* dialog has a channel picker if you
+  want the real one.
+
+Two properties worth knowing, both tested:
+
+- **A test target never falls back to the real webhook.** If
+  `DISCORD_WEBHOOK_URL_TEST` is unset, notifications are simply off. Falling
+  back would mean the one command you ran to avoid the real channel is the
+  command that posts to it.
+- **Each target has its own ledger** — `notified_ids.txt` and
+  `notified_ids.test.txt`. Sharing one would let a test run mark postings as
+  announced, and the real channel would then never hear about them.
+
+Runs print which channel they are talking to, by name — never the URL.
+
+**Treat both webhook URLs as credentials.** Anyone holding one can post to that
+channel. They belong in repository secrets and nowhere else: not in a file,
 not in a commit, not in a workflow's `run:` block. `notify.py` never prints it,
 including in error messages, because a failed webhook call can echo the URL
 back and CI logs are not private.

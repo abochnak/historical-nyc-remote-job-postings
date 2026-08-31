@@ -16,6 +16,12 @@ on:
     - cron: "40 3 * * 0"     # Sundays
   workflow_dispatch:
     inputs:
+      notify_target:
+        description: "Discord channel to post to"
+        type: choice
+        options: ["test", "prod"]
+        required: false
+        default: "test"
       limit:
         description: "Max postings this run (0 = all missing)"
         required: false
@@ -78,6 +84,11 @@ jobs:
       - name: Render and scrape
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
+          # A scheduled run has no inputs, so it resolves to prod. A
+          # hand-triggered run defaults to test, because a manual run is
+          # usually an experiment.
+          NOTIFY_TARGET: ${{ github.event.inputs.notify_target || 'prod' }}
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch

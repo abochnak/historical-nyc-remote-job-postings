@@ -5,6 +5,12 @@ on:
     - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
+      notify_target:
+        description: "Discord channel to post to"
+        type: choice
+        options: ["test", "prod"]
+        required: false
+        default: "test"
       commits:
         description: "Number of commits to check (default 5, use 100+ for catch-up)"
         required: false
@@ -61,6 +67,11 @@ jobs:
       - name: Run updater
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
+          # A scheduled run has no inputs, so it resolves to prod. A
+          # hand-triggered run defaults to test, because a manual run is
+          # usually an experiment.
+          NOTIFY_TARGET: ${{ github.event.inputs.notify_target || 'prod' }}
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch
@@ -96,6 +107,11 @@ jobs:
       - name: Render postings plain HTTP could not read
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
+          # A scheduled run has no inputs, so it resolves to prod. A
+          # hand-triggered run defaults to test, because a manual run is
+          # usually an experiment.
+          NOTIFY_TARGET: ${{ github.event.inputs.notify_target || 'prod' }}
         # Never fail the run over this. The cheap paths have already done their
         # work and been committed by this point; a browser crash or a slow board
         # must not cost the CSV updates.

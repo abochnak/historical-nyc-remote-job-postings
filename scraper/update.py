@@ -85,7 +85,14 @@ EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
 DETAILS_CSV  = os.path.join(DATA_DIR, "job_details.csv")
 DETAILS_JSONL = os.path.join(DATA_DIR, "job_details.jsonl")
 QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
-NOTIFIED_TXT   = os.path.join(DATA_DIR, "notified_ids.txt")
+# One ledger per notification target. A test run that wrote to the production
+# ledger would mark those postings announced, and the real channel would then
+# never hear about them -- testing would silently consume the announcements it
+# was meant to rehearse.
+def notified_path():
+    if notify.target() == "test":
+        return os.path.join(DATA_DIR, "notified_ids.test.txt")
+    return os.path.join(DATA_DIR, "notified_ids.txt")
 
 MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
 MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
@@ -390,16 +397,17 @@ def save_jsonl(rows):
             }) + "\n")
 
 def load_notified():
-    """Job ids already announced to Discord. Append-only, one id per line."""
-    if not os.path.exists(NOTIFIED_TXT):
+    """Job ids already announced, for the current target. One id per line."""
+    path = notified_path()
+    if not os.path.exists(path):
         return set()
-    with open(NOTIFIED_TXT, encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return {line.strip() for line in f if line.strip()}
 
 
 def save_notified(ids):
     os.makedirs(DATA_DIR, exist_ok=True)
-    with open(NOTIFIED_TXT, "a", encoding="utf-8") as f:
+    with open(notified_path(), "a", encoding="utf-8") as f:
         for jid in ids:
             f.write(jid + "\n")
 
@@ -454,6 +462,7 @@ def main():
     print(f"  Auth    : unauthenticated (public repo)")
     print(f"  Fetch   : last {args.commits} commits touching {FILE_PATH}")
     print(f"  Archive : {'skipped (--skip-archive)' if args.skip_archive else 'enabled'}")
+    print(f"  Discord : {notify.describe_target()}")
     print()
 
     # 1. Load exclusions
@@ -649,7 +658,7 @@ def main():
     #     but before committing the CSVs, which would otherwise make the job
     #     look new again on the next run.
     if notify.enabled() and discovered_now:
-        first_run = not os.path.exists(NOTIFIED_TXT)
+        first_run = not os.path.exists(notified_path())
         already = load_notified()
         to_announce = {jid: row for jid, row in discovered_now.items() if jid not in already}
 

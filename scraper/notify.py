@@ -20,8 +20,13 @@ Standard library only, like the rest of the scrapers.
 
 Check the wiring
 ----------------
-    export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'
+    # test channel (the default for --test)
+    export DISCORD_WEBHOOK_URL_TEST='https://discord.com/api/webhooks/...'
     python scraper/notify.py --test
+
+    # the real channel, deliberately
+    export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'
+    python scraper/notify.py --test --prod
 """
 
 import json
@@ -31,7 +36,11 @@ import time
 import urllib.error
 import urllib.request
 
-ENV_VAR = "DISCORD_WEBHOOK_URL"
+# Two channels. NOTIFY_TARGET picks between them; anything other than "test"
+# means production, so the default with no configuration at all is production.
+ENV_VAR      = "DISCORD_WEBHOOK_URL"
+ENV_VAR_TEST = "DISCORD_WEBHOOK_URL_TEST"
+TARGET_VAR   = "NOTIFY_TARGET"
 
 USERNAME = "job archive"
 
@@ -51,12 +60,36 @@ COLOR_WARN    = 0xFAA81A   # amber -- something needs attention
 MAX_RETRIES = 3
 
 
+def target():
+    """"test" or "prod". Anything unrecognised is treated as production."""
+    return "test" if (os.environ.get(TARGET_VAR) or "").strip().lower() == "test" else "prod"
+
+
 def webhook_url():
+    """
+    The webhook for the selected target, or "".
+
+    A test target NEVER falls back to the production webhook. Falling back
+    would mean the one command you ran to avoid touching the real channel is
+    the command that posts to it -- so an unset test webhook disables
+    notifications instead.
+    """
+    if target() == "test":
+        return (os.environ.get(ENV_VAR_TEST) or "").strip()
     return (os.environ.get(ENV_VAR) or "").strip()
 
 
 def enabled():
     return bool(webhook_url())
+
+
+def describe_target():
+    """One line for run output, naming the channel but never the URL."""
+    t = target()
+    if not webhook_url():
+        var = ENV_VAR_TEST if t == "test" else ENV_VAR
+        return f"notifications off ({var} not set)"
+    return f"notifying the {t} channel"
 
 
 def _truncate(s, limit):
@@ -250,8 +283,16 @@ def main():
     if "--test" not in sys.argv:
         print(__doc__)
         return
+    # `notify.py --test --prod` is the deliberate way to prove the real channel
+    # works; plain `--test` goes to the test channel.
+    if "--prod" in sys.argv:
+        os.environ[TARGET_VAR] = "prod"
+    else:
+        os.environ.setdefault(TARGET_VAR, "test")
+    print(f"  {describe_target()}")
     if not enabled():
-        sys.exit(f"{ENV_VAR} is not set — nothing to test.")
+        var = ENV_VAR_TEST if target() == "test" else ENV_VAR
+        sys.exit(f"{var} is not set — nothing to send.")
     ok = post_embed(
         "Webhook connected",
         ["This channel will receive new postings, close times, and backfill summaries.",
