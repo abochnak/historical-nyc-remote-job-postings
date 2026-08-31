@@ -615,6 +615,7 @@ def main():
     #     has no capture yet, and the lookup would only add latency.
     fresh = [j for j in pending_queue
              if not details_map.get(j["id"], {}).get("raw_text", "").strip()]
+    fresh.sort(key=lambda j: j.get("first_seen_date", ""), reverse=True)
     if fresh:
         batch = fresh[:MAX_TEXT_PER_RUN]
         deferred = len(fresh) - len(batch)
