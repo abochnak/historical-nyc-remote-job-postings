@@ -49,6 +49,7 @@ immediately rather than tomorrow.
 |---|---|
 | `scraper/jobtext.py` | Shared extraction: fetch, JSON-LD/container/body extraction, quality gate. The one place this logic lives. |
 | `scraper/update.py` | Incremental updater. New commits → new jobs → CSVs, immediate text capture, archives. |
+| `scraper/render_scrape.py` | Headless-browser capture for JS-built postings. Port of the review-page bookmarklet. |
 | `scraper/backfill_text.py` | Bulk backfill of missing `raw_text`. Resumable, checkpointed, safe to re-run. |
 | `scraper/notify.py` | Posts run results to a Discord webhook. Inert unless `DISCORD_WEBHOOK_URL` is set. |
 | `scraper/simplify_closes.py` | Records when postings stop accepting applications, from Simplify's active/inactive lists. |
@@ -168,6 +169,35 @@ back and CI logs are not private.
 
 With no secret set, notifications are a silent no-op — the scrapers run exactly
 as they do now, and a Discord outage can never fail a scrape.
+
+## Rendered scrape (for JavaScript-built postings)
+
+`backfill_text.py` uses urllib, so it gets **zero** characters from boards that
+build the posting client-side — Workday, Ashby, Oracle Cloud, iCIMS.
+`render_scrape.py` drives a headless browser, lets the page render, then walks
+the DOM. It is a port of the review-page bookmarklet: same tag skip-list, same
+nav-word filter, same line thresholds, with the `window.opener`/`postMessage`
+plumbing dropped and the shared quality gate applied instead of the
+bookmarklet's 100-character floor.
+
+```bash
+pip install -r scraper/requirements-render.txt
+python -m playwright install chromium
+
+python scraper/render_scrape.py --only-js --dry-run   # what it would attempt
+python scraper/render_scrape.py --only-js --limit 20  # try 20
+python scraper/render_scrape.py --headed              # watch it work
+```
+
+Runs weekly via `render-scrape.yml`, or on demand from the Actions tab. It is
+**not** part of the nightly job: it installs a ~150 MB browser and takes seconds
+per posting where the cheap path takes milliseconds. Run order is
+`backfill_text.py` first, this second.
+
+Outcomes are recorded per posting in `data/render_status.csv`, including which
+pages are hard blocks (`blocked (cookie/JS wall)`) rather than transient
+failures — iCIMS serves a cookie wall that survives a reload, so those are not
+worth retrying.
 
 ## What can't be recovered
 

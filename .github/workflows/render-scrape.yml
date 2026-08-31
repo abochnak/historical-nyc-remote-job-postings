@@ -1,0 +1,125 @@
+name: Rendered scrape (headless browser)
+
+# Recovers postings that a plain HTTP fetch cannot read, because the board
+# builds the description in JavaScript -- Workday, Ashby, Oracle Cloud, iCIMS.
+# urllib gets literally 0 characters from those pages; a real browser gets the
+# whole posting.
+#
+# Deliberately separate from backfill-text.yml and not on a frequent schedule:
+# it installs a ~150 MB browser and takes seconds per posting, where the cheap
+# path takes milliseconds. Weekly picks up whatever the nightly job could not
+# read, and workflow_dispatch is there for a deliberate catch-up.
+
+on:
+  schedule:
+    - cron: "40 3 * * 0"     # Sundays
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max postings this run (0 = all missing)"
+        required: false
+        default: "60"
+      only_js:
+        description: "Only hosts known to render client-side (faster, higher hit rate)"
+        type: boolean
+        required: false
+        default: true
+      retry_failed:
+        description: "Also retry postings this scraper already failed on"
+        type: boolean
+        required: false
+        default: false
+
+# Shares the lock with the other workflows -- they all force-push the data branch.
+concurrency:
+  group: data-branch-write
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch (for scraper code)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data-branch
+
+      - name: Verify data files exist before running
+        run: |
+          if [ ! -f "data-branch/data/job_details.csv" ]; then
+            echo "ERROR: data/job_details.csv missing — aborting to prevent data loss"
+            exit 1
+          fi
+          echo "job_details.csv: $(wc -l < data-branch/data/job_details.csv) lines"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright and Chromium
+        run: |
+          pip install -r main/scraper/requirements-render.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Render and scrape
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          cp -r main/scraper data-branch/scraper
+          cd data-branch
+          LIMIT="${{ github.event.inputs.limit || '60' }}"
+          ARGS="--limit $LIMIT"
+          # Default true on the schedule, where inputs are empty.
+          if [ "${{ github.event.inputs.only_js }}" != "false" ]; then
+            ARGS="$ARGS --only-js"
+          fi
+          if [ "${{ github.event.inputs.retry_failed }}" = "true" ]; then
+            ARGS="$ARGS --retry-failed"
+          fi
+          echo "Running: render_scrape.py $ARGS"
+          python scraper/render_scrape.py $ARGS
+
+      - name: Commit results to data branch
+        run: |
+          cd data-branch
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # The scraper directory is copied in, not tracked — don't commit it.
+          rm -rf scraper
+
+          # Pick up anything that landed while the browser was working, then
+          # reapply only the two files this job writes.
+          git fetch origin data
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/data)" ]; then
+            echo "Remote moved while rendering — replaying our files onto it"
+            mkdir -p /tmp/render-out
+            cp data/job_details.jsonl /tmp/render-out/ 2>/dev/null || true
+            cp data/render_status.csv /tmp/render-out/ 2>/dev/null || true
+            git reset --hard origin/data
+            cp /tmp/render-out/job_details.jsonl data/ 2>/dev/null || true
+            cp /tmp/render-out/render_status.csv data/ 2>/dev/null || true
+          fi
+
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No new text — nothing to commit."
+          else
+            git commit --amend --no-edit \
+              -m "data: latest job data $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push --force origin data
+            echo "Data branch updated with rendered descriptions"
+          fi
