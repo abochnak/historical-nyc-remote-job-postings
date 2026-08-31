@@ -1,0 +1,5 @@
+# Only render_scrape.py needs these. Every other script in this directory is
+# standard-library-only on purpose, so a normal run needs no install step.
+#
+# After installing:  python -m playwright install chromium
+playwright>=1.40.0

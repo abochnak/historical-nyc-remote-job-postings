@@ -47,6 +47,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import notify  # noqa: E402
 from jobtext import (HostThrottle, MIN_CHARS, best_effort_text,  # noqa: E402
                      looks_like_job_text)
 
@@ -286,6 +287,9 @@ def main():
     print(f"  job_details.jsonl   -> {len(texts):,} entries with text "
           f"({len(rows) - len(texts):,} still missing)")
     print(f"  backfill_status.csv -> {len(status):,} rows")
+    notify.notify_backfill(counts["ok"], counts["gone"], counts["empty"],
+                           counts["error"], len(texts), len(rows) - len(texts))
+
     if counts["error"]:
         print("\n  Re-run to retry errors; add --retry-failed to also revisit gone/thin.")
 

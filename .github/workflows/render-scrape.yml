@@ -1,17 +1,19 @@
-name: Backfill job description text
+name: Rendered scrape (headless browser)
 
-# Fills raw_text for postings that don't have it yet, so nobody has to scrape
-# a URL by hand. update.py already tries once per job as it's discovered; this
-# catches everything that first attempt missed -- pages that were slow, briefly
-# blocked, or only became available in the Wayback Machine later.
+# Recovers postings that a plain HTTP fetch cannot read, because the board
+# builds the description in JavaScript -- Workday, Ashby, Oracle Cloud, iCIMS.
+# urllib gets literally 0 characters from those pages; a real browser gets the
+# whole posting.
 #
-# Daily rather than every 30 minutes: the incremental updater handles fresh
-# postings, and what's left here is a long tail worth retrying occasionally,
-# not constantly.
+# update.yml handles the steady state: it renders up to 12 postings every 30
+# minutes, newest first, so anything discovered today is attempted while it is
+# still live. This workflow is the wider sweep -- a bigger batch, the option to
+# include non-JS hosts, and the option to retry postings already marked failed.
+# Run it by hand after a long outage, or let the weekly schedule mop up.
 
 on:
   schedule:
-    - cron: "20 6 * * *"
+    - cron: "40 3 * * 0"     # Sundays
   workflow_dispatch:
     inputs:
       notify_target:
@@ -23,27 +25,27 @@ on:
       limit:
         description: "Max postings this run (0 = all missing)"
         required: false
-        default: "120"
-      retry_failed:
-        description: "Also revisit postings previously marked gone/thin"
+        default: "150"
+      only_js:
+        description: "Only hosts known to render client-side (faster, higher hit rate)"
         type: boolean
         required: false
-        default: false
-      drop_bad:
-        description: "One-off cleanup: discard stored text that isn't a job posting, then refetch it"
+        default: true
+      retry_failed:
+        description: "Also retry postings this scraper already failed on"
         type: boolean
         required: false
         default: false
 
-# Shares the lock with update.yml -- both force-push the data branch.
+# Shares the lock with the other workflows -- they all force-push the data branch.
 concurrency:
   group: data-branch-write
   cancel-in-progress: false
 
 jobs:
-  backfill:
+  render:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     permissions:
       contents: write
@@ -68,16 +70,18 @@ jobs:
             exit 1
           fi
           echo "job_details.csv: $(wc -l < data-branch/data/job_details.csv) lines"
-          if [ -f "data-branch/data/job_details.jsonl" ]; then
-            echo "job_details.jsonl: $(wc -l < data-branch/data/job_details.jsonl) entries with text"
-          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Run backfill
+      - name: Install Playwright and Chromium
+        run: |
+          pip install -r main/scraper/requirements-render.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Render and scrape
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_WEBHOOK_URL_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
@@ -88,19 +92,17 @@ jobs:
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch
-          LIMIT="${{ github.event.inputs.limit || '120' }}"
-          ARGS="--limit $LIMIT --workers 6 --host-delay 2"
+          LIMIT="${{ github.event.inputs.limit || '150' }}"
+          ARGS="--limit $LIMIT"
+          # Default true on the schedule, where inputs are empty.
+          if [ "${{ github.event.inputs.only_js }}" != "false" ]; then
+            ARGS="$ARGS --only-js"
+          fi
           if [ "${{ github.event.inputs.retry_failed }}" = "true" ]; then
             ARGS="$ARGS --retry-failed"
           fi
-          # Deliberately not part of the schedule: --drop-bad rewrites stored
-          # text and is a one-off repair, not something to run unattended every
-          # night. Trigger it by hand when there is junk to clear out.
-          if [ "${{ github.event.inputs.drop_bad }}" = "true" ]; then
-            ARGS="$ARGS --drop-bad"
-          fi
-          echo "Running: backfill_text.py $ARGS"
-          python scraper/backfill_text.py $ARGS
+          echo "Running: render_scrape.py $ARGS"
+          python scraper/render_scrape.py $ARGS
 
       - name: Commit results to data branch
         run: |
@@ -111,26 +113,25 @@ jobs:
           # The scraper directory is copied in, not tracked — don't commit it.
           rm -rf scraper
 
-          # Pick up anything (Flask edits, an update.py run) that landed while
-          # we were scraping, then reapply only the two files this job writes.
+          # Pick up anything that landed while the browser was working, then
+          # reapply only the two files this job writes.
           git fetch origin data
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/data)" ]; then
-            echo "Remote moved while backfilling — replaying our two files onto it"
-            mkdir -p /tmp/backfill-out
-            cp data/job_details.jsonl    /tmp/backfill-out/ 2>/dev/null || true
-            cp data/backfill_status.csv  /tmp/backfill-out/ 2>/dev/null || true
+            echo "Remote moved while rendering — replaying our files onto it"
+            mkdir -p /tmp/render-out
+            cp data/job_details.jsonl /tmp/render-out/ 2>/dev/null || true
+            cp data/render_status.csv /tmp/render-out/ 2>/dev/null || true
             git reset --hard origin/data
-            cp /tmp/backfill-out/job_details.jsonl   data/job_details.jsonl   2>/dev/null || true
-            cp /tmp/backfill-out/backfill_status.csv data/backfill_status.csv 2>/dev/null || true
+            cp /tmp/render-out/job_details.jsonl data/ 2>/dev/null || true
+            cp /tmp/render-out/render_status.csv data/ 2>/dev/null || true
           fi
 
           git add data/
           if git diff --cached --quiet; then
             echo "No new text — nothing to commit."
           else
-            # The data branch is kept as a single squashed commit, matching update.yml.
             git commit --amend --no-edit \
               -m "data: latest job data $(date -u '+%Y-%m-%d %H:%M UTC')"
             git push --force origin data
-            echo "Data branch updated with backfilled descriptions"
+            echo "Data branch updated with rendered descriptions"
           fi

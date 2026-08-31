@@ -24,10 +24,13 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import classify
 import jobtext
+import notify
 
 # -- URL deduplication --------------------------------------------------------
 def extract_job_id(url):
@@ -82,9 +85,29 @@ EXCLUDE_CSV = os.path.join(DATA_DIR, "excluded_jobs.csv")
 DETAILS_CSV  = os.path.join(DATA_DIR, "job_details.csv")
 DETAILS_JSONL = os.path.join(DATA_DIR, "job_details.jsonl")
 QUEUE_CSV      = os.path.join(DATA_DIR, "pending_archive.csv")
+# One ledger per notification target. A test run that wrote to the production
+# ledger would mark those postings announced, and the real channel would then
+# never hear about them -- testing would silently consume the announcements it
+# was meant to rehearse.
+def notified_path():
+    if notify.target() == "test":
+        return os.path.join(DATA_DIR, "notified_ids.test.txt")
+    return os.path.join(DATA_DIR, "notified_ids.txt")
 
 MAX_ARCHIVE_PER_RUN  = 5  # matches 30-min cron; typical window has 1-3 new jobs
 MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
+
+# Description text is captured for *every* newly discovered posting, not just
+# the handful that get archived this run. A posting is at its most fetchable
+# the moment it appears and may be gone within days, so waiting for a slot in
+# the archive queue is how postings get lost. One GET per job is cheap; the
+# Wayback save that MAX_ARCHIVE_PER_RUN throttles is what isn't.
+#
+# The cap here only exists so a catch-up run (--commits 200) can't fetch
+# thousands of pages in one go. Anything over it is left to backfill-text.yml.
+MAX_TEXT_PER_RUN = 80
+TEXT_WORKERS     = 6   # concurrent fetches, throttled per host by jobtext
+TEXT_HOST_DELAY  = 2.0
 
 CSV_HEADERS = [
     "company_name", "title", "recruiting_season",
@@ -95,7 +118,13 @@ DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status",
-    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived", "status", "source", "first_seen_date",
+    "recruiting_season",
+    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived",
+    # Written by simplify_closes.py. It must be listed here: save_details() uses
+    # these as the CSV fieldnames with extrasaction="ignore", so a column absent
+    # from this list is silently dropped on the next updater run.
+    "application_closes",
+    "status", "source", "first_seen_date",
 ]
 
 EXCL_HEADERS = [
@@ -248,8 +277,29 @@ def archive_ghostarchive(url, retries=2):
     return "", "failed"
 
 
-def fetch_or_archive(job_url):
-    """Try to fetch text from live URL first. If that fails, archive and extract from archive."""
+def fetch_or_archive(job_url, have_text=False):
+    """
+    Archive a job URL, extracting text along the way.
+
+    have_text=True means step 5b already captured the description from the live
+    posting, so the live fetch here is skipped and we go straight to creating an
+    archive -- the archive still matters for provenance even when the text is
+    already in hand.
+    """
+    if have_text:
+        print("    text already captured, archiving ... ", end="", flush=True)
+        for fn, label in [
+            (archive_wayback,      "wayback"),
+            (archive_archiveph,    "archive.ph"),
+            (archive_ghostarchive, "ghostarchive"),
+        ]:
+            arc_url, status = fn(job_url)
+            if status == "success":
+                print(f"{label} OK")
+                return arc_url, label, "success", ""
+        print("all archives failed -- flagged for manual archive")
+        return "", "none", "failed", ""
+
     # Try live URL first
     print(f"    fetching live ... ", end="", flush=True)
     text = fetch_page_text(job_url)
@@ -346,6 +396,22 @@ def save_jsonl(rows):
                 "raw_text": row.get("raw_text", ""),
             }) + "\n")
 
+def load_notified():
+    """Job ids already announced, for the current target. One id per line."""
+    path = notified_path()
+    if not os.path.exists(path):
+        return set()
+    with open(path, encoding="utf-8") as f:
+        return {line.strip() for line in f if line.strip()}
+
+
+def save_notified(ids):
+    os.makedirs(DATA_DIR, exist_ok=True)
+    with open(notified_path(), "a", encoding="utf-8") as f:
+        for jid in ids:
+            f.write(jid + "\n")
+
+
 def load_queue():
     if not os.path.exists(QUEUE_CSV):
         return []
@@ -396,6 +462,7 @@ def main():
     print(f"  Auth    : unauthenticated (public repo)")
     print(f"  Fetch   : last {args.commits} commits touching {FILE_PATH}")
     print(f"  Archive : {'skipped (--skip-archive)' if args.skip_archive else 'enabled'}")
+    print(f"  Discord : {notify.describe_target()}")
     print()
 
     # 1. Load exclusions
@@ -448,6 +515,7 @@ def main():
 
     # 5. Process commits oldest-first
     new_nyc, new_rem, errors = [], [], 0
+    discovered_now = {}      # id -> row, for the Discord announcement
     for i, (sha, date) in enumerate(reversed(commit_list), 1):
         print(f"  [{i:>2}/{len(commit_list)}] {sha[:10]}  {date} ... ", end="", flush=True)
         raw = fetch_raw(sha)
@@ -483,6 +551,10 @@ def main():
                 seen_nyc_ids.add(jid); new_nyc.append(row); added_nyc += 1; is_new = True
             if jid not in seen_rem_ids and is_remote(locs):
                 seen_rem_ids.add(jid); new_rem.append(row); added_rem += 1; is_new = True
+            if is_new:
+                # Keyed by id: a posting that is both NYC and remote lands in
+                # both lists and must still be announced once.
+                discovered_now[jid] = row
 
             # Add to job_details if:
             # - job is new to the CSVs AND
@@ -516,6 +588,7 @@ def main():
                     "company_name":     row["company_name"],
                     "title":            row["title"],
                     "job_url":          row["url"],
+                    "recruiting_season": row.get("recruiting_season", ""),
                     "archive_url":      "",
                     "archive_source":   "",
                     "archive_status":   "pending",
@@ -535,6 +608,117 @@ def main():
     print(f"  New remote jobs : +{len(new_rem)}")
     print(f"  Queue total     : {len(pending_queue):,} jobs pending archive")
 
+    # 5b. Capture description text for every posting discovered this run, now,
+    #     while it is still live. This is deliberately not gated on the archive
+    #     queue: archiving is rate-limited and can lag by hours, but by then the
+    #     posting may be gone. Wayback is skipped here -- a posting minutes old
+    #     has no capture yet, and the lookup would only add latency.
+    fresh = [j for j in pending_queue
+             if not details_map.get(j["id"], {}).get("raw_text", "").strip()]
+    # Newest first. The queue is loaded from disk in insertion order, so with a
+    # backlog larger than MAX_TEXT_PER_RUN the slice below would spend the whole
+    # budget on old postings and today's arrivals would never be fetched
+    # "immediately" at all -- which is the entire point of this step.
+    fresh.sort(key=lambda j: j.get("first_seen_date", ""), reverse=True)
+    if fresh:
+        batch = fresh[:MAX_TEXT_PER_RUN]
+        deferred = len(fresh) - len(batch)
+        print()
+        print(f"  Capturing text for {len(batch)} new posting(s)"
+              + (f" | {deferred} left to the nightly backfill" if deferred else ""))
+
+        throttle = jobtext.HostThrottle(TEXT_HOST_DELAY)
+
+        def grab(job):
+            return job, jobtext.best_effort_text(
+                job["job_url"], "", throttle=throttle, use_wayback=False
+            )
+
+        captured = 0
+        with ThreadPoolExecutor(max_workers=TEXT_WORKERS) as ex:
+            for job, res in ex.map(grab, batch):
+                jid = job["id"]
+                if jid not in details_map:
+                    continue
+                if res["status"] == "ok":
+                    details_map[jid]["raw_text"] = res["text"]
+                    captured += 1
+                    print(f"    OK   {job['company_name'][:24]}: {len(res['text']):,} chars")
+                else:
+                    label = {"gone": "GONE", "empty": "THIN",
+                             "error": "ERR "}.get(res["status"], "ERR ")
+                    print(f"    {label} {job['company_name'][:24]}: {res['note'][:44]}")
+        print(f"  Captured text for {captured}/{len(batch)}")
+
+
+
+    # 5c. Announce newly discovered postings to Discord.
+    #
+    #     Based on what this run actually discovered -- NOT on the pending
+    #     queue. The queue carries jobs over between runs, so announcing from
+    #     it re-posted the same posting every 30 minutes for as long as its text
+    #     capture kept failing, which for older postings is indefinitely.
+    #
+    #     The ledger makes it exactly-once even if a run dies after notifying
+    #     but before committing the CSVs, which would otherwise make the job
+    #     look new again on the next run.
+    if notify.enabled() and discovered_now:
+        first_run = not os.path.exists(notified_path())
+        already = load_notified()
+        to_announce = {jid: row for jid, row in discovered_now.items() if jid not in already}
+
+        # The first run with notifications on establishes a baseline instead of
+        # announcing. Without this, switching the webhook on -- or any catch-up
+        # run like --commits 200 -- dumps the entire backlog into the channel as
+        # "new", which is both wrong and unreadable. Same convention as
+        # simplify_closes.py's first run.
+        if first_run and len(to_announce) > 25:
+            save_notified(to_announce)
+            print(f"  Discord: baseline set from {len(to_announce):,} existing postings "
+                  "(not announced). New postings from the next run on will be.")
+            to_announce = {}
+
+        if to_announce:
+            announce = []
+            for jid, row in to_announce.items():
+                text = details_map.get(jid, {}).get("raw_text", "").strip()
+                level = None
+                if text:
+                    try:
+                        level, _ = classify.classify_text(text)
+                    except Exception:
+                        level = None
+                # listings.json is authoritative for the term. Only when it
+                # says nothing (or "N/A" -- 11% of the archive) is the term read
+                # out of the description, and only when the description states
+                # it unambiguously.
+                season = (row.get("recruiting_season") or "").strip()
+                if season.upper() in ("", "N/A", "NA") and text:
+                    try:
+                        season = classify.extract_season(text) or ""
+                    except Exception:
+                        season = ""
+                    # Keep it. This used to be computed for the Discord message
+                    # and thrown away, so a term recovered from the description
+                    # never reached the dataset.
+                    if season and jid in details_map:
+                        details_map[jid]["recruiting_season"] = season
+
+                announce.append({
+                    "company_name":      row["company_name"],
+                    "title":             row["title"],
+                    "url":               row["url"],
+                    "recruiting_season": season,
+                    "degree_level":      level,
+                })
+            with_text = sum(1 for a in announce if a["degree_level"])
+            if notify.notify_new_postings(announce, with_text, len(announce)):
+                save_notified(to_announce)
+                print(f"  Announced {len(to_announce)} new posting(s) to Discord")
+            else:
+                # Not recorded as notified, so the next run tries again.
+                print("  Discord announcement failed — will retry next run")
+
     # 6. Archive from persistent queue
     if pending_queue and not args.skip_archive:
         to_archive = pending_queue[:MAX_ARCHIVE_PER_RUN]
@@ -547,25 +731,36 @@ def main():
             jid      = job["id"]
             attempts = int(job.get("archive_attempts", 0))
             print(f"  -> {job['company_name']}: {job['title'][:55]}")
-            arc_url, arc_src, arc_status, raw_text = fetch_or_archive(job["job_url"])
+            have_text = bool(details_map.get(jid, {}).get("raw_text", "").strip())
+            arc_url, arc_src, arc_status, raw_text = fetch_or_archive(job["job_url"], have_text)
             time.sleep(3)
-            # Update existing entry preserving status and category
-            existing = details_map.get(jid, {})
-            details_map[jid] = {
-                "id":              jid,
-                "company_name":    job["company_name"],
-                "title":           job["title"],
-                "job_url":         job["job_url"],
-                "archive_url":     arc_url,
-                "archive_source":  arc_src,
-                "archive_status":  arc_status,
-                "category":        existing.get("category", ""),
-                "date_archived":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "status":          existing.get("status", "unreviewed"),
-                "source":          existing.get("source", "simplify"),
-                "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
-                "raw_text":        raw_text,
-            }
+            # Update the existing entry in place, rather than rebuilding it.
+            #
+            # This used to construct a fresh dict and copy across the handful of
+            # fields someone remembered, which silently blanked every other
+            # column on the next save_details() -- class_year,
+            # degree_enrollment, additional_skills, language_requirements,
+            # application_closes, and each new column after them. Archiving a
+            # posting wiped its classification. Listing what to *keep* is the
+            # wrong default; only the archive fields belong to this step.
+            entry = dict(details_map.get(jid, {}))
+            entry.setdefault("id", jid)
+            entry.setdefault("status", "unreviewed")
+            entry.setdefault("source", "simplify")
+            entry.setdefault("first_seen_date", job.get("first_seen_date", ""))
+            entry["company_name"]   = job["company_name"]
+            entry["title"]          = job["title"]
+            entry["job_url"]        = job["job_url"]
+            entry["archive_url"]    = arc_url
+            entry["archive_source"] = arc_src
+            entry["archive_status"] = arc_status
+            entry["date_archived"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            # Step 5b already captured this from the live posting, which is a
+            # better source than an archive rendering of it. Only take the
+            # archive's text if we don't already have some.
+            if not entry.get("raw_text", "").strip():
+                entry["raw_text"] = raw_text
+            details_map[jid] = entry
             if arc_status == "success":
                 archived_ids.add(jid)  # success — remove from queue
             else:
@@ -604,9 +799,9 @@ def main():
     if details_map and (new_nyc or new_rem or not args.skip_archive):
         save_details(details_map)
         failed = [r for r in details_map.values() if r.get("archive_status") == "failed"]
-        archived_count = sum(1 for r in details_map.values() if r.get("archive_url"))
+        with_text = sum(1 for r in details_map.values() if r.get("raw_text", "").strip())
         print(f"  data/job_details.csv  -> {len(details_map):,} entries")
-        print(f"  data/job_details.jsonl -> {archived_count:,} entries (with archive URL)")
+        print(f"  data/job_details.jsonl -> {with_text:,} entries (with description text)")
         if failed:
             print(f"  Warning: {len(failed)} jobs failed to archive:")
             for r in failed[-5:]:
