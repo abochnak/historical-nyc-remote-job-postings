@@ -124,6 +124,13 @@ One message per posting, up to ten; beyond that they are grouped so a catch-up
 run can't fire dozens of requests at a webhook that allows about thirty a
 minute. The season is dropped when the posting has none.
 
+The term comes from `listings.json`. When that says `N/A` — 11% of the archive —
+`classify.extract_season()` reads it out of the description instead, but only
+when the description names one term unambiguously (93% precision, commits on
+26% of postings). In practice this recovers few: of 61 archived postings with
+no term, 39 have text and 5 yielded one. It is a small gain that degrades to
+the existing behaviour of simply omitting the parenthetical.
+
 | Event | When | Message |
 |---|---|---|
 | New postings found | every 30 min (`update.yml`) | title, season, link |

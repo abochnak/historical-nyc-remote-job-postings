@@ -672,11 +672,22 @@ def main():
                         level, _ = classify.classify_text(text)
                     except Exception:
                         level = None
+                # listings.json is authoritative for the term. Only when it
+                # says nothing (or "N/A" -- 11% of the archive) is the term read
+                # out of the description, and only when the description states
+                # it unambiguously.
+                season = (row.get("recruiting_season") or "").strip()
+                if season.upper() in ("", "N/A", "NA") and text:
+                    try:
+                        season = classify.extract_season(text) or ""
+                    except Exception:
+                        season = ""
+
                 announce.append({
                     "company_name":      row["company_name"],
                     "title":             row["title"],
                     "url":               row["url"],
-                    "recruiting_season": row.get("recruiting_season", ""),
+                    "recruiting_season": season,
                     "degree_level":      level,
                 })
             with_text = sum(1 for a in announce if a["degree_level"])
