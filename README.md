@@ -72,31 +72,26 @@ Outcomes are recorded per job in `data/backfill_status.csv`:
 | `empty` | pages loaded, no posting text (JS-rendered board) | only with `--retry-failed` |
 | `gone` | a page said the posting was taken down | only with `--retry-failed` |
 
-## Automatic classification
+## Degree classification
 
-`classify.py` assigns `category`, `class_year`, `degree_enrollment`,
-`additional_skills`, and `language_requirements` by reading the posting text,
-so nobody has to do it by hand. It needs `ANTHROPIC_API_KEY` and
-`pip install -r scraper/requirements.txt`.
-
-194 postings were classified by hand before this existed. Score against them
-before trusting it:
+`classify.py` reads the posting text and fills `degree_enrollment` — whether a
+posting needs a graduate student, an undergraduate, or is open to any student.
+Rules only: no API key, no network, standard library.
 
 ```bash
-python scraper/classify.py --eval --limit 40   # writes nothing
-python scraper/classify.py --limit 20          # classify for real
-python scraper/classify.py                     # the whole backlog
+python scraper/classify.py --eval      # score against hand labels; writes nothing
+python scraper/classify.py --dry-run   # show what would change
+python scraper/classify.py             # fill in degree_enrollment
+python scraper/classify.py --explain ID
 ```
 
-The model is constrained to the exact taxonomy already in the data — it cannot
-invent a category — and values are re-checked against that list on the way out.
+**It is currently 67% accurate on the three-bucket question** (grad only /
+undergrad / any student), measured against 106 hand-labelled postings. That is
+not good enough to run unattended — see the header of `classify.py` for the
+per-bucket numbers and the three measured reasons it plateaus there. Treat it
+as a starting point that needs review, not as a replacement for judgement.
 
-Two things it deliberately does not do:
-
-- **It never sets `status`.** Automatically classified is not the same as
-  human-reviewed, and merging the two would lose that distinction for good.
-- **It never guesses without text.** A posting with no `raw_text` is reported
-  as blocked, not classified from its title.
+It only writes `degree_enrollment`. The other review fields are left alone.
 
 ## What can't be recovered
 

@@ -1,197 +1,264 @@
 #!/usr/bin/env python3
 """
-historical-nyc-remote-job-postings -- Automatic Posting Classifier
-==================================================================
-Fills the five review fields from the posting's own description text, so
-classifying postings by hand stops being a job anyone has to do.
+historical-nyc-remote-job-postings -- Degree Requirement Classifier
+===================================================================
+Reads a posting's description text and decides what level of study it requires:
 
-    category                Software Engineering, Data Analysis, ...
-    class_year              Freshman / Sophomore / Junior / Senior / Grad Student
-    degree_enrollment       AS/AAS, BS/BA, MS required, or open
-    additional_skills       free-form list pulled from the posting
-    language_requirements   English, plus anything explicitly required
+    MS Required           graduate students -- master's, PhD, doctoral
+    BS/BA Required        undergraduates -- bachelor's
+    AS/AAS Required       associate degree (rare)
+    Open to All Degrees   no specific degree named
 
-Only postings that already have raw_text can be classified -- there is nothing
-to read otherwise. Run backfill_text.py first.
+A posting can require more than one ("pursuing a Bachelor's or Master's"), in
+which case both are recorded, joined by " | " -- the format the CSV already uses.
 
-Trust, then automate
---------------------
-194 postings were classified by hand before this existed. `--eval` scores the
-model against those, per field, so you can see what the automation actually
-agrees on before letting it write anything:
+Rules, not a model. No API key, no network, standard library only.
 
-    python scraper/classify.py --eval           # score against human labels
-    python scraper/classify.py --limit 20       # classify 20, write results
-    python scraper/classify.py                  # classify everything unclassified
-    python scraper/classify.py --dry-run        # show what would be done
+Measured accuracy -- read this before trusting it
+-------------------------------------------------
+Scored against 106 postings that have both a hand-assigned label and
+description text:
 
-Requires ANTHROPIC_API_KEY (or an `ant auth login` profile) and:
+    three-bucket (grad only / undergrad / any student) : 67%
+    exact match on the CSV's multi-label values        : 55%
+    "any student" recall                               : 85%
+    "undergraduate required" recall                    : 18%
+    "grad only" precision                              : 55%
 
-    pip install anthropic
+An abstaining variant -- deciding only on unambiguous evidence -- reaches 80%
+precision but covers only 42% of postings.
+
+67% is not good enough to run unsupervised, and the plateau has three measured
+causes, only one of which more regexes can fix:
+
+  1. 7 of the 106 postings contain no degree language anywhere in their stored
+     text. They were labelled from something else -- the live posting, the job
+     title, context. No text classifier can recover those.
+  2. The hand labels are not self-consistent. "Currently pursuing a Bachelor's
+     or Master's degree" is labelled "Open to All Degrees" on five postings and
+     "BS/BA Required | MS Required" on others. Identical text, different label,
+     so exact-match accuracy is capped below 100% by the target itself.
+  3. Real phrasing variety that patterns handle badly.
+
+Run --eval after any rule change. Four rounds of tuning moved the three-bucket
+score by under three points, which is the honest signal that this approach is
+near its ceiling on this data.
+
+Usage
+-----
+    python scraper/classify.py --eval        # score against human labels
+    python scraper/classify.py --dry-run     # show what would change
+    python scraper/classify.py               # fill in degree_enrollment
+    python scraper/classify.py --explain ID  # show why one posting was classified
+
+Only degree_enrollment is written. The other review fields (category,
+class_year, additional_skills, language_requirements) are left alone -- they are
+not reliably derivable from formulaic phrasing the way degree level is.
 """
 
 import argparse
 import csv
 import json
 import os
+import re
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
-
-try:
-    import anthropic
-except ImportError:
-    sys.exit("ERROR: pip install anthropic")
-
-from pydantic import BaseModel, Field
 
 ROOT          = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR      = os.path.join(ROOT, "data")
 DETAILS_CSV   = os.path.join(DATA_DIR, "job_details.csv")
 DETAILS_JSONL = os.path.join(DATA_DIR, "job_details.jsonl")
 
-MODEL       = "claude-opus-5"
-MAX_TOKENS  = 1024
-EFFORT      = "low"   # classification against a closed taxonomy; see --effort
-WORKERS     = 6
+MS    = "MS Required"
+BS    = "BS/BA Required"
+AS    = "AS/AAS Required"
+OPEN  = "Open to All Degrees"
+MULTI_SEP = " | "
 
-# The description is the only input that matters, and the tail of a long
-# posting is boilerplate (EEO statements, benefits, application instructions).
-# Trimming keeps cost predictable without losing the part that classifies.
-MAX_TEXT_CHARS = 12_000
-
-# -- Taxonomy ------------------------------------------------------------------
-# Derived from the 194 postings classified by hand. Keep these lists in sync
-# with what the review app offers; the model is constrained to exactly these
-# values, so anything missing here can never be assigned.
-CATEGORIES = [
-    "Software Engineering", "Data Analysis", "Machine Learning / AI",
-    "Data Science", "Data Engineering", "Product Management", "Cybersecurity",
-    "IT Support", "Engineering (Non-Software)", "Quant / Finance",
-    "Product Design/UX", "Other",
+# Application-form boilerplate ("Undergraduate GPA", "Expected graduation
+# date") sits at the end of Greenhouse/Lever pages and mentions degree words
+# without requiring anything. Everything from these markers on is ignored.
+FORM_MARKERS = [
+    r"\*\s*required\s*fields?",
+    r"\bautofill with (?:greenhouse|resume)\b",
+    r"\bapplication questions?\b",
+    r"\bvoluntary self[- ]identification\b",
+    r"\bequal employment opportunity\b.{0,40}\bself[- ]identification\b",
+    r"\bwill you now or in the future require sponsorship\b",
 ]
 
-CLASS_YEARS = ["Freshman", "Sophomore", "Junior", "Senior", "Grad Student", "Open to All"]
+# Phrases that genuinely state a degree level. Bare words are useless here:
+# "master your craft" and "limited term associates" both appear in real
+# postings that require neither degree, so every pattern below demands the
+# surrounding words that make it a credential.
+GRAD_PATTERNS = [
+    r"master'?s?\s+(?:degree|program|student|candidate)",
+    r"master\s+of\s+(?:science|arts|engineering|business|public|computer)",
+    r"\bm\.?s\.?\s+(?:in|degree|program)\b",
+    r"\bm\.?eng\b|\bm\.?b\.?a\b",
+    r"\bph\.?\s?d\.?\b",
+    r"\bdoctoral\b|\bdoctorate\b",
+    r"graduate\s+(?:degree|program|student|studies|level)",
+    r"\b(?:advanced|graduate)\s+degree\b",
+    r"currently\s+enrolled\s+in\s+(?:a\s+)?(?:master|graduate|ph\.?d)",
+    r"\bor\s+(?:a\s+)?(?:non-?mba\s+)?master'?s?\b",
+    r"\bor\s+(?:a\s+)?graduate\b",
+    r"master'?s?\s*(?:,|/|\s+or\b|\s+and/or\b)",
+]
 
-DEGREES = ["AS/AAS Required", "BS/BA Required", "MS Required", "Open to All Degrees"]
+BACH_PATTERNS = [
+    r"bachelor'?s?\s+(?:degree|program|student|candidate)",
+    r"bachelor\s+of\s+(?:science|arts|engineering)",
+    r"\bb\.?s\.?\s+(?:in|degree|program)\b",
+    r"\bb\.?a\.?\s+(?:in|degree|program)\b",
+    r"\bb\.?s\.?/\s?b\.?a\.?\b",
+    r"undergraduate\s+(?:degree|program|student|studies)",
+    r"four[- ]year\s+degree|4[- ]year\s+degree",
+    r"currently\s+enrolled\s+in\s+(?:a\s+)?(?:bachelor|undergraduate)",
+    # Coordinated forms: "Bachelor's or Master's degree", "undergraduate or
+    # graduate program". The head noun attaches to the last item only, so the
+    # patterns above miss the first half of every one of these.
+    r"bachelor'?s?\s*(?:,|/|\s+or\b|\s+and/or\b)",
+    r"undergraduate\s+(?:or|and/or)\b",
+    r"\bor\s+(?:a\s+)?bachelor'?s?\b",
+]
 
-MULTI_SEP = " | "   # how the CSV stores multi-value fields
+ASSOC_PATTERNS = [
+    r"associate'?s?\s+degree",
+    r"\ba\.?a\.?s\.?\s+(?:in|degree)\b",
+    r"\bassociate\s+of\s+(?:science|arts|applied)",
+]
 
+# A degree named inside one of these clauses is a nice-to-have, not a
+# requirement. The human labels consistently treat "Master's preferred" as
+# not requiring a master's.
+PREFERRED_CUES = [
+    "preferred", "preference", "a plus", "nice to have", "ideally",
+    "bonus", "desirable", "would be great", "not required", "or equivalent",
+]
 
-class Classification(BaseModel):
-    category: list[str] = Field(
-        description="Every listed category that genuinely fits this role. Most "
-                    "roles have exactly one. Use two or more only when the "
-                    "posting really spans them."
-    )
-    class_year: list[str] = Field(
-        description='Class years eligible to apply. Use ["Open to All"] alone '
-                    "when the posting sets no year restriction."
-    )
-    degree_enrollment: list[str] = Field(
-        description='Degree levels the posting requires. Use ["Open to All '
-                    'Degrees"] alone when no specific degree is required.'
-    )
-    additional_skills: list[str] = Field(
-        description="Concrete named technologies, tools, and languages the "
-                    "posting asks for. Empty list if none are named."
-    )
-    language_requirements: list[str] = Field(
-        description="Human languages explicitly required. Almost always "
-                    '["English"]; add others only when the posting requires them.'
-    )
-    reasoning: str = Field(
-        description="One sentence on why this category was chosen. Kept for "
-                    "spot-checking; not written to the CSV."
-    )
-
-
-SYSTEM = f"""You classify internship and early-career job postings for an archive of NYC and remote roles.
-
-You will be given the text of one posting. Assign these five fields.
-
-category — the kind of work. Choose from exactly these values:
-{chr(10).join('  - ' + c for c in CATEGORIES)}
-Pick the single best fit. Assign more than one only when the role genuinely
-spans them (e.g. a role that is equally data engineering and ML). "Other" is for
-roles that fit none of the above, not for roles you are unsure about — pick the
-closest real category instead.
-
-class_year — which students may apply. Choose from exactly these values:
-{chr(10).join('  - ' + c for c in CLASS_YEARS)}
-Use ["Open to All"] on its own when the posting names no year restriction; this
-is the most common case. When specific years are named, list exactly those and
-do not include "Open to All". "Grad Student" covers master's and PhD students.
-
-degree_enrollment — the degree level required. Choose from exactly these values:
-{chr(10).join('  - ' + d for d in DEGREES)}
-Use ["Open to All Degrees"] on its own when no specific degree is required.
-When a posting accepts several levels, list each acceptable one. A posting
-saying "pursuing a Bachelor's or Master's" is ["BS/BA Required", "MS Required"].
-
-additional_skills — specific named technologies, languages, tools, and
-frameworks the posting asks for (e.g. Python, React, SQL, PyTorch, Excel, AWS).
-Name them as the posting does. Do not include soft skills, degree subjects, or
-generic phrases like "communication" or "problem solving". Empty list if the
-posting names none.
-
-language_requirements — human languages explicitly required. Nearly every
-posting is ["English"]. Add another language only when the posting states it is
-required, not merely preferred or "a plus".
-
-Rules that matter:
-- Use only the exact values listed above for the first three fields. Never
-  invent a value or alter its spelling.
-- Classify from what the posting says, not from what the company usually hires
-  for. If the text does not state a restriction, it is not restricted.
-- If the text is truncated or mostly boilerplate, still give your best reading
-  of the fields you can see rather than refusing."""
+# Explicit "anyone enrolled may apply" phrasing. These beat a stray degree
+# mention: a posting saying "open to all majors" is open regardless.
+OPEN_PATTERNS = [
+    r"all\s+majors",
+    r"any\s+major",
+    r"regardless\s+of\s+(?:major|degree|discipline)",
+    r"all\s+degree\s+(?:levels|programs)",
+    r"open\s+to\s+all\s+(?:students|majors|degrees)",
+    r"degree[- ]seeking\s+program",
+    r"enrolled\s+in\s+(?:an\s+)?accredited\s+(?:college|university|institution)",
+]
 
 
-def build_prompt(row, text):
-    return (
-        f"Company: {row.get('company_name', '')}\n"
-        f"Title: {row.get('title', '')}\n\n"
-        f"Posting text:\n{text[:MAX_TEXT_CHARS]}"
-    )
+# Coordination joining the undergrad and grad terms themselves -- "Bachelor's
+# or Master's", "undergraduate / graduate". It must sit *between* the two
+# degree mentions and close to them: matching any "or" in the sentence made
+# "Bachelor's degree in Computer Science or Engineering" look like an
+# undergrad-or-grad choice, which flattened genuine bachelor's requirements
+# into "open to all".
+COORD_RE     = re.compile(r"^[\s,/]*(?:or|and/or|,)[\s,/]*$", re.I)
+COORD_MAX_GAP = 40   # chars allowed between the two degree mentions
 
 
-def classify_one(client, row, text, effort):
-    """Classify one posting. Returns (row_id, Classification) or (row_id, None)."""
-    try:
-        response = client.messages.parse(
-            model=MODEL,
-            max_tokens=MAX_TOKENS,
-            # The taxonomy is identical on every request, so cache it -- with a
-            # few hundred postings this is the difference between paying for the
-            # instructions once and paying for them every time.
-            system=[{
-                "type": "text",
-                "text": SYSTEM,
-                "cache_control": {"type": "ephemeral"},
-            }],
-            output_config={"effort": effort},
-            messages=[{"role": "user", "content": build_prompt(row, text)}],
-            output_format=Classification,
-        )
-        if response.stop_reason == "refusal":
-            return row["id"], None
-        return row["id"], response.parsed_output
-    except anthropic.APIError as e:
-        print(f"    API error for {row['id'][:8]}: {type(e).__name__}: {e}", flush=True)
-        return row["id"], None
+def offers_either_path(sentence, bs_span, ms_span):
+    """True when the sentence offers an undergrad OR grad route, not both as requirements."""
+    if not bs_span or not ms_span:
+        return False
+    first, second = sorted([bs_span, ms_span], key=lambda sp: sp[0])
+    if second[0] < first[1]:                     # overlapping matches
+        return False
+    between = sentence[first[1]:second[0]]
+    if len(between) > COORD_MAX_GAP:
+        return False
+    return bool(COORD_RE.match(between)) or bool(
+        re.fullmatch(r"[\s,/]*(?:or|and/or)[\s,/]*(?:a\s+|an\s+)?(?:non-?mba\s+)?", between, re.I))
 
 
-def clean(values, allowed):
-    """Drop anything outside the taxonomy -- structured output constrains the
-    shape, not the vocabulary, so a stray value is still possible."""
-    seen, out = set(), []
-    for v in values:
-        v = v.strip()
-        if v and v in allowed and v not in seen:
-            seen.add(v)
-            out.append(v)
-    return out
+def trim_form_boilerplate(text):
+    """Cut the application form off the end so its labels aren't read as requirements."""
+    cut = len(text)
+    for marker in FORM_MARKERS:
+        m = re.search(marker, text, re.I)
+        if m and m.start() < cut:
+            cut = m.start()
+    # Only trust the cut if it leaves a real posting behind; some pages are
+    # mostly form.
+    return text[:cut] if cut > 400 else text
+
+
+def sentences(text):
+    return [s for s in re.split(r"(?<=[.!?;:\n])\s+", text) if s.strip()]
+
+
+REQUIRED_CUES = ["required qualifications", "basic qualifications", "minimum qualifications",
+                 "must be", "must have", "requirements:", "required:", "you must"]
+
+
+def is_preferred(sentence):
+    """
+    True when a degree named here is a nice-to-have rather than a requirement.
+
+    A sentence can contain both cues -- "Bachelors or Associates degree in
+    process with Computer Science major preferred" is a requirement whose
+    *major* is preferred. An explicit requirement framing therefore wins over a
+    preference cue; treating the whole sentence as soft dropped these entirely.
+    """
+    low = sentence.lower()
+    if any(cue in low for cue in REQUIRED_CUES):
+        return False
+    return any(cue in low for cue in PREFERRED_CUES)
+
+
+def classify_text(text):
+    """
+    Decide the degree requirement for one posting.
+
+    Returns (labels, evidence) where evidence lists the (level, sentence)
+    pairs the decision rested on, for --explain and for spot-checking.
+    """
+    body = trim_form_boilerplate(text)
+
+    required, preferred, evidence = set(), set(), []
+    either = False   # a sentence offering undergrad OR grad -- see below
+
+    for sentence in sentences(body):
+        if len(sentence) > 600:          # a run-on block, usually a wall of benefits
+            sentence = sentence[:600]
+        soft = is_preferred(sentence)
+
+        found, spans = set(), {}
+        for level, patterns in ((MS, GRAD_PATTERNS), (BS, BACH_PATTERNS), (AS, ASSOC_PATTERNS)):
+            for pat in patterns:
+                m = re.search(pat, sentence, re.I)
+                if m:
+                    found.add(level)
+                    spans[level] = m.span()
+                    evidence.append((level + (" (preferred)" if soft else ""),
+                                     re.sub(r"\s+", " ", sentence.strip())[:180]))
+                    break
+
+        # "pursuing a Bachelor's or Master's degree" places no restriction on
+        # who may apply -- it is the posting saying *any* student qualifies.
+        # The hand labels overwhelmingly treat this as Open to All Degrees
+        # rather than as requiring both, so a single sentence offering an
+        # undergrad and a grad path is read as open, not as two requirements.
+        if not soft and offers_either_path(sentence, spans.get(BS), spans.get(MS)):
+            either = True
+
+        (preferred if soft else required).update(found)
+
+    if either:
+        return [OPEN], evidence
+
+    if required:
+        # Order the labels the way the CSV already does, least to most advanced.
+        return [lvl for lvl in (AS, BS, MS) if lvl in required], evidence
+
+    explicitly_open = any(re.search(p, body, re.I) for p in OPEN_PATTERNS)
+    if explicitly_open or not preferred:
+        return [OPEN], evidence
+
+    # Only soft mentions: the posting names a degree but doesn't require it.
+    return [OPEN], evidence
 
 
 # -- Data I/O ------------------------------------------------------------------
@@ -200,7 +267,7 @@ def load_details():
         sys.exit(f"ERROR: {DETAILS_CSV} not found. Run this on the data branch.")
     with open(DETAILS_CSV, encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        return list(reader), reader.fieldnames
+        return list(reader), list(reader.fieldnames or [])
 
 
 def load_texts():
@@ -231,175 +298,139 @@ def save_details(rows, fieldnames):
 
 
 # -- Eval ----------------------------------------------------------------------
-def run_eval(client, rows, texts, limit, effort):
-    """
-    Score the model against postings a human already classified.
-
-    Reported per field:
-      exact  — the model's set of values matches the human's exactly
-      overlap— they agree on at least one value (the useful bar for multi-label)
-    """
-    gold = [r for r in rows
-            if r.get("category", "").strip() and r["id"] in texts]
+def run_eval(rows, texts, show_errors):
+    gold = [r for r in rows if r["degree_enrollment"].strip() and r["id"] in texts]
     if not gold:
-        sys.exit("No human-labelled postings with description text to evaluate against.")
-    if limit:
-        gold = gold[:limit]
+        sys.exit("No human-labelled postings with text to evaluate against.")
 
-    print(f"  Scoring {len(gold)} human-classified postings (model={MODEL}, effort={effort})")
+    exact = overlap = 0
+    grad_tp = grad_fp = grad_fn = 0
+    confusion, errors = {}, []
+
+    for row in gold:
+        human = [v.strip() for v in row["degree_enrollment"].split("|") if v.strip()]
+        mine, evidence = classify_text(texts[row["id"]])
+        hset, mset = set(human), set(mine)
+
+        if hset == mset:
+            exact += 1
+        if hset & mset:
+            overlap += 1
+        else:
+            errors.append((row, human, mine, evidence))
+
+        # The distinction the classifier exists for: does this need a grad student?
+        if MS in hset and MS in mset:
+            grad_tp += 1
+        elif MS in mset and MS not in hset:
+            grad_fp += 1
+        elif MS in hset and MS not in mset:
+            grad_fn += 1
+
+        key = (MULTI_SEP.join(human), MULTI_SEP.join(mine))
+        confusion[key] = confusion.get(key, 0) + 1
+
+    n = len(gold)
+    print("=" * 72)
+    print(f"  Degree classifier vs {n} human-labelled postings")
+    print("=" * 72)
+    print(f"  exact match (all labels identical) : {exact:>4}/{n}  {exact/n:.0%}")
+    print(f"  overlap     (agree on >=1 label)   : {overlap:>4}/{n}  {overlap/n:.0%}")
     print()
-
-    fields = ["category", "class_year", "degree_enrollment", "language_requirements"]
-    stats = {f: {"exact": 0, "overlap": 0, "n": 0} for f in fields}
-    skills_hit = skills_n = 0
-    disagreements = []
-
-    with ThreadPoolExecutor(max_workers=WORKERS) as ex:
-        futures = {ex.submit(classify_one, client, r, texts[r["id"]], effort): r
-                   for r in gold}
-        for i, fut in enumerate(as_completed(futures), 1):
-            row = futures[fut]
-            _, result = fut.result()
-            if result is None:
-                continue
-
-            got = {
-                "category":              clean(result.category, CATEGORIES),
-                "class_year":            clean(result.class_year, CLASS_YEARS),
-                "degree_enrollment":     clean(result.degree_enrollment, DEGREES),
-                "language_requirements": [v.strip() for v in result.language_requirements],
-            }
-            for f in fields:
-                human = {v.strip() for v in row.get(f, "").split("|") if v.strip()}
-                if not human:
-                    continue
-                mine = set(got[f])
-                stats[f]["n"] += 1
-                if mine == human:
-                    stats[f]["exact"] += 1
-                if mine & human:
-                    stats[f]["overlap"] += 1
-                elif f == "category":
-                    disagreements.append(
-                        (row.get("company_name", "")[:22], row.get("title", "")[:34],
-                         MULTI_SEP.join(sorted(human)), MULTI_SEP.join(sorted(mine)))
-                    )
-
-            human_skills = {v.strip().lower() for v in row.get("additional_skills", "").split("|") if v.strip()}
-            if human_skills:
-                skills_n += 1
-                if human_skills & {s.strip().lower() for s in result.additional_skills}:
-                    skills_hit += 1
-
-            if i % 10 == 0:
-                print(f"    {i}/{len(gold)} scored", flush=True)
-
+    prec = grad_tp / (grad_tp + grad_fp) if (grad_tp + grad_fp) else 0.0
+    rec  = grad_tp / (grad_tp + grad_fn) if (grad_tp + grad_fn) else 0.0
+    print(f'  "needs a grad student" precision   : {prec:.0%}  '
+          f"({grad_tp} right, {grad_fp} wrongly flagged grad)")
+    print(f'  "needs a grad student" recall      : {rec:.0%}  '
+          f"({grad_fn} grad postings missed)")
     print()
-    print("-" * 68)
-    print(f"  {'field':<24} {'exact':>14} {'overlap':>14}")
-    print("-" * 68)
-    for f in fields:
-        s = stats[f]
-        if not s["n"]:
-            continue
-        print(f"  {f:<24} {s['exact']:>5}/{s['n']:<3} {s['exact']/s['n']:>5.0%} "
-              f"{s['overlap']:>5}/{s['n']:<3} {s['overlap']/s['n']:>5.0%}")
-    if skills_n:
-        print(f"  {'additional_skills':<24} {'':>14} {skills_hit:>5}/{skills_n:<3} "
-              f"{skills_hit/skills_n:>5.0%}")
-    print("-" * 68)
+    print("  human label -> classifier label (most common):")
+    for (h, m), c in sorted(confusion.items(), key=lambda kv: -kv[1])[:12]:
+        mark = "ok " if h == m else "MISS"
+        print(f"    {mark} {c:>3}x  {h or '(none)':<34} -> {m}")
 
-    if disagreements:
+    if show_errors and errors:
         print()
-        print(f"  Category disagreements ({len(disagreements)}) — worth reading before trusting this:")
-        for company, title, human, mine in disagreements[:15]:
-            print(f"    {company:<22} {title:<34}")
-            print(f"      human: {human}")
-            print(f"      model: {mine}")
+        print(f"  Disagreements ({len(errors)}) — the evidence each decision rested on:")
+        for row, human, mine, evidence in errors[:12]:
+            print(f"    {row['company_name'][:26]:<26} {row['title'][:34]}")
+            print(f"      human: {MULTI_SEP.join(human)}")
+            print(f"      rules: {MULTI_SEP.join(mine)}")
+            for level, sent in evidence[:2]:
+                print(f"        [{level}] {sent[:120]}")
     print()
-    print("  Nothing was written. Use --limit / no flag to classify for real.")
+    print("  Nothing was written.")
 
 
 # -- Main ----------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--eval", action="store_true",
-                    help="score against human-classified postings; writes nothing")
-    ap.add_argument("--limit", type=int, default=0, help="max postings (0 = all)")
-    ap.add_argument("--effort", default=EFFORT,
-                    choices=["low", "medium", "high", "xhigh", "max"],
-                    help=f"reasoning effort (default {EFFORT})")
+    ap.add_argument("--eval", action="store_true", help="score against human labels; writes nothing")
+    ap.add_argument("--errors", action="store_true", help="with --eval, print disagreements")
+    ap.add_argument("--explain", metavar="ID", help="show the evidence for one posting")
     ap.add_argument("--reclassify", action="store_true",
-                    help="also redo postings that already have a category")
-    ap.add_argument("--dry-run", action="store_true", help="report the work list only")
+                    help="also overwrite rows that already have a degree label")
+    ap.add_argument("--dry-run", action="store_true", help="report what would change")
     args = ap.parse_args()
 
     rows, fieldnames = load_details()
     texts = load_texts()
 
-    client = anthropic.Anthropic()
+    if args.explain:
+        row = next((r for r in rows if r["id"] == args.explain), None)
+        if not row:
+            sys.exit(f"No posting with id {args.explain}")
+        if row["id"] not in texts:
+            sys.exit("That posting has no description text yet.")
+        labels, evidence = classify_text(texts[row["id"]])
+        print(f"  {row['company_name']} — {row['title']}")
+        print(f"  human : {row['degree_enrollment'] or '(unlabelled)'}")
+        print(f"  rules : {MULTI_SEP.join(labels)}")
+        print("  evidence:")
+        for level, sent in evidence or []:
+            print(f"    [{level}] {sent}")
+        if not evidence:
+            print("    (no degree phrases found — defaults to Open to All Degrees)")
+        return
 
     if args.eval:
-        run_eval(client, rows, texts, args.limit, args.effort)
+        run_eval(rows, texts, args.errors)
         return
 
     todo = [r for r in rows
             if r["id"] in texts
-            and (args.reclassify or not r.get("category", "").strip())]
+            and (args.reclassify or not r["degree_enrollment"].strip())]
+    no_text = [r for r in rows if r["id"] not in texts and not r["degree_enrollment"].strip()]
 
-    no_text = [r for r in rows
-               if r["id"] not in texts and not r.get("category", "").strip()]
-
-    print("=" * 68)
-    print("  Automatic classification")
-    print("=" * 68)
+    print("=" * 72)
+    print("  Degree requirement classification")
+    print("=" * 72)
     print(f"  postings              : {len(rows):,}")
     print(f"  with description text : {len(texts):,}")
-    print(f"  already classified    : {sum(1 for r in rows if r.get('category','').strip()):,}")
+    print(f"  already labelled      : {sum(1 for r in rows if r['degree_enrollment'].strip()):,}")
     print(f"  blocked (no text yet) : {len(no_text):,}  — run backfill_text.py")
-    if args.limit:
-        todo = todo[: args.limit]
     print(f"  to classify this run  : {len(todo):,}")
-    print(f"  model / effort        : {MODEL} / {args.effort}")
     print()
+
+    counts = {}
+    for row in todo:
+        labels, _ = classify_text(texts[row["id"]])
+        value = MULTI_SEP.join(labels)
+        counts[value] = counts.get(value, 0) + 1
+        if not args.dry_run:
+            row["degree_enrollment"] = value
+
+    for value, c in sorted(counts.items(), key=lambda kv: -kv[1]):
+        print(f"    {c:>4}  {value}")
 
     if args.dry_run:
-        print("  (dry run — nothing sent, nothing written)")
+        print("\n  (dry run — nothing written)")
         return
-    if not todo:
-        print("  Nothing to do.")
-        return
-
-    by_id = {r["id"]: r for r in rows}
-    done = failed = 0
-
-    with ThreadPoolExecutor(max_workers=WORKERS) as ex:
-        futures = {ex.submit(classify_one, client, r, texts[r["id"]], args.effort): r
-                   for r in todo}
-        for fut in as_completed(futures):
-            row = futures[fut]
-            jid, result = fut.result()
-            if result is None:
-                failed += 1
-                print(f"  FAIL {row.get('company_name','')[:24]}")
-                continue
-
-            target = by_id[jid]
-            target["category"]              = MULTI_SEP.join(clean(result.category, CATEGORIES))
-            target["class_year"]            = MULTI_SEP.join(clean(result.class_year, CLASS_YEARS))
-            target["degree_enrollment"]     = MULTI_SEP.join(clean(result.degree_enrollment, DEGREES))
-            target["additional_skills"]     = MULTI_SEP.join(s.strip() for s in result.additional_skills if s.strip())
-            target["language_requirements"] = MULTI_SEP.join(s.strip() for s in result.language_requirements if s.strip())
-            # Leave `status` alone. Automatic classification is not the same as
-            # a human having reviewed the posting, and collapsing the two would
-            # throw away the distinction permanently.
-            done += 1
-            print(f"  OK   {row.get('company_name','')[:24]:<24} {target['category']}")
-
-    save_details(rows, fieldnames)
-    print()
-    print(f"  Classified : {done:,}   Failed : {failed:,}")
-    print(f"  data/job_details.csv updated")
+    if todo:
+        save_details(rows, fieldnames)
+        print(f"\n  data/job_details.csv updated ({len(todo):,} rows)")
+    else:
+        print("\n  Nothing to do.")
 
 
 if __name__ == "__main__":
