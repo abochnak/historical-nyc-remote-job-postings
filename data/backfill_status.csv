@@ -1,0 +1,445 @@
+id,status,source,chars,attempts,last_attempt,note
+009fbf42-7902-4632-a32d-8be35fa22fae,error,,0,2,2026-09-05T10:37:01Z,http_429
+00acf754-02eb-4f66-bdea-d642834475a7,error,,0,3,2026-09-05T10:37:01Z,http_429
+013934fd-e527-4543-b30c-ba4003cee756,error,,0,3,2026-09-05T10:37:01Z,http_429
+01a12202-6492-4660-8c18-67333a51aa05,error,,0,2,2026-09-05T10:37:01Z,http_429
+01ba76c4-8637-49c3-a04f-324409838c74,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_91c)
+02295591-882e-4a5b-a71f-dd90219ec024,ok,live,60000,1,2026-09-02T11:20:23Z,
+02ddd1d3-6d60-4e8d-81ca-0e2995b60e57,ok,wayback,4935,1,2026-09-05T10:37:01Z,
+034a8e4e-0595-4935-943e-bb805676a5d2,ok,live,5276,1,2026-09-02T11:20:23Z,
+043d70c3-4576-4f40-bc1f-08885ba8ebc8,ok,live,24839,1,2026-09-01T11:40:49Z,
+048d4314-64a9-4be8-aa3d-f1e9801a7c32,ok,wayback,4646,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260427234516id_/https://www.shopify.com/careers/data-and-engineering-internships-fall-2026_9b2afa1b-28fa-4ae4-8f69-80ce64059065
+055aa083-296f-48f0-8045-8cb95a1ef2a0,ok,wayback,5108,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260505225255id_/https://careers-lynker.icims.com/jobs/1548/job?mobile=true&needsRedirect=false
+05ab114c-f9d4-45b3-ac84-20227b44db3f,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+05d6191d-bcef-4557-b17a-783ddb6d4b92,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_1038c)
+060d5fd2-d9cc-4d76-896f-a7183ed2a6c0,ok,wayback,14239,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260429234737id_/https://job-boards.greenhouse.io/thenewyorktimes/jobs/4688353005
+06633e4b-4d98-4a80-a791-5dc0f248390f,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+067fde7e-5b83-40ed-8830-3864aced6f33,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+069e94c8-0ad8-44b9-9f03-5cd31a1154ff,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+0718fecc-0b61-46aa-a33c-44fa02cce82a,error,,0,1,2026-09-05T10:37:01Z,http_429
+072dbf25-7509-499b-9478-b00e9e52963d,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_12109c)
+08532603-7472-48a9-a825-fef3a7108472,ok,live,6646,1,2026-08-31T13:53:47Z,
+09174c1c-7ac5-489a-8c87-dcb67b971aa0,error,,0,3,2026-09-05T10:37:01Z,http_429
+094fc400-8cf1-4839-8605-e5f144700551,error,,0,3,2026-09-02T11:20:23Z,http_410
+0a98ebc5-e475-46d7-82ae-71e4d433d7c6,error,,0,3,2026-09-02T11:20:23Z,http_410
+0aa38a85-7be2-4d60-8ec3-0002a9643512,ok,live,4857,1,2026-08-31T13:53:47Z,
+0cac198d-5b59-411b-8ddf-3138668da722,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_491c)
+0cb6d8c4-17b1-456d-be16-606d06feb87c,empty,,0,1,2026-09-04T11:19:58Z,no posting-like text above 600 chars (thin_654c)
+0cc71c0c-aed8-49d9-a23c-45e22cc9e8ad,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+0cdb99d3-9690-4d7a-8727-bd690d7f51ff,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+0d138427-6921-4a12-99e2-30a0b223cef3,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+0d46d0ee-0a76-4970-9c7c-c4db40ae4fe5,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+0d5b6431-b3ab-4450-8dc4-f912a69e0e6a,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_12109c)
+0d7b8d67-b0c6-42e4-8757-72009f66499e,error,,0,3,2026-09-05T10:37:01Z,http_429
+0d836d0f-86b0-426e-9d8a-55a68f233a3c,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+0d8819e9-06a6-4bf6-9c18-a00012e17263,error,,0,3,2026-09-05T10:37:01Z,http_429
+0e79ef0c-9caf-4c3b-bc58-270866bd69df,error,,0,2,2026-09-05T10:37:01Z,http_429
+0ee42cec-fd2b-4ffa-8687-8c302e90fbcf,ok,wayback,4340,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260519021545id_/https://jobs.ashbyhq.com/melotech/15af19d9-a318-45a6-8a06-23053ea487a5/application
+0ee5e237-498f-42f6-81bc-b03b8e22e49b,ok,live,1973,1,2026-09-01T11:40:49Z,
+0f746c6b-4529-4a6f-9cf4-d545bce64cd9,ok,wayback,3900,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260601172309id_/https://ats.rippling.com/theguarantors-open-positions/jobs/478122bd-b7ef-4a0b-a0cd-d204c856f382
+0fc23464-ee24-45e4-ae4c-cbf98ca6ac10,ok,live,4120,1,2026-09-01T11:40:49Z,
+10d96e7a-3541-4fba-b9e4-02bc40feaea7,ok,live,9980,1,2026-09-01T11:40:49Z,
+10e605f7-ddf1-4da3-81d0-198db01cd0b8,ok,live,12115,1,2026-08-31T13:53:47Z,
+10f26a2e-0806-4a95-ab5a-9937df1917fa,ok,wayback,3491,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260721035946id_/https://job-boards.greenhouse.io/scaleai/jobs/4703343005
+119372b9-773c-43f5-a19e-c61469564529,ok,wayback,2451,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260727154904id_/https://www.citadelsecurities.com/careers/details/credit-rates-rotational-trader-intern-us/
+11a8d7d6-f891-4cac-bb67-5b895e603560,empty,,0,1,2026-09-05T10:37:01Z,no posting-like text above 600 chars (thin_402c)
+120b5dc5-005a-459d-848c-a05d3a0eba5e,ok,live,5348,1,2026-08-31T13:53:47Z,
+12c027ac-4d4e-436f-8165-633a717cc12a,ok,live,3529,1,2026-09-02T11:20:23Z,
+13b36132-b9cb-42d8-bc06-e610c7b94edc,ok,wayback,6676,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260507100025id_/https://jobs.lever.co/endpointclinical/d8e94671-b722-4bd9-94a6-c0f27008acbf/apply
+149cce4b-7421-4fc6-8841-bd40fabd4c41,ok,live,1984,1,2026-08-31T13:53:47Z,
+14baa8ae-f151-483f-b5e0-77ca5086d04e,ok,live,4467,1,2026-09-01T11:40:49Z,
+14e51d14-067b-43b8-80cf-dcf3c6893565,ok,live,6014,1,2026-08-31T13:53:47Z,
+15940e4d-d0db-45c4-a255-0626fdac14ac,ok,wayback,3657,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260601172309id_/https://ats.rippling.com/theguarantors-open-positions/jobs/d78ec000-5f8b-43d3-9590-4eb51970e49b
+16942976-6eb5-4a8a-a01f-d995f6f6e27b,ok,live,4122,1,2026-09-03T11:16:36Z,
+1795d6df-fcca-45dc-836d-41a82dc36894,ok,wayback,4686,1,2026-08-31T13:53:47Z,http://web.archive.org/web/20260829182421id_/https://jobs.intuit.com/job/mountain-view/summer-2027-software-engineering-intern-full-stack/27595/99856180864
+19732e66-5a0d-4db2-a039-33e752197e70,ok,live,3496,1,2026-08-31T13:53:47Z,
+1af2873b-32c5-4dac-9ccb-9af00aa0c9a3,ok,live,8594,1,2026-09-01T11:40:49Z,
+1cb48f29-b8a3-47e1-98f2-1a2b893d0027,ok,live,7374,1,2026-09-01T11:40:49Z,
+1cf14ab5-bc9d-4842-9fb3-7f423c965a86,ok,live,5894,1,2026-09-01T11:40:49Z,
+1e070356-7637-458b-b016-143243ecf95e,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_10130c)
+1f413552-77af-4f45-aecd-532852b777c8,ok,live,6310,1,2026-09-01T11:40:49Z,
+1f454555-e3ae-4611-a53d-40c8d109d8c8,error,,0,1,2026-09-05T10:37:01Z,no source yielded text
+204b9fba-55e9-4709-a9ba-af7bee3bca30,ok,live,3587,1,2026-09-05T10:37:01Z,
+20ba2faa-8c06-4328-b38a-a1ff32e5b009,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_239c)
+2115234d-be28-4c20-b435-cbb15464dda9,ok,live,6965,3,2026-09-02T11:20:23Z,
+229ace69-8177-42cc-a85f-c0517803f03b,ok,wayback,5213,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260729235549id_/https://cvshealth.wd1.myworkdayjobs.com/Private_Postings_Intern_Conversion_ONLY/job/NY---New-York/Analytics---Behavior-Change---Data-Science-Grad--Conversi
+22b2d0e9-fb64-49b6-8106-e7c9fd959e61,error,,0,3,2026-09-05T10:37:01Z,http_429
+243bb608-6df0-439e-aba6-649ae9e8de1f,error,,0,3,2026-09-05T10:37:01Z,http_429
+24534a41-4bd7-4c4d-9ae9-8eb9bbc7c79c,ok,live,60000,1,2026-09-02T11:20:23Z,
+2539c19a-bd13-4e12-b098-21cfc96b7d39,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+255595f1-f6b4-4007-9563-647c8db7fae5,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_676c)
+25634961-9424-41ec-9553-925a6e400699,ok,live,4853,1,2026-09-01T11:40:49Z,
+25e5cdde-2399-431a-a6d9-20218124af5f,error,,0,2,2026-09-05T10:37:01Z,http_429
+26469c50-c009-48da-9415-b146a1d441df,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_1218c)
+268262ab-3056-48bd-a78d-3fe70d2fb886,error,,0,3,2026-09-04T11:19:58Z,no source yielded text
+26b828f4-819c-4c9f-9d17-0cb377b3b310,ok,wayback,5146,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260527234217id_/https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Remote/AI-Research-Intern_R4041665-1
+2751af83-9f4f-48b8-8aba-6f534e9681e7,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_2015c)
+27c082da-62c4-4f26-8137-74728d05965e,error,,0,2,2026-09-05T10:37:01Z,http_429
+28ba42da-8a23-42a0-8f6c-e867d40c6e48,error,,0,3,2026-09-04T11:19:58Z,http_410
+28de39fe-563f-4b16-93f7-5d3bbbb04340,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+2a0557a3-781a-4a1b-9313-506c5de08ec0,error,,0,3,2026-09-05T10:37:01Z,http_429
+2b58f87c-45e3-47f3-8d33-ff72212accde,error,,0,3,2026-09-05T10:37:01Z,http_429
+2ec22e8c-8004-46f2-943c-b71ca142908f,error,,0,3,2026-09-04T11:19:58Z,http_410
+2ed62ebe-2d2b-4ccb-bf87-d9a76e9209fa,ok,live,4328,1,2026-09-02T11:20:23Z,
+2eeca6bb-23cf-4253-8f33-432b24d93ab5,error,,0,3,2026-09-05T10:37:01Z,http_429
+2f47de17-a088-41a1-8238-0a8713c924ae,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+3072b230-244a-4010-bb65-9cb60880223b,ok,wayback,3776,1,2026-09-05T10:37:01Z,
+30968849-8351-4128-a546-cd9bbad4a60c,ok,wayback,6609,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260604233104id_/https://ancestry.wd501.myworkdayjobs.com/Careers/job/Remote/Data-Science---AI-Document-Understanding--Co-op_R003371
+31355168-e211-42dc-a7b5-c84567c929cc,ok,live,6293,1,2026-08-31T13:53:47Z,
+3233fcfb-8678-4efa-8fe0-1034b9db4a52,error,,0,3,2026-09-03T11:16:36Z,http_410
+3249364a-f140-41a7-8004-64618a2bdb78,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+336fd145-0741-4f33-aaa7-51bc5107aeeb,error,,0,2,2026-09-05T10:37:01Z,http_429
+33b81d4d-2080-4016-b2af-33d8a690356f,ok,live,60000,1,2026-09-02T11:20:23Z,
+33d49b99-ffcc-4d51-ab65-58a97d2afbf0,error,,0,2,2026-09-05T10:37:01Z,http_429
+342c3878-0f0a-4f31-b343-8989d1ef68b7,error,,0,2,2026-09-05T10:37:01Z,http_429
+35880e25-246d-4a52-9e52-2241407852fd,ok,wayback,13418,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260704035642id_/https://job-boards.greenhouse.io/twosixtechnologies/jobs/6105290004
+35ccd8f2-5371-4cda-9000-084c9d21fdec,error,,0,3,2026-09-05T10:37:01Z,http_429
+35d8cb0a-56cf-478f-80bb-73ba1dafbac2,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+365705d7-043e-406a-a42b-c1114d889dfb,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+369aa379-9db8-44bd-8238-0cbf7f9c3483,ok,live,4129,1,2026-09-01T11:40:49Z,
+36e8bcb9-72d6-4a77-9c62-1a92759cce36,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+37f29e78-6188-4883-8606-42dcbabb6448,ok,wayback,4536,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260710212809id_/https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4679434006
+381e25f6-4ab5-4346-9d5a-2c6e06b792fb,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_1946c)
+38fae718-2ebc-4e97-af8f-e135cff957b4,ok,live,1532,1,2026-09-02T11:20:23Z,
+39d9c34d-25c2-4b63-b896-ad1ecb98c563,ok,wayback,4720,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260519021313id_/https://jobs.ashbyhq.com/melotech/f2f3e785-12a0-4d30-be43-e6c5c119a6c2/application
+39dca295-bc44-41f9-9a27-08b8a5cd9994,ok,wayback,4336,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260529182449id_/https://careers.mta.org/jobs/17700042-data-analyst-automatic-camera-enforcement-ace-emerging-talent-intern-fall
+3a2e2c86-3612-46c8-891d-50a65e292f46,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+3ad0c282-1052-46d1-8033-6d723edf25a5,ok,live,4175,1,2026-08-31T13:53:47Z,
+3ae897a1-0ad7-410e-8882-d492c1f9e19a,ok,wayback,5228,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260720184137id_/https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4679224006
+3bbe3661-8a0b-43c9-a4f7-5c1b984cc3f9,ok,wayback,5428,1,2026-08-31T13:53:47Z,http://web.archive.org/web/20260814224639id_/https://amainc.wd12.myworkdayjobs.com/ama_careers/job/Hampton-VA/Computer-Science-Engineering-Intern---Computer-Vision-Applications_R-100731
+3be23f9f-b730-4b41-90d4-adf9e07a393a,ok,live,1232,1,2026-09-01T11:40:49Z,
+3cb15cd2-4921-403c-adee-e05fb84c6dda,error,,0,3,2026-09-04T11:19:58Z,http_410
+3d5030c9-5b53-4ead-8664-250c3688b6ee,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+3d503fc4-bfe2-4891-bde8-0d134e450913,error,,0,3,2026-09-05T10:37:01Z,http_429
+3d88fb1f-4b46-4e88-a576-048f777a91f2,ok,live,3233,1,2026-09-01T11:40:49Z,
+3e2fa4d6-9588-4f77-a073-1747d963be9e,ok,wayback,3975,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260513123625id_/https://ats.rippling.com/pendulum-intelligence-jobs/jobs/301a1742-46fd-4489-b410-6fdcac0dbe27
+3ead5def-8555-40d4-817c-7435fa78e157,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+3ebe96ab-b5a9-4ddf-99f0-9583e2226fb6,ok,wayback,5329,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260729235845id_/https://cvshealth.wd1.myworkdayjobs.com/Private_Postings_Intern_Conversion_ONLY/job/NY---New-York/Analytics---Behavior-Change---Engineering-Grad--Conversio
+3ef6005a-dc19-43a2-ae36-e463222f6fa7,ok,wayback,3520,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260505225113id_/https://jobs.ashbyhq.com/blackbird-labs-inc/a901dd42-7c52-488a-bd55-f1d5dcd37b38/application
+4040c08e-acb6-48dd-b6cd-43c4aede894c,ok,live,7211,1,2026-09-02T11:20:23Z,
+40437c0f-7771-4ec0-aedd-aa6abd7ed518,error,,0,2,2026-09-05T10:37:01Z,http_429
+40c1294a-a472-402c-882b-843d26a07449,ok,wayback,5220,1,2026-09-01T11:40:49Z,
+4253e953-04fc-48f3-be58-728d5c241c3c,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+4316d3b6-dc12-4c25-bb13-4a917980b40b,error,,0,2,2026-09-05T10:37:01Z,http_429
+439c65c1-64f2-461c-8ca1-ca36969ef10a,ok,live,2724,1,2026-08-31T13:53:47Z,
+43e1a137-781f-49d7-bd75-baee92bb54bc,error,,0,2,2026-09-05T10:37:01Z,http_429
+441050ea-b57f-4448-ae69-2a4a8646229f,ok,live,60000,1,2026-09-04T11:19:58Z,
+443c0a68-63ca-4026-94b7-cf3e555f2d0f,ok,live,2972,1,2026-08-31T13:53:47Z,
+446f16de-a70b-4c44-b1e7-7bd48429a95f,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_239c)
+4474324d-fc29-44ab-ac6b-ad29c0babae6,ok,wayback,8549,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260610022217id_/https://jobs.ashbyhq.com/1password/8f8774dc-e400-48b1-8100-c6840b8eaed1/application
+44dc6bbf-bf67-45ed-bd4f-36102982e97a,error,,0,2,2026-09-05T10:37:01Z,http_429
+451d266b-c459-492a-b5c3-df553f98d6d5,ok,live,13801,1,2026-08-31T13:53:47Z,
+452bd6d1-0b35-4f40-aa51-c0ae49420249,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+457ebe8d-73e3-4d0c-913d-22e495b1d6c8,error,,0,2,2026-09-05T10:37:01Z,http_429
+45cb500e-6cea-48a1-941e-f33226a37036,ok,live,2738,1,2026-09-02T11:20:23Z,
+462f2077-96ee-46b5-82ee-70c2d671d849,ok,live,5674,1,2026-09-01T11:40:49Z,
+4770a4e3-28be-40d7-b5a2-700c0307960d,ok,live,60000,1,2026-09-02T11:20:23Z,
+47cd8fb3-de26-4b09-8e8d-0a17a36ce0d6,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+47e93c35-6beb-41fc-bb7f-81c35722ff8d,error,,0,2,2026-09-05T10:37:01Z,http_429
+47fe2157-ddd3-4233-87d7-cf96058a286d,ok,live,6145,1,2026-08-31T13:53:47Z,
+480a3ec4-1b4b-4ee7-9901-ed9ea485c1c5,ok,live,3595,1,2026-08-31T13:53:47Z,
+48327e8c-a8f7-4339-83a4-019ef774f663,ok,wayback,2133,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20240226174724id_/https://www.citadel.com/careers/details/quantitative-research-analyst-intern-us/
+483336e7-948a-4f0e-a61d-4151a29c78de,error,,0,2,2026-09-05T10:37:01Z,http_429
+49a613fe-0291-4b1e-9d57-00c3a580dfe0,error,,0,2,2026-09-05T10:37:01Z,http_429
+49ff5004-3fea-42cf-8ed9-f8ddb314058f,error,,0,3,2026-09-05T10:37:01Z,http_429
+4b41cc6a-c7ca-4364-bf7c-41f6ca98409e,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+4b968d7d-6734-4e0b-b21f-d1b8a7968640,ok,live,60000,1,2026-09-02T11:20:23Z,
+4d9b0122-84e8-4c47-bba6-4f0bedc1b9dc,ok,live,4757,1,2026-09-05T10:37:01Z,
+4e46ef11-a7c5-4895-a907-c2c188d58328,ok,wayback,5610,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260708201338id_/https://ancestry.wd501.myworkdayjobs.com/careers/job/Remote/Graduate-Research-Co-op---AI---Representation-Learning_R003340
+4ecd563d-7e5c-4be4-9a0f-b2b33e9bf6bc,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_2837c)
+4f7cb481-182f-4e4b-8d60-1341ff96f5b3,ok,wayback,3726,1,2026-09-05T10:37:01Z,
+4fed62c4-1d14-45b6-9a3c-6961eee90816,error,,0,2,2026-09-05T10:37:01Z,http_429
+5046a684-049e-42fa-ad93-7d21aeed4084,error,,0,3,2026-09-04T11:19:58Z,http_410
+50713986-aff9-40ea-98ea-3a751c83b80f,ok,wayback,10265,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260827152516id_/https://jobs.lever.co/calstart/cbd0d758-18b0-481d-9e67-a065682f30ea/apply
+50f076dc-b912-4d1b-b7d7-59cfb38b5688,gone,,0,1,2026-09-01T11:40:49Z,posting taken down
+51390559-49b8-46aa-8e77-cb2b750241cc,ok,wayback,3865,1,2026-09-02T11:20:23Z,
+51a49e4a-6863-481c-807d-570b0a1db7fa,ok,live,5112,1,2026-08-31T13:53:47Z,
+52014453-b015-4a04-9cd4-5967c444f77c,ok,wayback,4552,1,2026-09-05T10:37:01Z,
+527e83c9-8667-42c5-ae2d-aa16111a9379,ok,wayback,5283,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260603000121id_/https://osv-rubicon.wd5.myworkdayjobs.com/en-US/MagniteCareers/job/New-York---New-York/Intern--Software-Engineering---Demand-Solutions--NYC-_R-01332
+52a1bad8-5a44-4bf7-a4ef-fe2683e423b5,ok,live,3367,1,2026-08-31T13:53:47Z,
+5379a4df-fa7a-4799-8978-00d1844415b9,ok,wayback,4736,1,2026-08-31T13:53:47Z,http://web.archive.org/web/20260807173259id_/https://job-boards.greenhouse.io/cssmerge/jobs/8687915002
+53cee592-5a1d-4506-9ee0-b5a4fa38065d,empty,,0,1,2026-09-03T11:16:36Z,no posting-like text above 600 chars (thin_278c)
+5407f428-b513-492f-97d0-d2bd020610b6,ok,live,60000,1,2026-09-04T11:19:58Z,
+54a129c8-53ec-4e38-b878-daaaa309f3f7,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+55723c85-bd8c-4d95-be54-2a6851a48b6c,ok,live,3568,1,2026-09-02T11:20:23Z,
+56196707-1bc1-44de-9e0e-a32456792771,ok,live,3236,1,2026-09-01T11:40:49Z,
+563916cf-2297-4c6b-93cc-b171f73555c4,ok,live,60000,1,2026-09-04T11:19:58Z,
+5646d793-dc8c-4ff6-82d3-e8d00aa58389,error,,0,3,2026-09-02T11:20:23Z,http_410
+567343bb-16d7-4d9d-9b61-18ca665f8a16,error,,0,1,2026-09-05T10:37:01Z,http_429
+569ed6bf-2af9-475a-a7db-65d129476547,ok,wayback,3661,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260428233020id_/https://centific.wd1.myworkdayjobs.com/Centific_Global/job/Remote-Work-USA/Technical-Intern--Masters-or-PhD-_JR106696-1
+56f714dd-27f8-4010-9262-c342a2fdecd0,error,,0,3,2026-09-05T10:37:01Z,http_429
+5862704c-af4b-420f-9538-a27f52a6dc49,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+589e122b-8999-49a6-8442-c90ddb3b04bf,ok,live,4619,1,2026-09-01T11:40:49Z,
+599919c9-248d-495b-a106-81088707bc82,ok,wayback,4507,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260715223612id_/https://revvity.wd103.myworkdayjobs.com/External/job/CAD-Remote--ON/Full-Stack-AI-Developer-Intern_JR-044915
+59b38467-71db-455a-94f0-aef60039a70c,error,,0,3,2026-09-03T11:16:36Z,http_404
+59b92f0b-36cb-4eb5-9a6c-8f15f9435a83,error,,0,3,2026-09-05T10:37:01Z,http_429
+5a584c30-3ce0-47db-9704-8a23896e8742,ok,wayback,3952,1,2026-09-04T11:19:58Z,
+5a8f88cd-754a-4346-9ce0-61112aaec6f7,ok,wayback,12223,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260626014206id_/https://job-boards.greenhouse.io/pointc/jobs/5236086008
+5c99289c-7083-430e-9511-14fa13015733,error,,0,3,2026-09-04T11:19:58Z,http_429
+5cbbf737-ec58-4199-bd17-62438749ebc9,ok,live,3586,1,2026-09-02T11:20:23Z,
+5d6c33d1-6d0a-4416-b7d6-c47f481517c5,error,,0,2,2026-09-05T10:37:01Z,http_429
+5d95fbd7-3bfc-46bc-8fd9-9f014b6308ed,ok,wayback,2488,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260727154848id_/https://www.citadelsecurities.com/careers/details/designated-market-maker-dmm-trader-intern-us/
+5ea98056-c56b-4b75-bc44-d64a3c6c73a3,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+60af5688-3330-413e-961c-6f3ffb2b4c84,error,,0,3,2026-09-05T10:37:01Z,http_429
+60c7c83c-4da3-419f-b94d-37706d65f534,ok,live,2912,1,2026-08-31T13:53:47Z,
+6200c443-ced9-4868-902f-2ba885ed5c02,ok,live,6809,1,2026-09-02T11:20:23Z,
+626bb7ad-7fc6-4fd0-99cd-31a7fb23cef3,ok,live,60000,1,2026-09-02T11:20:23Z,
+62709f49-dca3-4418-9cbb-85fae7d3b7ce,ok,wayback,8599,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260609233314id_/https://jobs.ashbyhq.com/1password/c502ea19-dc77-4955-8797-6f8b64ccf52f/application
+629fac72-4880-42e9-b648-cdfa036a00ac,ok,live,2760,1,2026-08-31T13:53:47Z,
+631bbbfe-8d2d-4b49-8e16-c60d7eebde34,ok,live,3209,1,2026-08-31T13:53:47Z,
+63312998-23b7-4617-994a-97b67a1866fb,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+6409dda3-9704-4933-a226-3ae46b43d171,ok,live,2436,1,2026-09-01T11:40:49Z,
+641bea35-1071-4095-99a9-1f68a28662c8,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_3916c)
+6470fc04-154d-4d53-9a4c-9f69aaba3aaf,ok,live,3706,1,2026-09-02T11:20:23Z,
+6511cfed-ce4c-45ab-8067-8f2f7842e34b,ok,wayback,10732,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260511150203id_/https://jobs.smartrecruiters.com/NBCUniversal3/744000125848951
+65e64ece-5971-4361-ac20-e6a4be68e2c5,ok,live,6094,1,2026-08-31T13:53:47Z,
+66058658-b81c-4603-b721-ad005299ed84,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+661c72d1-3246-4a68-a747-e850c8abb675,error,,0,3,2026-09-04T11:19:58Z,no source yielded text
+66357c67-5998-4524-8bd2-55280de56b1a,ok,wayback,4716,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260506020557id_/https://careers-mercuryinsurance.icims.com/jobs/6417/job?mobile=true&needsRedirect=false
+66aed69d-0acd-43a5-9aa1-fcbdc96ceebd,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_11845c)
+67073e06-6a56-423e-8829-d36ad479d2fe,ok,live,1623,1,2026-08-31T13:53:47Z,
+6744cf0c-8e1c-4608-b36f-b89f93fa2824,ok,wayback,15374,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260430233038id_/https://job-boards.greenhouse.io/constantcontact/jobs/7862452
+67a5f775-5448-46b2-9dad-a17c4c4584be,error,,0,3,2026-09-03T11:16:36Z,http_500
+6811bb0f-5241-4246-8d01-0048db2d15a5,error,,0,2,2026-09-05T10:37:01Z,http_429
+68127dda-73b9-40f5-9686-c6a63d8651ca,error,,0,3,2026-09-05T10:37:01Z,http_429
+68ceeffa-36f0-4cd6-9256-42fd6f4f016d,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+6a849ae3-5b64-44ef-8bcc-a7bb32766d9f,ok,live,3050,1,2026-09-01T11:40:49Z,
+6bb2553b-f9bc-4c0b-ae90-ae4d6dabeeee,ok,live,3296,1,2026-08-31T13:53:47Z,
+6bd91b2c-c817-4f94-bd81-3406c3d2d17b,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_2761c)
+6c4405d5-c008-48ab-bb63-5f8f77ba0777,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_726c)
+6c56bd42-aaca-45b8-b770-128f543898e0,ok,wayback,3902,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260519024505id_/https://jobs.ashbyhq.com/wealth-com/1899d513-4c4a-43b2-a307-8c8e4b877622/application
+6d7e83bd-6e67-4d8c-919e-862288b8b561,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+6ec40ca1-95e5-4505-aee1-11667fbe29f1,empty,,0,1,2026-09-05T10:37:01Z,no posting-like text above 600 chars (thin_302c)
+6f017171-74b9-4619-a761-d93250479626,ok,live,3549,1,2026-09-02T11:20:23Z,
+717a84ac-0440-4a38-9d40-7fb0e61d327b,ok,wayback,992,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260430153040id_/https://job-boards.greenhouse.io/globalizationpartners/jobs/7720641003
+72197bee-e9b3-4978-88cd-1cc51ba6254c,error,,0,3,2026-09-04T11:19:58Z,http_410
+7265b7f1-e86f-400a-acdc-ec06dc2c581a,error,,0,3,2026-09-05T10:37:01Z,http_429
+72d3b16a-abca-4801-ba46-ede79443dc62,ok,live,6585,1,2026-08-31T13:53:47Z,
+736ed5d6-63be-4dfa-b0d6-5eb9c5d4e663,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+74ba1fe3-ca71-4260-b251-29fa1d840279,ok,wayback,3715,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260515100145id_/https://careers-sig.icims.com/jobs/9442/job?mobile=true&needsRedirect=false
+74f8b0c5-8f2e-422d-af50-13f152a2f0bb,ok,wayback,13314,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260530193236id_/https://job-boards.greenhouse.io/arine/jobs/5997169004
+7668d718-523e-431c-a2b3-b39a409c2dec,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_178c)
+767f1b1b-9676-407d-99db-e3582821b87a,ok,live,60000,1,2026-09-02T11:20:23Z,
+78c03ab4-f50a-445d-9802-fb785330b50f,ok,live,7197,1,2026-08-31T13:53:47Z,
+79204fa0-81f5-4295-96d3-0a63bb614715,ok,wayback,2123,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260701053054id_/https://jobs.ashbyhq.com/outmarket/8d192421-2422-42f5-854f-6a0765a949da/application
+79ceb913-ca59-4a50-9fa9-18c378d86c3e,error,,0,3,2026-09-04T11:19:58Z,http_403
+7a155542-8f46-4f7b-8366-966fcea9c221,ok,live,60000,1,2026-09-02T11:20:23Z,
+7a287de8-41f1-4fe1-a05a-bf8918642d88,error,,0,2,2026-09-05T10:37:01Z,http_429
+7aa9448f-c028-4566-8078-45d402ca4ffe,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+7ac697b2-ff59-4660-990a-d4f53316f56c,error,,0,3,2026-09-05T10:37:01Z,http_429
+7b479664-d0af-4690-be2a-c9ba5d81314a,ok,wayback,4473,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260720184137id_/https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4676069006
+7b78baf6-f74f-4d7b-924f-a68d5e0e0dbf,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+7bd4f4c6-eca9-4fd7-93db-4bbd9540ca11,ok,wayback,11253,1,2026-08-31T13:53:47Z,http://web.archive.org/web/20260805190620id_/https://job-boards.greenhouse.io/simpletechnologysolutions/jobs/6134105004
+7c5ad96f-e7b8-4ad3-9e09-9da83e6659b0,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+7c6161a2-8ffc-443d-96ee-276bd5edf320,error,,0,3,2026-09-02T11:20:23Z,http_403
+7d3756e8-9e17-44bb-b29f-751947fabf50,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+7d880590-b150-42ab-810a-5e3b723e0a20,error,,0,3,2026-09-05T10:37:01Z,http_429
+7d8de26b-5da6-4e2a-9a17-d887bc8a61be,empty,,0,1,2026-09-03T11:16:36Z,no posting-like text above 600 chars (thin_402c)
+7dde25d1-45b9-4f21-b627-cae44898fbb3,ok,live,3586,1,2026-09-01T11:40:49Z,
+7df6766d-b43b-464c-a03e-68387c5ffb37,ok,wayback,4763,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260807173259id_/https://ats.rippling.com/rippling/jobs/00cbc991-d2fb-452c-a8b6-2978f109a484
+7e5feb76-9fea-420d-a0ea-32c19e256975,ok,live,3806,1,2026-09-01T11:40:49Z,
+7e914cf5-64bf-41bb-a680-71b7d7df80f6,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_2680c)
+7f96f8e4-43e2-4048-9d4f-23cd24cb9b1c,error,,0,2,2026-09-05T10:37:01Z,http_429
+7ff2bfdc-c0f7-4d3b-9cc7-c2eae7f22986,ok,live,6932,1,2026-08-31T13:53:47Z,
+800e06ea-4a8a-4db5-a93a-7aae82cfac49,ok,live,5661,1,2026-09-01T11:40:49Z,
+80123cbc-f5c6-4a6e-95bd-f97fb3c9d32b,error,,0,2,2026-09-05T10:37:01Z,http_429
+807f7a33-061f-4c85-9cf4-1d8edfa19135,ok,live,2756,1,2026-09-01T11:40:49Z,
+80b3432f-f7a2-4886-bda6-698e860df082,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+817f7bae-7713-4bd1-abd6-f0c2d4880c29,error,,0,2,2026-09-05T10:37:01Z,http_429
+8183f0b3-f63a-4b40-a5f3-9b6811decada,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+820400f1-d2e5-43b3-94b0-c8913692b46a,ok,wayback,10514,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260721134648id_/https://www.google.com/about/careers/applications/jobs/results/85564713261245126
+82220070-80c9-42ec-9a40-dc3d4aa5d2b8,ok,wayback,8530,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260610021948id_/https://jobs.ashbyhq.com/1password/c90c5d23-fd41-4c01-8422-08f4b64144f5/application
+8274eda3-9ac6-4582-ae1a-b4f690d6737f,ok,live,3156,1,2026-09-03T11:16:36Z,
+82a4d731-9bcd-4a93-8dda-6d7af0e3b64c,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_91c)
+836b272f-f58b-4472-83e7-09b03b198080,empty,,0,1,2026-09-03T11:16:36Z,no posting-like text above 600 chars (thin_417c)
+837f275c-c314-436a-9c5b-9f8c18daa488,error,,0,2,2026-09-05T10:37:01Z,http_429
+83ed4d09-cf58-46d7-adcd-40fc0238f3a2,ok,wayback,4542,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260517215429id_/https://careers-cadent.icims.com/jobs/1359/backend-engineer-intern/job
+8429362a-1d03-4406-8ab4-86f7dd0754b2,error,,0,3,2026-09-04T11:19:58Z,no source yielded text
+8446df16-f5f1-4fe4-9c20-44f6c0661737,error,,0,1,2026-09-05T10:37:01Z,http_429
+849495a9-c7c9-445b-95f4-0b6e90d82098,ok,wayback,6914,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260526193201id_/https://progyny.wd5.myworkdayjobs.com/en-US/progyny/job/New-York-New-York/Talent-Operations-Intern_JR101042
+8557ee50-9c1f-49e9-98b8-692547114b0a,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+85ec31e6-4d3a-497b-b455-039741edf4df,ok,live,1044,1,2026-08-31T13:53:47Z,
+86288e49-34fb-4db7-af79-7b5fab0ef2d4,error,,0,3,2026-09-05T10:37:01Z,http_429
+86d32b2c-d4a5-4961-879c-76e0aa4f4cba,ok,wayback,3813,1,2026-09-05T10:37:01Z,
+86fd502f-db41-49cb-9e56-950a3241b65b,error,,0,3,2026-09-04T11:19:58Z,http_429
+87235779-9531-4bf2-b265-6cc448aa0f35,ok,live,1243,1,2026-09-01T11:40:49Z,
+87799219-e91a-46a8-bb0e-78f7facdd115,ok,wayback,2674,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260617022111id_/https://jobs.lever.co/syntax/c5801194-4911-4769-86a4-266e5d451fdc/apply
+87e1f406-2b57-4d98-9b4f-2b0c197085e3,error,,0,2,2026-09-05T10:37:01Z,http_429
+8990370a-d091-498f-98bb-082a18262cfa,ok,live,7252,1,2026-09-01T11:40:49Z,
+8b6ea404-0949-4cd3-a4e1-f77ec1d8cca0,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+8bb432fa-21f1-4d2a-a11c-46955f58d383,error,,0,2,2026-09-05T10:37:01Z,http_429
+8c3c4866-6c14-4ec0-bc29-3ce391b4bea3,error,,0,3,2026-09-04T11:19:58Z,http_404
+8c8cf5d2-f485-4d7e-b8b1-ce1caaf73d31,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+8cd6c68a-d1b7-4a16-9dc4-411fb9932fbb,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+8ce746f2-4dd9-4c00-bfee-754334ef88ec,ok,wayback,4533,2,2026-09-03T11:16:36Z,http://web.archive.org/web/20260626014134id_/https://rfcuny.wd108.myworkdayjobs.com/rfcuny/job/New-York-NY/Data-Analyst-Intern_JR2987
+8cf244f2-f67a-4786-b968-74bd6c7aec38,ok,live,3868,1,2026-08-31T13:53:47Z,
+8d8f9605-6605-4474-9a61-7960df14b4a0,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+8dd5962c-94fd-4b2b-8be6-95ad68d36b57,error,,0,3,2026-09-05T10:37:01Z,http_429
+8e11b217-af00-44fb-88cd-cb241676e359,error,,0,3,2026-09-05T10:37:01Z,http_429
+8e9a164a-393f-4f52-8c16-a283cc796352,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+8ee2c108-7c86-4c94-b7bb-5667b48e3d3a,error,,0,3,2026-09-05T10:37:01Z,http_429
+8febf19c-cdf5-437d-bf7b-f5d9d35987ea,ok,live,3555,1,2026-09-02T11:20:23Z,
+90a6a21b-01c9-4a5a-8c1f-d58b67d00be8,error,,0,3,2026-09-05T10:37:01Z,http_429
+925fd340-08ca-444f-ab27-237fdfe56b27,ok,live,4328,1,2026-08-31T13:53:47Z,
+92837f3a-76ae-46c6-9a64-bf3ccc51ce73,ok,wayback,2974,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260501123123id_/https://jobs.ashbyhq.com/kira/d46f8721-f33d-4539-bb78-e07f204e8ee8
+92e5f47d-f903-4718-b7e5-0feb29dd9f89,ok,wayback,2612,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260514032223id_/https://job-boards.greenhouse.io/smartlyio/jobs/5995737004
+945da41b-7c5e-4576-9f1d-73caa551362e,error,,0,3,2026-09-05T10:37:01Z,http_429
+95a232c5-f611-4960-ab8f-79fcd25db5f2,ok,live,4313,1,2026-09-01T11:40:49Z,
+95f4579d-56be-417d-87ef-3870c70be3bd,error,,0,2,2026-09-05T10:37:01Z,http_429
+98224f6a-9244-4a2a-94e7-e9166181bd40,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+98635871-6276-41e4-ad95-172485704a2c,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+991a8f63-65fa-4790-8de1-d09deeed8643,ok,wayback,2887,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260514233045id_/https://careers-fsg.icims.com/jobs/2406/job?mobile=true&needsRedirect=false
+99b96750-4604-4ae8-8e56-d3c3287cc493,error,,0,3,2026-09-04T11:19:58Z,http_410
+99d71964-46d7-44c5-b6df-63a0a4b7f9ee,ok,wayback,14358,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260501230103id_/https://job-boards.greenhouse.io/vestwell/jobs/7722044003
+9a73f37b-f0c1-4f51-8d29-8096bf876470,ok,live,3766,1,2026-08-31T13:53:47Z,
+9ac6ae38-9b5a-4373-934b-b04f5fbdc09c,ok,live,4328,1,2026-08-31T13:53:47Z,
+9bd5bf91-17e4-4d57-9268-dd61b4b3cdf4,ok,live,4328,1,2026-08-31T13:53:47Z,
+9c647182-768d-410f-acf7-e162259bd5f2,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_229c)
+9c648fd4-14e8-4044-af8a-cf68219f8195,ok,live,9504,1,2026-08-31T13:53:47Z,
+9cc1f56c-0976-4b70-858c-3ca47bbd6331,error,,0,3,2026-09-02T11:20:23Z,http_404
+9d14590b-3922-4c2d-a411-04bbe025a5bc,ok,live,3454,1,2026-09-01T11:40:49Z,
+9d506d4e-91ee-4f46-bda5-4ab9b5dddf55,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_149c)
+9dceacf0-6d35-489a-95b3-0b2244d0c8d2,ok,live,1496,1,2026-08-31T13:53:47Z,
+9e0c7c74-d962-4dfd-a375-9f08ad8329ae,error,,0,1,2026-09-05T10:37:01Z,no source yielded text
+9e9b2cdb-3e51-4478-8b33-4281c7b2a565,error,,0,3,2026-09-05T10:37:01Z,http_429
+9f3c0656-6cef-4be9-9103-18c13986bef8,ok,wayback,4507,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260716021557id_/https://revvity.wd103.myworkdayjobs.com/External/job/CAD-Remote--ON/Full-Stack-AI-Developer-Intern_JR-044913
+9f4e4614-b132-4a36-8ec6-51a051c0ef58,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+9fc8a614-08fa-458a-ae94-17287abd6840,ok,wayback,6060,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260516230632id_/https://cisecurity.wd1.myworkdayjobs.com/CIS_External_Career_Site/job/Remote/Security-Engineering-Intern---Remote_JR100204
+a00101f6-5c51-4a7d-a424-e3f3a7ac8a16,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_91c)
+a07da328-cad2-4ede-bbbb-87ffe48211e5,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+a296d107-a3c9-4996-98c4-581930edc8df,ok,live,4880,1,2026-09-02T11:20:23Z,
+a2c969ec-510a-42ad-b323-d47c5bc5a702,ok,wayback,3868,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260501230024id_/https://careers-cotiviti.icims.com/jobs/19075/job?mobile=true&needsRedirect=false
+a2dd7ebc-2143-479f-a7cc-43c854f5e08a,ok,wayback,4168,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260715011343id_/https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4681002006
+a2f960f6-eba6-4fdb-98c3-75a52e21dbb4,error,,0,2,2026-09-05T10:37:01Z,http_429
+a449e924-cf5c-473e-b0a4-29943b45a868,error,,0,2,2026-09-05T10:37:01Z,http_429
+a4823558-f23b-4556-adac-d9b6d5e3f8cf,ok,live,3944,1,2026-08-31T13:53:47Z,
+a529c640-bb27-4b6c-b042-997fbba3095d,error,,0,2,2026-09-05T10:37:01Z,http_429
+a619c6de-ef67-4039-af21-31cf505b8ee2,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_149c)
+a67f3d7e-403e-4ae0-8608-1af033714104,error,,0,3,2026-09-04T11:19:58Z,http_429
+a73a78fc-c2c9-4dac-84b6-3d7d8f0702c5,ok,wayback,8674,1,2026-08-31T13:53:47Z,http://web.archive.org/web/20260811065250id_/https://truist.wd1.myworkdayjobs.com/en-US/Careers/job/New-York-NY/XMLNAME-2027-Truist-Securities---Fixed-Income-Loans-S-T--Sales--Trading---Research----An
+a7d8ee7d-d813-4aac-afa0-b2cc56b8b7f6,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+a7fdba37-efe3-4ac2-b779-bbc47aa7daee,ok,wayback,11486,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260724160904id_/https://job-boards.greenhouse.io/generalatlantic/jobs/6115031004
+a8394fef-9f28-44ce-a233-ed8822941ae4,ok,live,4845,1,2026-09-04T11:19:58Z,
+a9ad290c-9dc0-40d2-9e6e-d0a330be60dd,ok,wayback,6035,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260522233024id_/https://vhr-epri.wd1.myworkdayjobs.com/epricareers/job/RemoteHome-Based/Power-Systems-Software-Engineer-Student-Employee_REQ-3990-1
+a9b6e0e0-7d76-45b2-8d3b-c8a40a8342cd,ok,live,3139,1,2026-08-31T13:53:47Z,
+aac2840b-0767-4a5b-b94f-f8e890a1065e,ok,wayback,5753,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260514013909id_/https://job-boards.greenhouse.io/athinkingape/jobs/7918788
+ac3c45e9-76c1-4b7c-8c15-3452d5958e9e,ok,live,2305,1,2026-09-03T11:16:36Z,
+ae61434b-9142-44d7-96d5-7e8a5731372f,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+ae6480dc-19f7-41c1-93ec-fd10763825b1,ok,live,7876,1,2026-08-31T13:53:47Z,
+ae7fd66d-2ccb-4c86-894b-f1f097cff21c,ok,live,5153,1,2026-09-02T11:20:23Z,
+aec4ad25-f3ea-4386-99cc-b24aaa5e5926,ok,wayback,4507,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260803184758id_/https://revvity.wd103.myworkdayjobs.com/External/job/CAD-Remote--ON/Full-Stack-AI-Developer-Intern_JR-044905
+af41c8d1-6670-4cbb-9111-9204ac3a4da9,ok,wayback,3662,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260707223203id_/https://www.citadel.com/careers/details/quantitative-trader-equity-quantitative-research-intern-us/
+afda33ed-c25b-4bcb-9bd7-a14d3fb2d0f2,ok,wayback,3564,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260501231438id_/https://jobs.ashbyhq.com/MUBI/342a53eb-345f-4172-9264-e26237792c24/application
+b2905e3d-2dad-4ffd-a2cc-2b8c1aa04707,ok,wayback,4985,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260716020840id_/https://rfcuny.wd108.myworkdayjobs.com/RFCUNY/job/New-York-NY/IT---Data-Systems-Intern--Archibus---Applications-Development-_JR3276
+b326f48f-ee33-4ecc-bfa9-70aa89f4585e,error,,0,3,2026-09-05T10:37:01Z,http_429
+b364c68b-8fda-447b-b50d-dfa7fcd4039f,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+b376bf1f-e11d-4aeb-8c2f-5ab4f716191f,error,,0,2,2026-09-05T10:37:01Z,http_429
+b5a51123-5f95-4578-b058-795e2b7e4ecb,ok,live,3219,1,2026-08-31T13:53:47Z,
+b67c806f-262a-4ec2-8ed1-de44ffbca035,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_2385c)
+b70cf0fc-1a6d-451a-a737-885a6a68884f,ok,wayback,5752,1,2026-09-03T11:16:36Z,
+b7154b79-2d09-4d3d-8208-f32ccf9b1d14,ok,wayback,10160,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260617191723id_/https://jobs.ashbyhq.com/1password/d9909a9a-d941-404d-a7f2-5021670ffd2c/application
+b71c1aa2-4ccb-420a-a53e-cd09d3d3ba63,ok,wayback,10065,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260612014345id_/https://jobs.ashbyhq.com/1password/44150e12-89b1-4ac7-ad8d-671f5ec650dd/application
+b80b54aa-fe0f-4421-9c51-fe418ac5fa01,ok,live,10888,1,2026-09-02T11:20:23Z,
+b8824703-fe69-4f28-b705-68510ab904db,error,,0,2,2026-09-05T10:37:01Z,http_429
+b9669146-88c3-4c3b-8c92-5d6ade8bdaf5,ok,wayback,5167,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260603233028id_/https://situsamc.wd1.myworkdayjobs.com/SitusAMC/job/Remote/Intern---AI-Software-Development-Team_JR02562
+ba54f8c0-f2b7-4ba8-ad31-8475fb716eb0,error,,0,1,2026-09-05T10:37:01Z,http_429
+baf0289f-d552-40cc-956a-c2184364f85a,ok,live,1028,1,2026-08-31T13:53:47Z,
+bc4407ea-452d-4ef5-b173-3260a4f7db7b,ok,live,5462,1,2026-08-31T13:53:47Z,
+bca90a25-419e-46da-864d-1d8564cdf838,ok,live,9986,1,2026-09-01T11:40:49Z,
+bcc400fa-c1ec-40ec-a4e9-6f22a0574f9c,error,,0,3,2026-09-05T10:37:01Z,http_429
+bce00b8e-0bf2-4317-8d52-be8495199473,ok,wayback,3428,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260530222643id_/https://jobs.lever.co/voltus/d30b5349-1023-497f-a5e5-264204071235/apply
+bec41fe0-ae4c-44d3-bddd-15ca4a245c18,ok,live,4173,1,2026-08-31T13:53:47Z,
+bf242ed9-9919-4627-bcd1-35178762d9c5,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+bf6f1046-c707-41a4-9446-0ed05b3dcb3c,error,,0,2,2026-09-05T10:37:01Z,http_429
+c07d8789-5d37-4216-93ce-d2d8035adb7d,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+c0bc8e2c-204a-461b-bd1b-7d720fbcbd77,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_239c)
+c1260e8d-9824-4174-9668-7f4e1627e756,ok,wayback,3453,1,2026-09-03T11:16:36Z,
+c1b571ef-de82-4792-8035-782a245125e4,ok,live,3513,1,2026-09-05T10:37:01Z,
+c2308ec8-a80e-4bb3-ae50-a835b8c50958,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+c32147c4-e359-49f8-8d2e-d52f0a1646d8,ok,wayback,4639,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260726073439id_/https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4676587006
+c3433d6a-bf30-4d16-8e0f-5126b09236cf,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_918c)
+c344d643-aa8d-4d64-a497-67a78ca63dc9,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+c3cb586c-7a74-433e-9247-a5bf6ab308e5,ok,wayback,6468,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260724160903id_/https://job-boards.greenhouse.io/goldenpetbrands/jobs/4713182005
+c5e8d6dd-ca17-4cde-89c3-e8da016a78e5,ok,wayback,3417,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260731012041id_/https://job-boards.greenhouse.io/eulerity/jobs/4695806006
+c61b3999-cfc9-4184-8e3e-3a21a00ebcef,ok,live,5920,1,2026-08-31T13:53:47Z,
+c623e3d0-43d6-4ba5-93dc-077ec55a1bb3,ok,wayback,4378,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260515020032id_/https://jobs.ashbyhq.com/phil/4626509e-297e-4a03-b5b1-7d72cbbc5b82/application
+caa27f3e-6106-40d7-93d0-7348ebea4c56,error,,0,1,2026-09-05T10:37:01Z,http_429
+cab3dc48-123e-4fdc-8ca8-10d067c841b0,ok,wayback,4192,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260512021347id_/https://careers-cotiviti.icims.com/jobs/18676/job?mobile=true&needsRedirect=false
+cbdb6805-42ae-416d-ba9d-7b66cf887b4d,error,,0,3,2026-09-05T10:37:01Z,http_429
+cc0575ec-4150-4e85-9ce6-7b15f68f2b7c,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_33c)
+cc58fac9-b0fa-47d6-8d76-5a9b5e373147,error,,0,2,2026-09-05T10:37:01Z,http_404
+cca94bc1-ca14-4a30-b4a1-7484452d46f6,ok,live,3950,1,2026-08-31T13:53:47Z,
+ccc26e13-7964-413d-8db2-404361781e7a,ok,live,3207,1,2026-08-31T13:53:47Z,
+cd6f32c7-2c66-4423-8ff5-b998f48126e0,ok,live,2735,1,2026-08-31T13:53:47Z,
+cd7682b8-7722-4a26-9813-42ece290a387,ok,live,9697,1,2026-08-31T13:53:47Z,
+ce1d842e-89a6-4905-a608-3eca02ddd233,ok,live,4268,1,2026-09-01T11:40:49Z,
+cf9613df-d8e3-4474-87fd-386eaa1816e8,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+d02658b8-38cb-4fc7-9841-62916abfefc2,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_711c)
+d0337534-379c-4a13-ba43-0946fd91d5fd,ok,wayback,3630,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260519233154id_/https://vhr-epri.wd1.myworkdayjobs.com/epricareers/job/RemoteHome-Based/Software-Developer-Power-System-Student-Employee_REQ-3986-1
+d15c2dd4-7288-4110-bf59-550c753167ab,ok,live,3595,1,2026-08-31T13:53:47Z,
+d1787088-b958-47f6-91df-8bc1262f98bf,error,,0,1,2026-08-31T13:53:47Z,no source yielded text
+d1a12763-bd6a-435c-bc94-05274ad822f1,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+d1b794fd-26be-4c15-bf39-5df493a20cd7,error,,0,3,2026-09-05T10:37:01Z,http_429
+d392b2b1-5d8e-4ea6-969f-665fbd492ba4,ok,wayback,8602,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260609233119id_/https://jobs.ashbyhq.com/1password/47274802-4040-4039-978a-fc9b7d6868ce/application
+d3d390d0-c2a6-4fdd-8c45-3b5fd2e8bc07,ok,wayback,6298,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260608020957id_/https://rsm.wd1.myworkdayjobs.com/rsmcareers/job/Remote/TESS-Intern---Fall-2026_JR119746
+d3ee5bc4-7518-4aa5-b4c1-53a1a4793a3e,ok,wayback,4390,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260519021106id_/https://jobs.ashbyhq.com/melotech/e99207bd-8a2f-4641-a463-08a6633a7073/application
+d49211be-b915-4375-8c6a-17b40be46506,error,,0,3,2026-09-05T10:37:01Z,http_429
+d4bd04b2-b4a7-41b4-ab15-339b8e50f45e,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+d55a832d-489f-468a-8688-f419fb8b1b38,ok,live,3595,1,2026-08-31T13:53:47Z,
+d6fad79e-96ae-48cc-b352-313e695d5e0f,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_239c)
+d738cea5-b94d-4242-a6e3-00a441104aad,error,,0,2,2026-09-05T10:37:01Z,http_429
+d7612fa7-5009-43fc-a9d3-8f16c3478eb2,ok,live,24854,1,2026-09-01T11:40:49Z,
+d7896522-5218-4362-8092-60cacc29a642,ok,live,4067,1,2026-08-31T13:53:47Z,
+d78c5e39-dccf-475e-9124-2c3a66982e2c,error,,0,3,2026-09-05T10:37:01Z,http_429
+d7cb67a6-930f-4fc0-a3b7-3f7d47bcdb31,empty,,0,1,2026-08-31T13:53:47Z,no posting-like text above 600 chars (thin_239c)
+d8419553-b116-44e9-8ec0-d1ae843c6512,ok,live,5349,1,2026-09-01T11:40:49Z,
+d91645a0-c83d-4a09-bb25-c45044295c83,ok,live,7144,1,2026-09-01T11:40:49Z,
+d935bae6-e667-4bd1-b10d-4431b5555110,ok,live,3169,1,2026-08-31T13:53:47Z,
+d954b282-1586-4e74-818f-8d83c3936a8c,ok,live,11898,1,2026-09-01T11:40:49Z,
+d9ea509b-1e6a-4984-8ede-eb92547cabed,ok,wayback,5312,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260514035750id_/https://ats.rippling.com/pathos/jobs/430a21a7-8718-47ff-8963-2095727cce57
+da2a97f8-9827-4fe9-a716-a33f244952bc,ok,wayback,4296,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260715005744id_/https://job-boards.greenhouse.io/eulerity/jobs/4694300006
+dd1b5c69-83f6-47c2-9e9b-02fcd73f5019,ok,wayback,3171,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260428032955id_/https://careers-cotiviti.icims.com/jobs/19007/job?mobile=true&needsRedirect=false
+de048c9f-8cf0-45fe-b307-40b9a04a9416,ok,live,2544,1,2026-08-31T13:53:47Z,
+de926b0a-99e7-4dbd-94cd-334ec565be9f,error,,0,3,2026-09-02T11:20:23Z,http_403
+e012dfd4-c33a-4639-8ea0-3e6586db2b77,ok,live,7570,1,2026-08-31T13:53:47Z,
+e187ad72-4116-4c14-a34f-8e95e658b89c,error,,0,2,2026-09-05T10:37:01Z,http_429
+e37131d1-d111-4bf1-8493-2e54ad4ced68,ok,live,1232,1,2026-09-01T11:40:49Z,
+e3dc5e7f-9828-4121-8b6f-6d45091a92a4,ok,live,8524,1,2026-08-31T13:53:47Z,
+e413d8a4-5bbc-41f3-afbb-9c537903ed53,error,,0,2,2026-09-05T10:37:01Z,http_429
+e42a0957-f1e1-461b-be85-4b1399cbf8c5,ok,wayback,3868,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260517204057id_/https://careers-cadent.icims.com/jobs/1362/data-engineer-intern/job
+e48da94e-987a-48e6-a34c-82e0558ae8bb,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_880c)
+e557afc8-009d-464e-a765-a92b4a72e18a,ok,live,8978,1,2026-08-31T13:53:47Z,
+e5bf0800-58fa-41cf-bba9-7799f4f540f5,ok,live,60000,1,2026-09-04T11:19:58Z,
+e64f8833-28d9-4336-8818-8f38d5d83e2b,error,,0,3,2026-09-05T10:37:01Z,http_429
+e7fc3ab1-8a1d-4b71-b1aa-d3179e9244f9,ok,live,5163,1,2026-09-01T11:40:49Z,
+e8b59897-2766-4ebd-907b-14e589a75372,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_676c)
+ea21f599-680e-4822-8289-fe0af38a4bfe,ok,live,60000,1,2026-09-02T11:20:23Z,
+ea64c40c-c89c-49ac-b395-a3c66a568e0f,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+ebd0e25e-fda3-446a-8872-f7292f38d1f7,ok,live,2187,1,2026-08-31T13:53:47Z,
+ef507edc-8e28-42bb-8700-a616adc2d5cb,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+eff23e0e-2522-445b-925a-811fe2e459d1,error,,0,2,2026-09-05T10:37:01Z,http_429
+f000f27d-73d5-4c3f-9e46-7aa5d75a235a,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_1542c)
+f0ac800d-804a-400b-9ee5-a6006e56c30b,ok,wayback,3621,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260609153217id_/https://gevernova.wd5.myworkdayjobs.com/only_confidential_executive_recruiting/job/Remote/Grid-Automation---Software-Intern_R5041706-3
+f15eabeb-73d9-4a1d-b314-38d1600f8365,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+f2d2fce5-0d01-4d4a-9a98-85a62798d293,ok,live,8635,1,2026-09-01T11:40:49Z,
+f41dfdbb-4229-4d32-87b4-278db89df197,error,,0,2,2026-09-05T10:37:01Z,http_429
+f48a8b1a-b2ba-48ce-becd-612e1c0a2198,empty,,0,1,2026-09-02T11:20:23Z,no posting-like text above 600 chars (thin_149c)
+f4bff374-c560-4627-b60d-dce64838eea8,ok,wayback,6733,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260527140649id_/https://centific.wd1.myworkdayjobs.com/Centific_Global/job/Remote-Work-USA/AI-Research-Strategist--Intern_JR107347
+f4e6b65a-c191-47b6-b02b-f2385f91d990,empty,,0,1,2026-09-05T10:37:01Z,no posting-like text above 600 chars (thin_654c)
+f59e5b11-d1a0-4afa-ac2f-9c1e54ef6179,ok,wayback,5945,1,2026-09-02T11:20:23Z,http://web.archive.org/web/20260715192257id_/https://job-boards.greenhouse.io/ada18/jobs/5180710007
+f6828d11-8794-49da-965a-3a6dd7bebca2,ok,wayback,7981,1,2026-09-04T11:19:58Z,http://web.archive.org/web/20260511233050id_/https://ats.rippling.com/energycap-external-career-page/jobs/e448abdb-dbef-4918-9cd9-0987fb413f00
+f6f17706-f32e-4624-8175-889945a160e5,ok,live,6350,1,2026-08-31T13:53:47Z,
+f828e5b4-9ccb-4b61-bb2c-d55a088b45f4,error,,0,3,2026-09-04T11:19:58Z,http_403
+f82f4313-ed51-49e1-8692-428585ee2875,error,,0,3,2026-09-05T10:37:01Z,http_429
+f845f125-fa49-4e15-a653-128534761cd4,ok,live,3095,1,2026-08-31T13:53:47Z,
+f888ed06-3182-4e4f-94b4-7763ee515470,error,,0,1,2026-09-05T10:37:01Z,http_429
+f9409f79-48bb-4a2c-9236-57425948e3e6,ok,wayback,7915,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260427234438id_/https://lifeattiktok.com/search/7632363492922034485
+faaf208d-f3fb-4acf-90e1-a4498d1cebb6,error,,0,3,2026-09-03T11:16:36Z,no source yielded text
+fc244a70-fbd2-4a62-a5e8-7caad750e8d9,error,,0,3,2026-09-02T11:20:23Z,no source yielded text
+fc88d475-f678-4ae3-bc2c-5ef19e50476f,ok,wayback,6322,2,2026-09-04T11:19:58Z,http://web.archive.org/web/20260522230025id_/https://strideinc.wd1.myworkdayjobs.com/en-US/SK/job/US-Nationwide---Remote/K12-Zone-Engineering-Intern_JR114632-1
+fcbb295b-3dae-4af6-bd41-ec8b5d05a1ca,ok,live,24838,1,2026-09-01T11:40:49Z,
+fcd24d2e-1552-4b2e-a939-87596e9177ce,empty,,0,1,2026-09-01T11:40:49Z,no posting-like text above 600 chars (thin_1125c)
+fd2f0640-b221-4c71-bf6f-c57f8f5bc712,ok,live,1587,1,2026-08-31T13:53:47Z,
+fd4b2ae3-7ff3-4faf-9469-b64c12be8275,ok,wayback,4151,1,2026-09-03T11:16:36Z,http://web.archive.org/web/20260602000541id_/https://jobs.ashbyhq.com/kong/1de58755-b134-4223-9caf-54ee7f376a5b/application
+fdcce4dd-7800-4e80-bc0f-fa79d580e58c,ok,wayback,3776,1,2026-09-01T11:40:49Z,http://web.archive.org/web/20260713223308id_/https://jobs.ashbyhq.com/adaptivesecurity/a941849b-bc2b-421d-b58c-bd76cfa31b1b/application
+fdf66316-7107-429f-8489-abb929ab95ee,ok,wayback,7955,1,2026-09-05T10:37:01Z,http://web.archive.org/web/20260428020142id_/https://lifeattiktok.com/search/7632474163383765301

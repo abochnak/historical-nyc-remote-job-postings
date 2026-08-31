@@ -1,0 +1,4023 @@
+{
+  "active": {
+    "AIG | Summer Intern - Data Office": {
+      "company": "AIG",
+      "role": "Summer Intern - Data Office"
+    },
+    "AMD | ASIC Package Engineering Intern Co-op": {
+      "company": "AMD",
+      "role": "ASIC Package Engineering Intern Co-op"
+    },
+    "AMD | ASIC Verification Engineer Intern/Co-op": {
+      "company": "AMD",
+      "role": "ASIC Verification Engineer Intern/Co-op"
+    },
+    "AMD | Compiler Engineer Intern/Co-op": {
+      "company": "AMD",
+      "role": "Compiler Engineer Intern/Co-op"
+    },
+    "AMD | Diagnostics Design Engineering Intern/Co-op": {
+      "company": "AMD",
+      "role": "Diagnostics Design Engineering Intern/Co-op"
+    },
+    "AMD | Firmware Engineer Intern/Co-op": {
+      "company": "AMD",
+      "role": "Firmware Engineer Intern/Co-op"
+    },
+    "AMD | Graphics Software Engineer Intern/Co-op": {
+      "company": "AMD",
+      "role": "Graphics Software Engineer Intern/Co-op"
+    },
+    "AMD | Hardware Design Verification Engineer Intern/Co-op": {
+      "company": "AMD",
+      "role": "Hardware Design Verification Engineer Intern/Co-op"
+    },
+    "AMD | Machine Learning/Artificial Intelligence Intern/Co-op": {
+      "company": "AMD",
+      "role": "Machine Learning/Artificial Intelligence Intern/Co-op"
+    },
+    "AMD | Product Management Intern/Co-op - Multiple Teams": {
+      "company": "AMD",
+      "role": "Product Management Intern/Co-op - Multiple Teams"
+    },
+    "AMD | Research Engineering Intern/Co-op - AMD Research": {
+      "company": "AMD",
+      "role": "Research Engineering Intern/Co-op - AMD Research"
+    },
+    "AMD | Software Engineer Intern/Co-op - Masters": {
+      "company": "AMD",
+      "role": "Software Engineer Intern/Co-op - Masters"
+    },
+    "AQR Capital Management | Arbitrage Research Summer Analyst Intern - AQR Arbitrage": {
+      "company": "AQR Capital Management",
+      "role": "Arbitrage Research Summer Analyst Intern - AQR Arbitrage"
+    },
+    "AQR Capital Management | Quantitative Prediction Markets Research Summer Analyst Intern": {
+      "company": "AQR Capital Management",
+      "role": "Quantitative Prediction Markets Research Summer Analyst Intern"
+    },
+    "AQR Capital Management | Trading Analyst Intern": {
+      "company": "AQR Capital Management",
+      "role": "Trading Analyst Intern"
+    },
+    "AXQ Capital | Quantitative Research Intern - Summer 2027": {
+      "company": "AXQ Capital",
+      "role": "Quantitative Research Intern - Summer 2027"
+    },
+    "AbbVie | Business Technology Solutions Intern - Data & Software Engineering": {
+      "company": "AbbVie",
+      "role": "Business Technology Solutions Intern - Data & Software Engineering"
+    },
+    "AbbVie | Business Technology Solutions Intern - Data & Software Engineering - Undergraduate": {
+      "company": "AbbVie",
+      "role": "Business Technology Solutions Intern - Data & Software Engineering - Undergraduate"
+    },
+    "Adobe | Machine Learning Engineer Intern": {
+      "company": "Adobe",
+      "role": "Machine Learning Engineer Intern"
+    },
+    "Adobe | Software Engineer Intern": {
+      "company": "Adobe",
+      "role": "Software Engineer Intern"
+    },
+    "AeroVironment | Embedded Software Engineer Intern": {
+      "company": "AeroVironment",
+      "role": "Embedded Software Engineer Intern"
+    },
+    "AeroVironment | Machine Learning Intern": {
+      "company": "AeroVironment",
+      "role": "Machine Learning Intern"
+    },
+    "AeroVironment | Software Engineer Intern": {
+      "company": "AeroVironment",
+      "role": "Software Engineer Intern"
+    },
+    "Aerotech | Electrical/Computer Engineering Intern Co-op": {
+      "company": "Aerotech",
+      "role": "Electrical/Computer Engineering Intern Co-op"
+    },
+    "Aerotech | Software Engineering Intern Co-op - Enterprise Development Team - Application Development Team": {
+      "company": "Aerotech",
+      "role": "Software Engineering Intern Co-op - Enterprise Development Team - Application Development Team"
+    },
+    "Akuna Capital University | Hardware Engineer Intern": {
+      "company": "Akuna Capital University",
+      "role": "Hardware Engineer Intern"
+    },
+    "Akuna Capital University | Quantitative Research Intern": {
+      "company": "Akuna Capital University",
+      "role": "Quantitative Research Intern"
+    },
+    "Akuna Capital University | Software Engineer Intern - C++": {
+      "company": "Akuna Capital University",
+      "role": "Software Engineer Intern - C++"
+    },
+    "Alberta Investment Management Corporation | Fixed Income Co-op": {
+      "company": "Alberta Investment Management Corporation",
+      "role": "Fixed Income Co-op"
+    },
+    "Allegheny County | Business Analytics Intern": {
+      "company": "Allegheny County",
+      "role": "Business Analytics Intern"
+    },
+    "Allied Solutions | Data Science Intern - Data Intelligence": {
+      "company": "Allied Solutions",
+      "role": "Data Science Intern - Data Intelligence"
+    },
+    "Allied Solutions | Product Management Intern - Risk Management": {
+      "company": "Allied Solutions",
+      "role": "Product Management Intern - Risk Management"
+    },
+    "Allied Solutions | Sales Analytics Intern": {
+      "company": "Allied Solutions",
+      "role": "Sales Analytics Intern"
+    },
+    "Allied Solutions | Software Engineer Intern": {
+      "company": "Allied Solutions",
+      "role": "Software Engineer Intern"
+    },
+    "Altamira Technologies | Research and Development Intern": {
+      "company": "Altamira Technologies",
+      "role": "Research and Development Intern"
+    },
+    "Altamira Technologies | Software Development Intern": {
+      "company": "Altamira Technologies",
+      "role": "Software Development Intern"
+    },
+    "Amazon | Software Development Engineer Intern - Robotics": {
+      "company": "Amazon",
+      "role": "Software Development Engineer Intern - Robotics"
+    },
+    "Ameren | Meteorology Intern - Crisis Management": {
+      "company": "Ameren",
+      "role": "Meteorology Intern - Crisis Management"
+    },
+    "American Express | AI Engineer Intern - Enterprise Technology Services": {
+      "company": "American Express",
+      "role": "AI Engineer Intern - Enterprise Technology Services"
+    },
+    "American Express | Data Analytics Intern - Enterprise Technology Services": {
+      "company": "American Express",
+      "role": "Data Analytics Intern - Enterprise Technology Services"
+    },
+    "American Express | Data Analytics Intern - Global Servicing - Financial Crimes Risk & Controls": {
+      "company": "American Express",
+      "role": "Data Analytics Intern - Global Servicing - Financial Crimes Risk & Controls"
+    },
+    "American Express | Data Science Intern - Global Decision Science - Credit & Fraud Risk": {
+      "company": "American Express",
+      "role": "Data Science Intern - Global Decision Science - Credit & Fraud Risk"
+    },
+    "American Express | Product Development Intern - Global Commercial Services": {
+      "company": "American Express",
+      "role": "Product Development Intern - Global Commercial Services"
+    },
+    "American Express | Product Development Intern - Global Servicing": {
+      "company": "American Express",
+      "role": "Product Development Intern - Global Servicing"
+    },
+    "American Express | Product Development Intern - US Consumer Services": {
+      "company": "American Express",
+      "role": "Product Development Intern - US Consumer Services"
+    },
+    "American Express | Product Management Intern": {
+      "company": "American Express",
+      "role": "Product Management Intern"
+    },
+    "American Express | Product Management Intern - Global Merchant & Network Services": {
+      "company": "American Express",
+      "role": "Product Management Intern - Global Merchant & Network Services"
+    },
+    "American Express | Software Engineer Intern - Enterprise Technology Services": {
+      "company": "American Express",
+      "role": "Software Engineer Intern - Enterprise Technology Services"
+    },
+    "Ameriprise Financial | Asset Management Technology Intern - Data Enablement": {
+      "company": "Ameriprise Financial",
+      "role": "Asset Management Technology Intern - Data Enablement"
+    },
+    "Amgen | Operations Graduate Program Intern - Operations": {
+      "company": "Amgen",
+      "role": "Operations Graduate Program Intern - Operations"
+    },
+    "AnaVation | Computer Science Intern": {
+      "company": "AnaVation",
+      "role": "Computer Science Intern"
+    },
+    "Anthelion Capital | Quant Developer / Quant Research Intern": {
+      "company": "Anthelion Capital",
+      "role": "Quant Developer / Quant Research Intern"
+    },
+    "Apex | Ground Software Intern - Spring or Summer 2027": {
+      "company": "Apex",
+      "role": "Ground Software Intern - Spring or Summer 2027"
+    },
+    "Apex | Simulation Software Engineering Intern": {
+      "company": "Apex",
+      "role": "Simulation Software Engineering Intern"
+    },
+    "Apex | Software Engineer Intern - Embedded Systems": {
+      "company": "Apex",
+      "role": "Software Engineer Intern - Embedded Systems"
+    },
+    "Appian | Product Manager Intern": {
+      "company": "Appian",
+      "role": "Product Manager Intern"
+    },
+    "Appian | Software Engineer Intern": {
+      "company": "Appian",
+      "role": "Software Engineer Intern"
+    },
+    "Apple | GPU Intern": {
+      "company": "Apple",
+      "role": "GPU Intern"
+    },
+    "Applied Materials | Data Analyst Intern - Global Technical Learning Center": {
+      "company": "Applied Materials",
+      "role": "Data Analyst Intern - Global Technical Learning Center"
+    },
+    "Arch Capital Group | Data and Analytics Intern": {
+      "company": "Arch Capital Group",
+      "role": "Data and Analytics Intern"
+    },
+    "Arrowstreet Capital | Quantitative Developer Intern": {
+      "company": "Arrowstreet Capital",
+      "role": "Quantitative Developer Intern"
+    },
+    "Arthur J. Gallagher & Co. | Data Analytics Intern": {
+      "company": "Arthur J. Gallagher & Co.",
+      "role": "Data Analytics Intern"
+    },
+    "Atlassian | Product Management Intern": {
+      "company": "Atlassian",
+      "role": "Product Management Intern"
+    },
+    "Atlassian | Software Engineer Intern": {
+      "company": "Atlassian",
+      "role": "Software Engineer Intern"
+    },
+    "Atoms | Machine Learning PhD Software Engineer Intern": {
+      "company": "Atoms",
+      "role": "Machine Learning PhD Software Engineer Intern"
+    },
+    "Auto-Owners Insurance | Business Intelligence Developer Intern - Summer 2027": {
+      "company": "Auto-Owners Insurance",
+      "role": "Business Intelligence Developer Intern - Summer 2027"
+    },
+    "Auto-Owners Insurance | Data Engineering Intern - Summer 2027": {
+      "company": "Auto-Owners Insurance",
+      "role": "Data Engineering Intern - Summer 2027"
+    },
+    "Auto-Owners Insurance | Software Developer Intern - Summer 2027": {
+      "company": "Auto-Owners Insurance",
+      "role": "Software Developer Intern - Summer 2027"
+    },
+    "Axon | 2027 US Electrical Engineering Internship": {
+      "company": "Axon",
+      "role": "2027 US Electrical Engineering Internship"
+    },
+    "Axon | Embedded Engineer Intern": {
+      "company": "Axon",
+      "role": "Embedded Engineer Intern"
+    },
+    "BNY | Data Science Intern - Engineering": {
+      "company": "BNY",
+      "role": "Data Science Intern - Engineering"
+    },
+    "BNY | Product Management Intern - Product Management": {
+      "company": "BNY",
+      "role": "Product Management Intern - Product Management"
+    },
+    "BNY | Software Engineer Intern - Engineering - Developer": {
+      "company": "BNY",
+      "role": "Software Engineer Intern - Engineering - Developer"
+    },
+    "BTI360 | Software Engineer Intern": {
+      "company": "BTI360",
+      "role": "Software Engineer Intern"
+    },
+    "Baird | Capital Markets Compliance Data & Analytics Intern": {
+      "company": "Baird",
+      "role": "Capital Markets Compliance Data & Analytics Intern"
+    },
+    "Bank of Montreal | Investment Intern Co-op - Gam": {
+      "company": "Bank of Montreal",
+      "role": "Investment Intern Co-op - Gam"
+    },
+    "Barclays | Quantitative Finance Associate Intern": {
+      "company": "Barclays",
+      "role": "Quantitative Finance Associate Intern"
+    },
+    "Barclays | Technology Developer Intern": {
+      "company": "Barclays",
+      "role": "Technology Developer Intern"
+    },
+    "Belvedere Trading | Quantitative Trading Intern - Summer 2027": {
+      "company": "Belvedere Trading",
+      "role": "Quantitative Trading Intern - Summer 2027"
+    },
+    "Belvedere Trading | Software Engineer Intern - Summer 2027": {
+      "company": "Belvedere Trading",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Blackhawk Network Holdings | Product Management Intern": {
+      "company": "Blackhawk Network Holdings",
+      "role": "Product Management Intern"
+    },
+    "Blackstone | Data Engineer Summer Analyst - Blackstone Technology & Innovations": {
+      "company": "Blackstone",
+      "role": "Data Engineer Summer Analyst - Blackstone Technology & Innovations"
+    },
+    "Blackstone | Software Engineer Summer Analyst - Blackstone Technology & Innovations": {
+      "company": "Blackstone",
+      "role": "Software Engineer Summer Analyst - Blackstone Technology & Innovations"
+    },
+    "Blue Origin | Software Developer Intern - Avionics Software": {
+      "company": "Blue Origin",
+      "role": "Software Developer Intern - Avionics Software"
+    },
+    "BlueCross BlueShield of Nebraska | Data Intern - Data Science - Data Analytics": {
+      "company": "BlueCross BlueShield of Nebraska",
+      "role": "Data Intern - Data Science - Data Analytics"
+    },
+    "BlueCross BlueShield of Nebraska | Digital Experience Information Systems Intern": {
+      "company": "BlueCross BlueShield of Nebraska",
+      "role": "Digital Experience Information Systems Intern"
+    },
+    "Booz Allen | Data Scientist Intern - Summer Games": {
+      "company": "Booz Allen",
+      "role": "Data Scientist Intern - Summer Games"
+    },
+    "Booz Allen | Data Scientist Intern - University - Summer Games": {
+      "company": "Booz Allen",
+      "role": "Data Scientist Intern - University - Summer Games"
+    },
+    "Booz Allen | Electronic Warfare FPGA Engineer Intern": {
+      "company": "Booz Allen",
+      "role": "Electronic Warfare FPGA Engineer Intern"
+    },
+    "Booz Allen | Software Developer Intern - Summer Games": {
+      "company": "Booz Allen",
+      "role": "Software Developer Intern - Summer Games"
+    },
+    "Booz Allen | Software Developer Intern - University - 2027 Summer Games": {
+      "company": "Booz Allen",
+      "role": "Software Developer Intern - University - 2027 Summer Games"
+    },
+    "Booz Allen | Systems Engineer Intern - University - 2027 Summer Games": {
+      "company": "Booz Allen",
+      "role": "Systems Engineer Intern - University - 2027 Summer Games"
+    },
+    "Bosch Home Comfort | AI Application Intern": {
+      "company": "Bosch Home Comfort",
+      "role": "AI Application Intern"
+    },
+    "Bosch Home Comfort | Software Engineer Intern": {
+      "company": "Bosch Home Comfort",
+      "role": "Software Engineer Intern"
+    },
+    "Boston Scientific | Research Algorithm & Data Science Intern - Interns/Graduates": {
+      "company": "Boston Scientific",
+      "role": "Research Algorithm & Data Science Intern - Interns/Graduates"
+    },
+    "Brunswick | Power BI/Ops Analytics Co-op": {
+      "company": "Brunswick",
+      "role": "Power BI/Ops Analytics Co-op"
+    },
+    "Brunswick | Product Management Intern - Oils & Lubricants": {
+      "company": "Brunswick",
+      "role": "Product Management Intern - Oils & Lubricants"
+    },
+    "Brunswick | Reinforcement Learning Intern - Boating Intelligence Design Lab": {
+      "company": "Brunswick",
+      "role": "Reinforcement Learning Intern - Boating Intelligence Design Lab"
+    },
+    "Brunswick | Software Controls Engineer Intern": {
+      "company": "Brunswick",
+      "role": "Software Controls Engineer Intern"
+    },
+    "Brunswick | Systems Engineer Co-op - Software Engineering": {
+      "company": "Brunswick",
+      "role": "Systems Engineer Co-op - Software Engineering"
+    },
+    "ByteDance | AI Perception Intern - Pico": {
+      "company": "ByteDance",
+      "role": "AI Perception Intern - Pico"
+    },
+    "ByteDance | ASIC Design Engineer Intern - Video Silicon IP": {
+      "company": "ByteDance",
+      "role": "ASIC Design Engineer Intern - Video Silicon IP"
+    },
+    "ByteDance | Cloud Acceleration Research Intern - DPU & AI Infra": {
+      "company": "ByteDance",
+      "role": "Cloud Acceleration Research Intern - DPU & AI Infra"
+    },
+    "ByteDance | Data Lake Infrastructure & Data Analytics Research Engineer Intern - Applied Machine Learning Ark": {
+      "company": "ByteDance",
+      "role": "Data Lake Infrastructure & Data Analytics Research Engineer Intern - Applied Machine Learning Ark"
+    },
+    "ByteDance | Data Lake Infrastructure and Data Analytics Research Engineer Intern - Applied Machine Learning Ark": {
+      "company": "ByteDance",
+      "role": "Data Lake Infrastructure and Data Analytics Research Engineer Intern - Applied Machine Learning Ark"
+    },
+    "ByteDance | GPU/AI Application System Software Engineer Intern - System Technologies and Engineering": {
+      "company": "ByteDance",
+      "role": "GPU/AI Application System Software Engineer Intern - System Technologies and Engineering"
+    },
+    "ByteDance | Machine Learning Engineer Intern - E-Commerce Risk Control - PhD": {
+      "company": "ByteDance",
+      "role": "Machine Learning Engineer Intern - E-Commerce Risk Control - PhD"
+    },
+    "ByteDance | Machine Learning Research Scientist Intern - Seed AI for Science - Atomistic AI": {
+      "company": "ByteDance",
+      "role": "Machine Learning Research Scientist Intern - Seed AI for Science - Atomistic AI"
+    },
+    "ByteDance | Network Software Engineer Intern - Network Switch": {
+      "company": "ByteDance",
+      "role": "Network Software Engineer Intern - Network Switch"
+    },
+    "ByteDance | Research Intern - AI Compute Efficiency & Scheduling": {
+      "company": "ByteDance",
+      "role": "Research Intern - AI Compute Efficiency & Scheduling"
+    },
+    "ByteDance | Research Intern - AI-Native Databases": {
+      "company": "ByteDance",
+      "role": "Research Intern - AI-Native Databases"
+    },
+    "ByteDance | Research Scientist Intern": {
+      "company": "ByteDance",
+      "role": "Research Scientist Intern"
+    },
+    "ByteDance | Self-Built Engineer Intern - CDN Platform": {
+      "company": "ByteDance",
+      "role": "Self-Built Engineer Intern - CDN Platform"
+    },
+    "ByteDance | Software Development Engineer Intern - Network Automation - 2027 Summer": {
+      "company": "ByteDance",
+      "role": "Software Development Engineer Intern - Network Automation - 2027 Summer"
+    },
+    "ByteDance | Software Engineer Intern - AI Infra Compute": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - AI Infra Compute"
+    },
+    "ByteDance | Software Engineer Intern - AI Platform": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - AI Platform"
+    },
+    "ByteDance | Software Engineer Intern - Global Payment": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - Global Payment"
+    },
+    "ByteDance | Software Engineer Intern - Global Payment Infra and SRE": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - Global Payment Infra and SRE"
+    },
+    "ByteDance | Software Engineer Intern - Relational Database": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - Relational Database"
+    },
+    "C3.ai | Data Scientist Intern - Summer 2027": {
+      "company": "C3.ai",
+      "role": "Data Scientist Intern - Summer 2027"
+    },
+    "C3.ai | Software Engineer Intern": {
+      "company": "C3.ai",
+      "role": "Software Engineer Intern"
+    },
+    "CACI | Software Developer/Data Scientist Intern - Summer 2027": {
+      "company": "CACI",
+      "role": "Software Developer/Data Scientist Intern - Summer 2027"
+    },
+    "CACI | Software Engineer Co-op - Summer & Fall 2027": {
+      "company": "CACI",
+      "role": "Software Engineer Co-op - Summer & Fall 2027"
+    },
+    "CACI | Software Engineer Intern": {
+      "company": "CACI",
+      "role": "Software Engineer Intern"
+    },
+    "CDM Smith | Electrical Engineer Intern - Summer 2027": {
+      "company": "CDM Smith",
+      "role": "Electrical Engineer Intern - Summer 2027"
+    },
+    "CIBC | Software Engineer Intern": {
+      "company": "CIBC",
+      "role": "Software Engineer Intern"
+    },
+    "CNO Financial Group | Artificial Intelligence Information Technology Intern - AI": {
+      "company": "CNO Financial Group",
+      "role": "Artificial Intelligence Information Technology Intern - AI"
+    },
+    "CSX | Engineering Intern - Positive Train Control - Paid": {
+      "company": "CSX",
+      "role": "Engineering Intern - Positive Train Control - Paid"
+    },
+    "CSX | Sales & Marketing Analytics Intern - Paid": {
+      "company": "CSX",
+      "role": "Sales & Marketing Analytics Intern - Paid"
+    },
+    "Capital One | Data Science Intern": {
+      "company": "Capital One",
+      "role": "Data Science Intern"
+    },
+    "Capula | Trading and Research Intern": {
+      "company": "Capula",
+      "role": "Trading and Research Intern"
+    },
+    "Cardinal Health | Data and Analytics Intern - Summer 2027": {
+      "company": "Cardinal Health",
+      "role": "Data and Analytics Intern - Summer 2027"
+    },
+    "Castleton Commodities International | Commodities Trading Analyst Intern": {
+      "company": "Castleton Commodities International",
+      "role": "Commodities Trading Analyst Intern"
+    },
+    "Caterpillar | Corporate Intern - Autonomy & Intelligent Systems Engineering": {
+      "company": "Caterpillar",
+      "role": "Corporate Intern - Autonomy & Intelligent Systems Engineering"
+    },
+    "Chamberlain Group | Community Product Management Intern - Summer 2027": {
+      "company": "Chamberlain Group",
+      "role": "Community Product Management Intern - Summer 2027"
+    },
+    "Charles Schwab | Data Engineering Intern - Data Engineering": {
+      "company": "Charles Schwab",
+      "role": "Data Engineering Intern - Data Engineering"
+    },
+    "Charles Schwab | Software Engineering Intern - Technology": {
+      "company": "Charles Schwab",
+      "role": "Software Engineering Intern - Technology"
+    },
+    "Chicago Trading Company | Quant Trading Intern": {
+      "company": "Chicago Trading Company",
+      "role": "Quant Trading Intern"
+    },
+    "Chicago Trading Company | Software Engineer Intern": {
+      "company": "Chicago Trading Company",
+      "role": "Software Engineer Intern"
+    },
+    "Chicago Trading Company | Software Engineering Intern": {
+      "company": "Chicago Trading Company",
+      "role": "Software Engineering Intern"
+    },
+    "Cigna Group | Analytics Leadership Development Intern - ALDP": {
+      "company": "Cigna Group",
+      "role": "Analytics Leadership Development Intern - ALDP"
+    },
+    "Cigna Group | Legal Operations Financial Data & AI Analytics Intern": {
+      "company": "Cigna Group",
+      "role": "Legal Operations Financial Data & AI Analytics Intern"
+    },
+    "Circleback | Software Engineer Intern": {
+      "company": "Circleback",
+      "role": "Software Engineer Intern"
+    },
+    "Citadel | Sector Data Scientist Intern": {
+      "company": "Citadel",
+      "role": "Sector Data Scientist Intern"
+    },
+    "Citi | Quantitative Risk Management Summer Analyst Intern - Functions": {
+      "company": "Citi",
+      "role": "Quantitative Risk Management Summer Analyst Intern - Functions"
+    },
+    "Clarios | Category Analyst Intern": {
+      "company": "Clarios",
+      "role": "Category Analyst Intern"
+    },
+    "Clarios | Forward Deployed Engineer Intern - Summer 2027": {
+      "company": "Clarios",
+      "role": "Forward Deployed Engineer Intern - Summer 2027"
+    },
+    "Commerce Bank | IT Intern - Summer 2027": {
+      "company": "Commerce Bank",
+      "role": "IT Intern - Summer 2027"
+    },
+    "Compeer Financial | Data Analytics Intern": {
+      "company": "Compeer Financial",
+      "role": "Data Analytics Intern"
+    },
+    "Compeer Financial | Engineering Intern": {
+      "company": "Compeer Financial",
+      "role": "Engineering Intern"
+    },
+    "ConocoPhillips | Trading Analytics Intern": {
+      "company": "ConocoPhillips",
+      "role": "Trading Analytics Intern"
+    },
+    "Continental Resources | Data Analyst Intern": {
+      "company": "Continental Resources",
+      "role": "Data Analyst Intern"
+    },
+    "Corning | Artificial Intelligence and Machine Learning Intern": {
+      "company": "Corning",
+      "role": "Artificial Intelligence and Machine Learning Intern"
+    },
+    "Corning | Data Analytics Intern - Summer 2027": {
+      "company": "Corning",
+      "role": "Data Analytics Intern - Summer 2027"
+    },
+    "Corning | Digital & IT Intern": {
+      "company": "Corning",
+      "role": "Digital & IT Intern"
+    },
+    "Corning | Digital & IT Intern - Analyst - Data & AI Platform Engineering": {
+      "company": "Corning",
+      "role": "Digital & IT Intern - Analyst - Data & AI Platform Engineering"
+    },
+    "Corning | Digital & IT Intern - Analyst - Manufacturing": {
+      "company": "Corning",
+      "role": "Digital & IT Intern - Analyst - Manufacturing"
+    },
+    "Corning | Digital and Information Technology Intern - Analyst": {
+      "company": "Corning",
+      "role": "Digital and Information Technology Intern - Analyst"
+    },
+    "Cox | Software Engineer Intern - Summer 2027": {
+      "company": "Cox",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Cvent | Software Engineer Intern - Summer 2027": {
+      "company": "Cvent",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Cybernetic Labs | Full-Stack Software Engineer Intern - Product": {
+      "company": "Cybernetic Labs",
+      "role": "Full-Stack Software Engineer Intern - Product"
+    },
+    "Cybernetic Labs | Software Engineer Intern - Agent Platform": {
+      "company": "Cybernetic Labs",
+      "role": "Software Engineer Intern - Agent Platform"
+    },
+    "DIRECTV | Customer Operations Intern": {
+      "company": "DIRECTV",
+      "role": "Customer Operations Intern"
+    },
+    "DIRECTV | Operational Analytics Intern": {
+      "company": "DIRECTV",
+      "role": "Operational Analytics Intern"
+    },
+    "DRW | Quantitative Trading Analyst Intern": {
+      "company": "DRW",
+      "role": "Quantitative Trading Analyst Intern"
+    },
+    "DTCC | Application Developer Intern": {
+      "company": "DTCC",
+      "role": "Application Developer Intern"
+    },
+    "DTCC | Data Solutions Intern - Internship Program": {
+      "company": "DTCC",
+      "role": "Data Solutions Intern - Internship Program"
+    },
+    "DTCC | Model Risk Management Intern - 2027 Internship Program": {
+      "company": "DTCC",
+      "role": "Model Risk Management Intern - 2027 Internship Program"
+    },
+    "DV Trading | Futures & Options Trading Analyst Intern - Summer 2027": {
+      "company": "DV Trading",
+      "role": "Futures & Options Trading Analyst Intern - Summer 2027"
+    },
+    "DV Trading | Quantitative Risk Intern": {
+      "company": "DV Trading",
+      "role": "Quantitative Risk Intern"
+    },
+    "DV Trading | Software Engineer Intern": {
+      "company": "DV Trading",
+      "role": "Software Engineer Intern"
+    },
+    "DV Trading | Trading Intern": {
+      "company": "DV Trading",
+      "role": "Trading Intern"
+    },
+    "Daktronics | Hardware Design Co-op Intern - Firmware": {
+      "company": "Daktronics",
+      "role": "Hardware Design Co-op Intern - Firmware"
+    },
+    "Databricks | Product Management Intern": {
+      "company": "Databricks",
+      "role": "Product Management Intern"
+    },
+    "Datadog | Product Management Intern": {
+      "company": "Datadog",
+      "role": "Product Management Intern"
+    },
+    "Dee Zee | Software Development Intern": {
+      "company": "Dee Zee",
+      "role": "Software Development Intern"
+    },
+    "Deloitte | AI and Data Engineering Summer Scholar Intern - Government & Public Services": {
+      "company": "Deloitte",
+      "role": "AI and Data Engineering Summer Scholar Intern - Government & Public Services"
+    },
+    "Deloitte | Data & AI Solutions Engineering Summer Scholar Intern": {
+      "company": "Deloitte",
+      "role": "Data & AI Solutions Engineering Summer Scholar Intern"
+    },
+    "Deutsche Bank | Quantitative Research and Development Labs Sales and Trading Intern - Quantitative Research and Development Labs": {
+      "company": "Deutsche Bank",
+      "role": "Quantitative Research and Development Labs Sales and Trading Intern - Quantitative Research and Development Labs"
+    },
+    "Deutsche Bank | Quantitative Trading Intern - Fixed Income & Currencies": {
+      "company": "Deutsche Bank",
+      "role": "Quantitative Trading Intern - Fixed Income & Currencies"
+    },
+    "Deutsche Bank | Technology, Data and Innovation Intern - Technology, Data and Innovation": {
+      "company": "Deutsche Bank",
+      "role": "Technology, Data and Innovation Intern - Technology, Data and Innovation"
+    },
+    "Dev Technology Group | AI/Agentic Solution Engineer Intern - Summer 2027": {
+      "company": "Dev Technology Group",
+      "role": "AI/Agentic Solution Engineer Intern - Summer 2027"
+    },
+    "Dev Technology Group | Microsoft Power Platform & AI Intern - Summer 2027": {
+      "company": "Dev Technology Group",
+      "role": "Microsoft Power Platform & AI Intern - Summer 2027"
+    },
+    "Devon Energy | Technology Intern - Data Engineering": {
+      "company": "Devon Energy",
+      "role": "Technology Intern - Data Engineering"
+    },
+    "Dimensional Fund Advisors | Global Client Group Intern - Data and Tools - Undergraduate and Master's": {
+      "company": "Dimensional Fund Advisors",
+      "role": "Global Client Group Intern - Data and Tools - Undergraduate and Master's"
+    },
+    "DraftKings | Analytics Intern - Summer 2027": {
+      "company": "DraftKings",
+      "role": "Analytics Intern - Summer 2027"
+    },
+    "DraftKings | Data Science Intern": {
+      "company": "DraftKings",
+      "role": "Data Science Intern"
+    },
+    "DraftKings | Software Engineer Intern - Summer 2027": {
+      "company": "DraftKings",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "DriveTime | Database Engineer Intern": {
+      "company": "DriveTime",
+      "role": "Database Engineer Intern"
+    },
+    "DriveTime | Software Engineer Intern - Summer 2027": {
+      "company": "DriveTime",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "DuCharme, McMillen & Associates | Software Developer Intern": {
+      "company": "DuCharme, McMillen & Associates",
+      "role": "Software Developer Intern"
+    },
+    "ENFOS | Software Engineer Intern - Summer 2027": {
+      "company": "ENFOS",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Eaton | Firmware Engineer Intern/Co-op - Research & Development Engineering": {
+      "company": "Eaton",
+      "role": "Firmware Engineer Intern/Co-op - Research & Development Engineering"
+    },
+    "Ecolab | Digital & AI Technology Intern": {
+      "company": "Ecolab",
+      "role": "Digital & AI Technology Intern"
+    },
+    "Ecolab | Research and Development Intern": {
+      "company": "Ecolab",
+      "role": "Research and Development Intern"
+    },
+    "Edison International | Computer Science Intern": {
+      "company": "Edison International",
+      "role": "Computer Science Intern"
+    },
+    "Edison International | Software/Data Engineering Intern": {
+      "company": "Edison International",
+      "role": "Software/Data Engineering Intern"
+    },
+    "Elk Valley Resources | Geographic Information Systems Co-op": {
+      "company": "Elk Valley Resources",
+      "role": "Geographic Information Systems Co-op"
+    },
+    "Emerson Electric | Software Engineer Co-op - January 2027 - May 2027": {
+      "company": "Emerson Electric",
+      "role": "Software Engineer Co-op - January 2027 - May 2027"
+    },
+    "Empirical Foods | Software Engineer Intern - Summer 2027": {
+      "company": "Empirical Foods",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Entergy | Engineering Intern": {
+      "company": "Entergy",
+      "role": "Engineering Intern"
+    },
+    "Entergy | Student Intern - Power Delivery Performance & Analytics": {
+      "company": "Entergy",
+      "role": "Student Intern - Power Delivery Performance & Analytics"
+    },
+    "Epic Games | Frontend Programmer Intern": {
+      "company": "Epic Games",
+      "role": "Frontend Programmer Intern"
+    },
+    "Epic Games | Gameplay Programmer Intern": {
+      "company": "Epic Games",
+      "role": "Gameplay Programmer Intern"
+    },
+    "Epic Games | Machine Learning Intern - Special Projects - Epic Research Group": {
+      "company": "Epic Games",
+      "role": "Machine Learning Intern - Special Projects - Epic Research Group"
+    },
+    "Ernst & Young | Artificial Intelligence Intern - Tax - Tax Technology and Transformation": {
+      "company": "Ernst & Young",
+      "role": "Artificial Intelligence Intern - Tax - Tax Technology and Transformation"
+    },
+    "Ernst & Young | Data and Technology Intern - Multiple Teams": {
+      "company": "Ernst & Young",
+      "role": "Data and Technology Intern - Multiple Teams"
+    },
+    "Ernst & Young | Product Manager Intern - Tax - Other Tax": {
+      "company": "Ernst & Young",
+      "role": "Product Manager Intern - Tax - Other Tax"
+    },
+    "Eulerity | Backend Developer Intern": {
+      "company": "Eulerity",
+      "role": "Backend Developer Intern"
+    },
+    "Exelon | Data Science Intern - Data Science/Analytics": {
+      "company": "Exelon",
+      "role": "Data Science Intern - Data Science/Analytics"
+    },
+    "FAST Enterprises | Implementation Intern": {
+      "company": "FAST Enterprises",
+      "role": "Implementation Intern"
+    },
+    "FTI Consulting | Technology Intern - Technology": {
+      "company": "FTI Consulting",
+      "role": "Technology Intern - Technology"
+    },
+    "Fannie Mae | Data Science Intern - Analytics & Modeling Program": {
+      "company": "Fannie Mae",
+      "role": "Data Science Intern - Analytics & Modeling Program"
+    },
+    "Fannie Mae | Finance Analytics Intern - Analytics & Modeling Program": {
+      "company": "Fannie Mae",
+      "role": "Finance Analytics Intern - Analytics & Modeling Program"
+    },
+    "Fannie Mae | Treasury & Capital Markets Intern - Quantitative Research Track": {
+      "company": "Fannie Mae",
+      "role": "Treasury & Capital Markets Intern - Quantitative Research Track"
+    },
+    "Fifth Third Bank | Enterprise Data Office Co-op": {
+      "company": "Fifth Third Bank",
+      "role": "Enterprise Data Office Co-op"
+    },
+    "Finastra | AI Engineer Intern - Summer 2027": {
+      "company": "Finastra",
+      "role": "AI Engineer Intern - Summer 2027"
+    },
+    "First National Bank | Application Development Intern": {
+      "company": "First National Bank",
+      "role": "Application Development Intern"
+    },
+    "First National Bank | Enterprise Data Governance Intern - Data Quality and Governance": {
+      "company": "First National Bank",
+      "role": "Enterprise Data Governance Intern - Data Quality and Governance"
+    },
+    "First National Bank | Enterprise Operations Intern - Multiple Teams": {
+      "company": "First National Bank",
+      "role": "Enterprise Operations Intern - Multiple Teams"
+    },
+    "Five Rings Capital | Quantitative Researcher Intern": {
+      "company": "Five Rings Capital",
+      "role": "Quantitative Researcher Intern"
+    },
+    "Five Rings Capital | Software Developer Intern - Software Developer": {
+      "company": "Five Rings Capital",
+      "role": "Software Developer Intern - Software Developer"
+    },
+    "Flow Traders | Quantitative Trading Intern": {
+      "company": "Flow Traders",
+      "role": "Quantitative Trading Intern"
+    },
+    "Freddie Mac | Multifamily Digital Product Analysis Intern - Summer 2027": {
+      "company": "Freddie Mac",
+      "role": "Multifamily Digital Product Analysis Intern - Summer 2027"
+    },
+    "Freddie Mac | Quantitative Risk Management Intern": {
+      "company": "Freddie Mac",
+      "role": "Quantitative Risk Management Intern"
+    },
+    "Freddie Mac | Single-Family Data Intern": {
+      "company": "Freddie Mac",
+      "role": "Single-Family Data Intern"
+    },
+    "Freddie Mac | Software Developer Intern - Single-Family": {
+      "company": "Freddie Mac",
+      "role": "Software Developer Intern - Single-Family"
+    },
+    "Freeform | Electrical Engineer Intern": {
+      "company": "Freeform",
+      "role": "Electrical Engineer Intern"
+    },
+    "Freeform | Software Engineer Intern - Summer 2027": {
+      "company": "Freeform",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "G-Research | Data Science Intern": {
+      "company": "G-Research",
+      "role": "Data Science Intern"
+    },
+    "G-Research | Quantitative Research Internship": {
+      "company": "G-Research",
+      "role": "Quantitative Research Internship"
+    },
+    "GE Aerospace | Applied AI Intern": {
+      "company": "GE Aerospace",
+      "role": "Applied AI Intern"
+    },
+    "GE Aerospace | Engines Engineering Intern - Computer or Software Engineering": {
+      "company": "GE Aerospace",
+      "role": "Engines Engineering Intern - Computer or Software Engineering"
+    },
+    "GE Appliances | Electrical Engineer Co-op": {
+      "company": "GE Appliances",
+      "role": "Electrical Engineer Co-op"
+    },
+    "GE Appliances | Software Engineer Co-op - Software Engineering": {
+      "company": "GE Appliances",
+      "role": "Software Engineer Co-op - Software Engineering"
+    },
+    "GE Healthcare | Engineering Development Program Intern - Hardware": {
+      "company": "GE Healthcare",
+      "role": "Engineering Development Program Intern - Hardware"
+    },
+    "GE Healthcare | Engineering Development Program Intern - Software": {
+      "company": "GE Healthcare",
+      "role": "Engineering Development Program Intern - Software"
+    },
+    "GE Vernova | CIC Systems Engineer Co-op": {
+      "company": "GE Vernova",
+      "role": "CIC Systems Engineer Co-op"
+    },
+    "GE Vernova | Controls Product Management Intern - Summer 2027": {
+      "company": "GE Vernova",
+      "role": "Controls Product Management Intern - Summer 2027"
+    },
+    "GE Vernova | Hardware Engineer Intern - Critical Infrastructure Communications": {
+      "company": "GE Vernova",
+      "role": "Hardware Engineer Intern - Critical Infrastructure Communications"
+    },
+    "GE Vernova | Product Management Intern - Controls Lifecare Services": {
+      "company": "GE Vernova",
+      "role": "Product Management Intern - Controls Lifecare Services"
+    },
+    "GE Vernova | Project Engineer Intern - Summer 2027": {
+      "company": "GE Vernova",
+      "role": "Project Engineer Intern - Summer 2027"
+    },
+    "Garda Capital Partners | Software Engineer Intern": {
+      "company": "Garda Capital Partners",
+      "role": "Software Engineer Intern"
+    },
+    "Garda Capital Partners | Trading Analyst Intern - Credit": {
+      "company": "Garda Capital Partners",
+      "role": "Trading Analyst Intern - Credit"
+    },
+    "Garmin | Electrical Design Engineer Intern": {
+      "company": "Garmin",
+      "role": "Electrical Design Engineer Intern"
+    },
+    "Garmin | Software Engineer Intern": {
+      "company": "Garmin",
+      "role": "Software Engineer Intern"
+    },
+    "General Dynamics UK | Computer Science and Robotics Co-op - Information Technology": {
+      "company": "General Dynamics UK",
+      "role": "Computer Science and Robotics Co-op - Information Technology"
+    },
+    "General Matter | Embedded Software Engineer Intern": {
+      "company": "General Matter",
+      "role": "Embedded Software Engineer Intern"
+    },
+    "General Matter | Software Engineering Intern": {
+      "company": "General Matter",
+      "role": "Software Engineering Intern"
+    },
+    "Geotab | Hardware Developer Intern": {
+      "company": "Geotab",
+      "role": "Hardware Developer Intern"
+    },
+    "GlobalFoundries | RF Technology Development Automation Engineer Intern - Summer 2027": {
+      "company": "GlobalFoundries",
+      "role": "RF Technology Development Automation Engineer Intern - Summer 2027"
+    },
+    "GlobalFoundries | SiGe HBT Device Modelling Intern - Summer 2027": {
+      "company": "GlobalFoundries",
+      "role": "SiGe HBT Device Modelling Intern - Summer 2027"
+    },
+    "GlobalFoundries | Silicon Photonics Advanced Packaging Intern": {
+      "company": "GlobalFoundries",
+      "role": "Silicon Photonics Advanced Packaging Intern"
+    },
+    "Goldman Sachs | Quantitative Strategist Intern - Asset and Wealth Management - Quantitative Strats": {
+      "company": "Goldman Sachs",
+      "role": "Quantitative Strategist Intern - Asset and Wealth Management - Quantitative Strats"
+    },
+    "Goldman Sachs | Summer Analyst Intern - Engineering": {
+      "company": "Goldman Sachs",
+      "role": "Summer Analyst Intern - Engineering"
+    },
+    "Google | Data Science PhD Intern": {
+      "company": "Google",
+      "role": "Data Science PhD Intern"
+    },
+    "Google | Research Intern - PhD": {
+      "company": "Google",
+      "role": "Research Intern - PhD"
+    },
+    "Google | Research Scientist PhD Intern": {
+      "company": "Google",
+      "role": "Research Scientist PhD Intern"
+    },
+    "Google | Software Developer Intern": {
+      "company": "Google",
+      "role": "Software Developer Intern"
+    },
+    "Google | Software Engineer Intern - Multiple Teams": {
+      "company": "Google",
+      "role": "Software Engineer Intern - Multiple Teams"
+    },
+    "Google | Software Engineering or Site Reliability Engineering PhD Intern": {
+      "company": "Google",
+      "role": "Software Engineering or Site Reliability Engineering PhD Intern"
+    },
+    "GuideWell Mutual | Enterprise Analytics Intern": {
+      "company": "GuideWell Mutual",
+      "role": "Enterprise Analytics Intern"
+    },
+    "Gulfstream | Software Engineer Intern - IEF": {
+      "company": "Gulfstream",
+      "role": "Software Engineer Intern - IEF"
+    },
+    "HD Supply | Artificial Intelligence and Data Science Intern - Artificial Intelligence & Data Science": {
+      "company": "HD Supply",
+      "role": "Artificial Intelligence and Data Science Intern - Artificial Intelligence & Data Science"
+    },
+    "HP IQ | Software Engineer Intern - AML Platform": {
+      "company": "HP IQ",
+      "role": "Software Engineer Intern - AML Platform"
+    },
+    "HP IQ | Software Engineer Intern - Cloud Services - Summer 2027": {
+      "company": "HP IQ",
+      "role": "Software Engineer Intern - Cloud Services - Summer 2027"
+    },
+    "HP IQ | Software Engineer Intern - Connectivity": {
+      "company": "HP IQ",
+      "role": "Software Engineer Intern - Connectivity"
+    },
+    "HPR | FPGA Engineer Intern": {
+      "company": "HPR",
+      "role": "FPGA Engineer Intern"
+    },
+    "HPR | Software Engineer Intern": {
+      "company": "HPR",
+      "role": "Software Engineer Intern"
+    },
+    "Hadrian | Data Science/Data Engineer Intern": {
+      "company": "Hadrian",
+      "role": "Data Science/Data Engineer Intern"
+    },
+    "Hadrian | Software Engineer Intern": {
+      "company": "Hadrian",
+      "role": "Software Engineer Intern"
+    },
+    "Heliux | Software Engineer Intern": {
+      "company": "Heliux",
+      "role": "Software Engineer Intern"
+    },
+    "Hermeus | Software Engineer Intern - Command & Control": {
+      "company": "Hermeus",
+      "role": "Software Engineer Intern - Command & Control"
+    },
+    "Hexagon AB | Defense Engineer Intern - Aerospace and Defense Engineering": {
+      "company": "Hexagon AB",
+      "role": "Defense Engineer Intern - Aerospace and Defense Engineering"
+    },
+    "Hexagon AB | Positioning Services Intern": {
+      "company": "Hexagon AB",
+      "role": "Positioning Services Intern"
+    },
+    "Hilton Worldwide | Corporate Summer Internship - Technology, Software Engineering and Cyber": {
+      "company": "Hilton Worldwide",
+      "role": "Corporate Summer Internship - Technology, Software Engineering and Cyber"
+    },
+    "Honeywell | Artificial Intelligence/Machine Learning Intern": {
+      "company": "Honeywell",
+      "role": "Artificial Intelligence/Machine Learning Intern"
+    },
+    "Honeywell | Embedded Engineer Intern": {
+      "company": "Honeywell",
+      "role": "Embedded Engineer Intern"
+    },
+    "Honeywell | Offering Management Intern": {
+      "company": "Honeywell",
+      "role": "Offering Management Intern"
+    },
+    "Honeywell | Software Engineer Intern - Computer Science": {
+      "company": "Honeywell",
+      "role": "Software Engineer Intern - Computer Science"
+    },
+    "Hormel Foods | Enterprise Analytics Intern - Campus Recruiting": {
+      "company": "Hormel Foods",
+      "role": "Enterprise Analytics Intern - Campus Recruiting"
+    },
+    "Hudson River Trading | Algorithm Development Intern - Quant Research": {
+      "company": "Hudson River Trading",
+      "role": "Algorithm Development Intern - Quant Research"
+    },
+    "Hudson River Trading | Hardware Engineer Intern": {
+      "company": "Hudson River Trading",
+      "role": "Hardware Engineer Intern"
+    },
+    "Hudson River Trading | Software Engineer Intern - C++ or Python": {
+      "company": "Hudson River Trading",
+      "role": "Software Engineer Intern - C++ or Python"
+    },
+    "Hunt Oil Company | Reservoir Engineer Intern": {
+      "company": "Hunt Oil Company",
+      "role": "Reservoir Engineer Intern"
+    },
+    "Huntington Bancshares | Data and Analytics Intern": {
+      "company": "Huntington Bancshares",
+      "role": "Data and Analytics Intern"
+    },
+    "Hy-Vee | Data Integration Intern": {
+      "company": "Hy-Vee",
+      "role": "Data Integration Intern"
+    },
+    "Hy-Vee | Software Engineer Intern": {
+      "company": "Hy-Vee",
+      "role": "Software Engineer Intern"
+    },
+    "IAT Insurance Group | Data & Integration Intern": {
+      "company": "IAT Insurance Group",
+      "role": "Data & Integration Intern"
+    },
+    "ID.me | Software Development Engineer Intern": {
+      "company": "ID.me",
+      "role": "Software Development Engineer Intern"
+    },
+    "IMC Trading | Performance Engineer Intern": {
+      "company": "IMC Trading",
+      "role": "Performance Engineer Intern"
+    },
+    "InfiniteQuant | Quantitative Developer Internship - Summer 2027": {
+      "company": "InfiniteQuant",
+      "role": "Quantitative Developer Internship - Summer 2027"
+    },
+    "Ingredion | Digital Innovation Intern": {
+      "company": "Ingredion",
+      "role": "Digital Innovation Intern"
+    },
+    "Innovative Systems | Software Engineer Intern/Co-op": {
+      "company": "Innovative Systems",
+      "role": "Software Engineer Intern/Co-op"
+    },
+    "Intel | Platform Hardware and Systems Engineering Intern - Bachelor's": {
+      "company": "Intel",
+      "role": "Platform Hardware and Systems Engineering Intern - Bachelor's"
+    },
+    "Intel | Software Engineer Intern": {
+      "company": "Intel",
+      "role": "Software Engineer Intern"
+    },
+    "JP Morgan Chase | Data & AI Intern - Analyst": {
+      "company": "JP Morgan Chase",
+      "role": "Data & AI Intern - Analyst"
+    },
+    "JP Morgan Chase | Data & AI Intern - Data & AI Program": {
+      "company": "JP Morgan Chase",
+      "role": "Data & AI Intern - Data & AI Program"
+    },
+    "JP Morgan Chase | Quantitative Research Intern": {
+      "company": "JP Morgan Chase",
+      "role": "Quantitative Research Intern"
+    },
+    "JP Morgan Chase | Software Engineer Intern - Immersion Program": {
+      "company": "JP Morgan Chase",
+      "role": "Software Engineer Intern - Immersion Program"
+    },
+    "John Deere | Data & Analytics Intern": {
+      "company": "John Deere",
+      "role": "Data & Analytics Intern"
+    },
+    "John Deere | Information Technology Intern - Technology": {
+      "company": "John Deere",
+      "role": "Information Technology Intern - Technology"
+    },
+    "Johns Hopkins Applied Physics Laboratory | 2027 Internship - Weapon Control": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "2027 Internship - Weapon Control"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Mission Systems Engineering Intern": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Mission Systems Engineering Intern"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Sensor Systems Intern - Data Analytics": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Sensor Systems Intern - Data Analytics"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Software Developer Intern - Tactical System Prototyping and Deployment": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Software Developer Intern - Tactical System Prototyping and Deployment"
+    },
+    "Johns Manville | Product Management Intern": {
+      "company": "Johns Manville",
+      "role": "Product Management Intern"
+    },
+    "Johnson & Johnson | Data Science Co-op - Summer 2027": {
+      "company": "Johnson & Johnson",
+      "role": "Data Science Co-op - Summer 2027"
+    },
+    "Johnson & Johnson | Electrical Engineering Co-op": {
+      "company": "Johnson & Johnson",
+      "role": "Electrical Engineering Co-op"
+    },
+    "Johnson & Johnson | Quality Data Science Co-op - MD Q&C Digital Solutions": {
+      "company": "Johnson & Johnson",
+      "role": "Quality Data Science Co-op - MD Q&C Digital Solutions"
+    },
+    "Johnson & Johnson | Software Engineer Co-op": {
+      "company": "Johnson & Johnson",
+      "role": "Software Engineer Co-op"
+    },
+    "Jump Trading | Campus Quantitative Researcher Intern - PhD": {
+      "company": "Jump Trading",
+      "role": "Campus Quantitative Researcher Intern - PhD"
+    },
+    "K2 Space | Software Engineer Intern - Summer 2027": {
+      "company": "K2 Space",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "KPMG | Product Specialist Intern Co-op - Asset Management Digital Solutions": {
+      "company": "KPMG",
+      "role": "Product Specialist Intern Co-op - Asset Management Digital Solutions"
+    },
+    "KeyBank | Data Intern - Key Technology & Services - Data Track": {
+      "company": "KeyBank",
+      "role": "Data Intern - Key Technology & Services - Data Track"
+    },
+    "Keysight Technologies | Full Stack Intern": {
+      "company": "Keysight Technologies",
+      "role": "Full Stack Intern"
+    },
+    "Kinder Morgan | Information Technology Intern - Application Development": {
+      "company": "Kinder Morgan",
+      "role": "Information Technology Intern - Application Development"
+    },
+    "Kinder Morgan | Intern - IT": {
+      "company": "Kinder Morgan",
+      "role": "Intern - IT"
+    },
+    "LPL Financial Holdings | Data Engineer Intern - Data": {
+      "company": "LPL Financial Holdings",
+      "role": "Data Engineer Intern - Data"
+    },
+    "LPL Financial Holdings | Product Intern - Product": {
+      "company": "LPL Financial Holdings",
+      "role": "Product Intern - Product"
+    },
+    "LPL Financial Holdings | Software Engineer Intern": {
+      "company": "LPL Financial Holdings",
+      "role": "Software Engineer Intern"
+    },
+    "Land O'Lakes | Business Insights & Analytics Intern - Animal Nutrition": {
+      "company": "Land O'Lakes",
+      "role": "Business Insights & Analytics Intern - Animal Nutrition"
+    },
+    "Lawrence Livermore National Laboratory | Computing Undergraduate Student Intern - Early Internship Program": {
+      "company": "Lawrence Livermore National Laboratory",
+      "role": "Computing Undergraduate Student Intern - Early Internship Program"
+    },
+    "Leidos | Data Engineering & Analytics Intern": {
+      "company": "Leidos",
+      "role": "Data Engineering & Analytics Intern"
+    },
+    "MSA Safety | Software Engineer Intern - Product Development - Summer 2027": {
+      "company": "MSA Safety",
+      "role": "Software Engineer Intern - Product Development - Summer 2027"
+    },
+    "Manulife Financial | AI Intern - AI": {
+      "company": "Manulife Financial",
+      "role": "AI Intern - AI"
+    },
+    "Manulife Financial | Quantitative Analyst Co-op Intern - Derivative and Asset Modeling": {
+      "company": "Manulife Financial",
+      "role": "Quantitative Analyst Co-op Intern - Derivative and Asset Modeling"
+    },
+    "Manulife Financial | Reporting Analyst Intern": {
+      "company": "Manulife Financial",
+      "role": "Reporting Analyst Intern"
+    },
+    "Manulife Financial | Software Engineering Intern": {
+      "company": "Manulife Financial",
+      "role": "Software Engineering Intern"
+    },
+    "Marsh | Government Health Consulting Informatics Intern - College Program": {
+      "company": "Marsh",
+      "role": "Government Health Consulting Informatics Intern - College Program"
+    },
+    "Marshall Wace | Quantitative Research Intern": {
+      "company": "Marshall Wace",
+      "role": "Quantitative Research Intern"
+    },
+    "Marshall Wace | Technology Intern": {
+      "company": "Marshall Wace",
+      "role": "Technology Intern"
+    },
+    "Marvell | Physical Design Engineer Intern - BS": {
+      "company": "Marvell",
+      "role": "Physical Design Engineer Intern - BS"
+    },
+    "Mastercard | Data Engineer Intern": {
+      "company": "Mastercard",
+      "role": "Data Engineer Intern"
+    },
+    "Mastercard | Data Scientist Intern": {
+      "company": "Mastercard",
+      "role": "Data Scientist Intern"
+    },
+    "Mastercard | Software Engineer Intern": {
+      "company": "Mastercard",
+      "role": "Software Engineer Intern"
+    },
+    "Mastercard | Technical Product Management Intern - Switching Solutions": {
+      "company": "Mastercard",
+      "role": "Technical Product Management Intern - Switching Solutions"
+    },
+    "Maven Securities | Quant Trader Intern": {
+      "company": "Maven Securities",
+      "role": "Quant Trader Intern"
+    },
+    "Maven Securities | Software Developer Intern": {
+      "company": "Maven Securities",
+      "role": "Software Developer Intern"
+    },
+    "Maven Securities | Trader Intern - Summer": {
+      "company": "Maven Securities",
+      "role": "Trader Intern - Summer"
+    },
+    "McKesson | Data Analyst Intern": {
+      "company": "McKesson",
+      "role": "Data Analyst Intern"
+    },
+    "McKesson | Software Engineer Intern": {
+      "company": "McKesson",
+      "role": "Software Engineer Intern"
+    },
+    "Medline | Business Intelligence Development/Analytics Intern": {
+      "company": "Medline",
+      "role": "Business Intelligence Development/Analytics Intern"
+    },
+    "Medline | MBA Intern - Product Management": {
+      "company": "Medline",
+      "role": "MBA Intern - Product Management"
+    },
+    "Medline | Software Engineer Intern - Summer 2027": {
+      "company": "Medline",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Medpace | Python Intern - Summer 2027": {
+      "company": "Medpace",
+      "role": "Python Intern - Summer 2027"
+    },
+    "Medtronic | Software Engineer Intern": {
+      "company": "Medtronic",
+      "role": "Software Engineer Intern"
+    },
+    "Melius | Software Engineer Intern": {
+      "company": "Melius",
+      "role": "Software Engineer Intern"
+    },
+    "Michelin | Data Engineering Intern": {
+      "company": "Michelin",
+      "role": "Data Engineering Intern"
+    },
+    "Microsoft | Software Engineer Intern - AI and ML": {
+      "company": "Microsoft",
+      "role": "Software Engineer Intern - AI and ML"
+    },
+    "Microsoft | Software Engineer Intern - CoreAI": {
+      "company": "Microsoft",
+      "role": "Software Engineer Intern - CoreAI"
+    },
+    "Moderna | Applied Technologies Intern": {
+      "company": "Moderna",
+      "role": "Applied Technologies Intern"
+    },
+    "Momentive | Data Science Intern - Enterprise Reporting & Analytics": {
+      "company": "Momentive",
+      "role": "Data Science Intern - Enterprise Reporting & Analytics"
+    },
+    "Momentive | Service Quality Intern": {
+      "company": "Momentive",
+      "role": "Service Quality Intern"
+    },
+    "Momentive | Software Development Intern": {
+      "company": "Momentive",
+      "role": "Software Development Intern"
+    },
+    "Montenson | Artificial Intelligence Intern": {
+      "company": "Montenson",
+      "role": "Artificial Intelligence Intern"
+    },
+    "Motorola | Android Application Developer Intern - Summer 2027": {
+      "company": "Motorola",
+      "role": "Android Application Developer Intern - Summer 2027"
+    },
+    "Motorola | Android Platform Software Engineer Intern - Summer 2027": {
+      "company": "Motorola",
+      "role": "Android Platform Software Engineer Intern - Summer 2027"
+    },
+    "Motorola | Test Engineer Intern": {
+      "company": "Motorola",
+      "role": "Test Engineer Intern"
+    },
+    "NJM Insurance Group | Insurance Product Management Analyst Intern 3": {
+      "company": "NJM Insurance Group",
+      "role": "Insurance Product Management Analyst Intern 3"
+    },
+    "NVIDIA | Digital Circuit Design Intern": {
+      "company": "NVIDIA",
+      "role": "Digital Circuit Design Intern"
+    },
+    "NVIDIA | Robotics Intern - Ph.D. Research": {
+      "company": "NVIDIA",
+      "role": "Robotics Intern - Ph.D. Research"
+    },
+    "NVIDIA | Software Engineering Intern": {
+      "company": "NVIDIA",
+      "role": "Software Engineering Intern"
+    },
+    "National Information Solutions Cooperative | Data Engineer Intern": {
+      "company": "National Information Solutions Cooperative",
+      "role": "Data Engineer Intern"
+    },
+    "National Information Solutions Cooperative | Software Development Intern": {
+      "company": "National Information Solutions Cooperative",
+      "role": "Software Development Intern"
+    },
+    "Nationwide | Feature Engineer Intern - Enterprise Analytics Office": {
+      "company": "Nationwide",
+      "role": "Feature Engineer Intern - Enterprise Analytics Office"
+    },
+    "Nationwide | State Product Analyst Intern - Personal Lines": {
+      "company": "Nationwide",
+      "role": "State Product Analyst Intern - Personal Lines"
+    },
+    "Newrez | Software Developer Intern": {
+      "company": "Newrez",
+      "role": "Software Developer Intern"
+    },
+    "NiSource | People Analytics Intern": {
+      "company": "NiSource",
+      "role": "People Analytics Intern"
+    },
+    "NiSource | Software Engineer Intern": {
+      "company": "NiSource",
+      "role": "Software Engineer Intern"
+    },
+    "Nike | Software Engineer Intern": {
+      "company": "Nike",
+      "role": "Software Engineer Intern"
+    },
+    "Nokia | AI Agent Development Co-op": {
+      "company": "Nokia",
+      "role": "AI Agent Development Co-op"
+    },
+    "Nokia | Optical Test Co-op": {
+      "company": "Nokia",
+      "role": "Optical Test Co-op"
+    },
+    "Nokia | Software Engineer Co-op - Deepfield": {
+      "company": "Nokia",
+      "role": "Software Engineer Co-op - Deepfield"
+    },
+    "Northern Trust | Technology Intern - Data Science and Analytics": {
+      "company": "Northern Trust",
+      "role": "Technology Intern - Data Science and Analytics"
+    },
+    "Northern Trust | Technology Intern - Software Engineering": {
+      "company": "Northern Trust",
+      "role": "Technology Intern - Software Engineering"
+    },
+    "Northrop Grumman | Software Engineer Intern": {
+      "company": "Northrop Grumman",
+      "role": "Software Engineer Intern"
+    },
+    "Northrop Grumman | Software Engineer Intern - Aeronautics Systems": {
+      "company": "Northrop Grumman",
+      "role": "Software Engineer Intern - Aeronautics Systems"
+    },
+    "Northwestern Mutual | Quantitative Analyst Intern - Public Investments": {
+      "company": "Northwestern Mutual",
+      "role": "Quantitative Analyst Intern - Public Investments"
+    },
+    "Northwood Space | Embedded Software Engineer Intern": {
+      "company": "Northwood Space",
+      "role": "Embedded Software Engineer Intern"
+    },
+    "Northwood Space | Software Engineer Intern - Multiple Teams": {
+      "company": "Northwood Space",
+      "role": "Software Engineer Intern - Multiple Teams"
+    },
+    "Notion | Software Engineer Intern - Summer 2027": {
+      "company": "Notion",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Nucor | Commodity Markets Analyst Intern": {
+      "company": "Nucor",
+      "role": "Commodity Markets Analyst Intern"
+    },
+    "Old Mission | Software Engineer Intern": {
+      "company": "Old Mission",
+      "role": "Software Engineer Intern"
+    },
+    "Ontario Teachers' Pension Plan | Risk Intern - Models and Asset Liability": {
+      "company": "Ontario Teachers' Pension Plan",
+      "role": "Risk Intern - Models and Asset Liability"
+    },
+    "Ontario Teachers' Pension Plan | Total Fund Risk Intern - Months": {
+      "company": "Ontario Teachers' Pension Plan",
+      "role": "Total Fund Risk Intern - Months"
+    },
+    "Optiver | FPGA Engineer Intern": {
+      "company": "Optiver",
+      "role": "FPGA Engineer Intern"
+    },
+    "Optiver | Institutional Trader Intern": {
+      "company": "Optiver",
+      "role": "Institutional Trader Intern"
+    },
+    "Optiver | Quantitative Intern - Summer 2027": {
+      "company": "Optiver",
+      "role": "Quantitative Intern - Summer 2027"
+    },
+    "Optiver | Software Engineer Intern": {
+      "company": "Optiver",
+      "role": "Software Engineer Intern"
+    },
+    "Optiver | Trading Automation and Operations Intern": {
+      "company": "Optiver",
+      "role": "Trading Automation and Operations Intern"
+    },
+    "Oshkosh | Product Management Intern - Summer 2027": {
+      "company": "Oshkosh",
+      "role": "Product Management Intern - Summer 2027"
+    },
+    "Oshkosh | Telematics Intern": {
+      "company": "Oshkosh",
+      "role": "Telematics Intern"
+    },
+    "PDT Partners | Software Engineer Intern": {
+      "company": "PDT Partners",
+      "role": "Software Engineer Intern"
+    },
+    "PIMCO | Client Solutions & Analytics Analyst Intern": {
+      "company": "PIMCO",
+      "role": "Client Solutions & Analytics Analyst Intern"
+    },
+    "PIMCO | Product Strategy Analyst Intern": {
+      "company": "PIMCO",
+      "role": "Product Strategy Analyst Intern"
+    },
+    "PIMCO | Quantitative Research Analyst Intern - Client Solutions & Analytics": {
+      "company": "PIMCO",
+      "role": "Quantitative Research Analyst Intern - Client Solutions & Analytics"
+    },
+    "PIMCO | Software Engineering Intern - Technology Analyst": {
+      "company": "PIMCO",
+      "role": "Software Engineering Intern - Technology Analyst"
+    },
+    "PayPal | Software Engineer Intern": {
+      "company": "PayPal",
+      "role": "Software Engineer Intern"
+    },
+    "Pella | Data Engineer Intern - Summer 2027": {
+      "company": "Pella",
+      "role": "Data Engineer Intern - Summer 2027"
+    },
+    "Pella | Software Intern": {
+      "company": "Pella",
+      "role": "Software Intern"
+    },
+    "Pentair | Product Management Internship": {
+      "company": "Pentair",
+      "role": "Product Management Internship"
+    },
+    "Perpay | Analytics Intern": {
+      "company": "Perpay",
+      "role": "Analytics Intern"
+    },
+    "Perry Homes | Options Analyst Intern": {
+      "company": "Perry Homes",
+      "role": "Options Analyst Intern"
+    },
+    "Persona AI | Electrical Engineer Intern": {
+      "company": "Persona AI",
+      "role": "Electrical Engineer Intern"
+    },
+    "Persona AI | Robotics Software Intern - Manipulation": {
+      "company": "Persona AI",
+      "role": "Robotics Software Intern - Manipulation"
+    },
+    "Philips | Data Engineering Co-op": {
+      "company": "Philips",
+      "role": "Data Engineering Co-op"
+    },
+    "Philips | Data Scientist Co-op": {
+      "company": "Philips",
+      "role": "Data Scientist Co-op"
+    },
+    "Polaris | Predictive Data Science Intern - Digital & IT": {
+      "company": "Polaris",
+      "role": "Predictive Data Science Intern - Digital & IT"
+    },
+    "Post Holdings | Data Science Intern - Summer 2027": {
+      "company": "Post Holdings",
+      "role": "Data Science Intern - Summer 2027"
+    },
+    "PricewaterhouseCoopers | Data Enablement Co-op - CPA": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Data Enablement Co-op - CPA"
+    },
+    "PricewaterhouseCoopers | Deals Analytics Intern - DTDS": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Deals Analytics Intern - DTDS"
+    },
+    "PricewaterhouseCoopers | Tax Innovation Delivery Experience Intern - Multiple Teams": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Tax Innovation Delivery Experience Intern - Multiple Teams"
+    },
+    "PricewaterhouseCoopers | Tax Innovation Delivery Experience Intern - Product Management": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Tax Innovation Delivery Experience Intern - Product Management"
+    },
+    "Primer | Software Engineer Intern - Full Stack": {
+      "company": "Primer",
+      "role": "Software Engineer Intern - Full Stack"
+    },
+    "Principal Financial Group | Software Engineer Intern - Summer 2027": {
+      "company": "Principal Financial Group",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Procter & Gamble | Analytics & Insights Intern/Co-op": {
+      "company": "Procter & Gamble",
+      "role": "Analytics & Insights Intern/Co-op"
+    },
+    "Procter & Gamble | Data Scientist Intern": {
+      "company": "Procter & Gamble",
+      "role": "Data Scientist Intern"
+    },
+    "Procter & Gamble | Digital Technologies Intern/Co-op": {
+      "company": "Procter & Gamble",
+      "role": "Digital Technologies Intern/Co-op"
+    },
+    "Procter & Gamble | IT Engineering Internship - Software, Platform, Network": {
+      "company": "Procter & Gamble",
+      "role": "IT Engineering Internship - Software, Platform, Network"
+    },
+    "Pylon | Software Engineer Intern": {
+      "company": "Pylon",
+      "role": "Software Engineer Intern"
+    },
+    "Qorvo | Full-Stack Web Developer Intern": {
+      "company": "Qorvo",
+      "role": "Full-Stack Web Developer Intern"
+    },
+    "Quadrillion | Software Engineering Intern": {
+      "company": "Quadrillion",
+      "role": "Software Engineering Intern"
+    },
+    "Quantbot Technologies | Machine Learning Research Engineer Intern": {
+      "company": "Quantbot Technologies",
+      "role": "Machine Learning Research Engineer Intern"
+    },
+    "Quantbot Technologies | Quantitative Researcher Intern": {
+      "company": "Quantbot Technologies",
+      "role": "Quantitative Researcher Intern"
+    },
+    "RSM | Application Development Intern - Summer 2027": {
+      "company": "RSM",
+      "role": "Application Development Intern - Summer 2027"
+    },
+    "RTX | Electrical Engineer Intern - Summer 2027": {
+      "company": "RTX",
+      "role": "Electrical Engineer Intern - Summer 2027"
+    },
+    "RTX | Software Engineer Co-op - Summer/Fall 2027": {
+      "company": "RTX",
+      "role": "Software Engineer Co-op - Summer/Fall 2027"
+    },
+    "RTX | Software Engineer Intern": {
+      "company": "RTX",
+      "role": "Software Engineer Intern"
+    },
+    "RTX | Software Engineering Intern": {
+      "company": "RTX",
+      "role": "Software Engineering Intern"
+    },
+    "RTX | Spectrum Dominance Intern": {
+      "company": "RTX",
+      "role": "Spectrum Dominance Intern"
+    },
+    "RTX | Technical Publications Technical Developer Intern - Artificial Intelligence/Machine Learning": {
+      "company": "RTX",
+      "role": "Technical Publications Technical Developer Intern - Artificial Intelligence/Machine Learning"
+    },
+    "Ragle Inc | Data Analytics Intern": {
+      "company": "Ragle Inc",
+      "role": "Data Analytics Intern"
+    },
+    "Ragle Inc | Data Engineering Intern": {
+      "company": "Ragle Inc",
+      "role": "Data Engineering Intern"
+    },
+    "Regions Bank | Human Resources Data and Analytics Intern": {
+      "company": "Regions Bank",
+      "role": "Human Resources Data and Analytics Intern"
+    },
+    "Regions Bank | Technology Intern - Multiple Teams": {
+      "company": "Regions Bank",
+      "role": "Technology Intern - Multiple Teams"
+    },
+    "Regions Bank | Technology, Operations, Digital, and Data Analytics Intern": {
+      "company": "Regions Bank",
+      "role": "Technology, Operations, Digital, and Data Analytics Intern"
+    },
+    "Repsol | Reservoir Engineer Intern": {
+      "company": "Repsol",
+      "role": "Reservoir Engineer Intern"
+    },
+    "Repsol | Subsurface Engineering Intern": {
+      "company": "Repsol",
+      "role": "Subsurface Engineering Intern"
+    },
+    "Rivian and Volkswagen Group Technologies | Software Engineering Intern - Applications - Infotainment & Mobile": {
+      "company": "Rivian and Volkswagen Group Technologies",
+      "role": "Software Engineering Intern - Applications - Infotainment & Mobile"
+    },
+    "Robert Bosch Venture Capital | Calibration Process Data Science Intern - 8 months/40 hours per week": {
+      "company": "Robert Bosch Venture Capital",
+      "role": "Calibration Process Data Science Intern - 8 months/40 hours per week"
+    },
+    "Roblox | Product Management Intern": {
+      "company": "Roblox",
+      "role": "Product Management Intern"
+    },
+    "Roblox | Software Engineer Intern": {
+      "company": "Roblox",
+      "role": "Software Engineer Intern"
+    },
+    "RoviSys | Engineering Co-op - Summer 2027": {
+      "company": "RoviSys",
+      "role": "Engineering Co-op - Summer 2027"
+    },
+    "Royal Bank of Canada | Business Analyst Intern - AI Innovation": {
+      "company": "Royal Bank of Canada",
+      "role": "Business Analyst Intern - AI Innovation"
+    },
+    "Royal Bank of Canada | Data Enablement Co-op - CFO - 8 Months": {
+      "company": "Royal Bank of Canada",
+      "role": "Data Enablement Co-op - CFO - 8 Months"
+    },
+    "Royal Bank of Canada | Financial Crimes Quality Assurance Intern - Grm": {
+      "company": "Royal Bank of Canada",
+      "role": "Financial Crimes Quality Assurance Intern - Grm"
+    },
+    "Royal Bank of Canada | Global Markets Quantitative Trading Summer Analyst - Capital Markets": {
+      "company": "Royal Bank of Canada",
+      "role": "Global Markets Quantitative Trading Summer Analyst - Capital Markets"
+    },
+    "Royal Bank of Canada | Quantitative Analyst Summer Associate - Quantitative Technology Services": {
+      "company": "Royal Bank of Canada",
+      "role": "Quantitative Analyst Summer Associate - Quantitative Technology Services"
+    },
+    "Ryan Companies | Business Intelligence Intern - Mission Critical": {
+      "company": "Ryan Companies",
+      "role": "Business Intelligence Intern - Mission Critical"
+    },
+    "Rystad Energy | Analyst Intern - Summer 2027": {
+      "company": "Rystad Energy",
+      "role": "Analyst Intern - Summer 2027"
+    },
+    "Saab | Software Engineer Co-op": {
+      "company": "Saab",
+      "role": "Software Engineer Co-op"
+    },
+    "Saab | Software Engineering Co-op": {
+      "company": "Saab",
+      "role": "Software Engineering Co-op"
+    },
+    "Sage | Software Engineer Intern - Edge - Summer 2027": {
+      "company": "Sage",
+      "role": "Software Engineer Intern - Edge - Summer 2027"
+    },
+    "Scale AI | Software Engineer Intern - Summer 2027": {
+      "company": "Scale AI",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Schonfeld | Risk Analyst Intern - DMFI": {
+      "company": "Schonfeld",
+      "role": "Risk Analyst Intern - DMFI"
+    },
+    "Schonfeld | Software Engineering Intern": {
+      "company": "Schonfeld",
+      "role": "Software Engineering Intern"
+    },
+    "Schonfeld | Systematic COO Intern": {
+      "company": "Schonfeld",
+      "role": "Systematic COO Intern"
+    },
+    "Schroders | Product Intern": {
+      "company": "Schroders",
+      "role": "Product Intern"
+    },
+    "Schroders | Product Strategy Intern": {
+      "company": "Schroders",
+      "role": "Product Strategy Intern"
+    },
+    "Schroders | Public Markets Quants Intern - Quants (Public Markets)": {
+      "company": "Schroders",
+      "role": "Public Markets Quants Intern - Quants (Public Markets)"
+    },
+    "Sensata | Electrical Engineer Intern": {
+      "company": "Sensata",
+      "role": "Electrical Engineer Intern"
+    },
+    "Shure | Application Software Engineer Intern": {
+      "company": "Shure",
+      "role": "Application Software Engineer Intern"
+    },
+    "Shure | Artificial Intelligence Engineer Intern": {
+      "company": "Shure",
+      "role": "Artificial Intelligence Engineer Intern"
+    },
+    "Shure | Automated Test Engineer Intern - Hardware": {
+      "company": "Shure",
+      "role": "Automated Test Engineer Intern - Hardware"
+    },
+    "Shure | Global Product Management Intern - Conferencing": {
+      "company": "Shure",
+      "role": "Global Product Management Intern - Conferencing"
+    },
+    "Sierra Nevada Corporation | Software Engineer Intern": {
+      "company": "Sierra Nevada Corporation",
+      "role": "Software Engineer Intern"
+    },
+    "Sierra Nevada Corporation | Test Engineer Intern - Summer 2027": {
+      "company": "Sierra Nevada Corporation",
+      "role": "Test Engineer Intern - Summer 2027"
+    },
+    "Sierra | Software Engineer Intern": {
+      "company": "Sierra",
+      "role": "Software Engineer Intern"
+    },
+    "Skydio | Autonomy Engineer Intern - Computer Vision / Deep Learning - Summer 2027": {
+      "company": "Skydio",
+      "role": "Autonomy Engineer Intern - Computer Vision / Deep Learning - Summer 2027"
+    },
+    "Skyward | Software Engineer Intern": {
+      "company": "Skyward",
+      "role": "Software Engineer Intern"
+    },
+    "Solidigm | Software Engineering Intern - Firmware & AI Engineering": {
+      "company": "Solidigm",
+      "role": "Software Engineering Intern - Firmware & AI Engineering"
+    },
+    "Southern Star Central Gas Pipeline | GIS Analyst Intern": {
+      "company": "Southern Star Central Gas Pipeline",
+      "role": "GIS Analyst Intern"
+    },
+    "SpaceX | Silicon Engineer Intern/Co-op": {
+      "company": "SpaceX",
+      "role": "Silicon Engineer Intern/Co-op"
+    },
+    "SpaceX | Software Engineering Intern/Co-op": {
+      "company": "SpaceX",
+      "role": "Software Engineering Intern/Co-op"
+    },
+    "Specter Aerospace | Full Stack Developer Co-op": {
+      "company": "Specter Aerospace",
+      "role": "Full Stack Developer Co-op"
+    },
+    "Springs Window Fashions | Data Analyst Intern - Consumer Business Unit": {
+      "company": "Springs Window Fashions",
+      "role": "Data Analyst Intern - Consumer Business Unit"
+    },
+    "Springs Window Fashions | Product Management Competitive Product Assessment Intern - Summer 2027": {
+      "company": "Springs Window Fashions",
+      "role": "Product Management Competitive Product Assessment Intern - Summer 2027"
+    },
+    "Springs Window Fashions | Software Engineering Intern - Summer 2027": {
+      "company": "Springs Window Fashions",
+      "role": "Software Engineering Intern - Summer 2027"
+    },
+    "Stanley Black & Decker | Embedded Software Engineering Intern": {
+      "company": "Stanley Black & Decker",
+      "role": "Embedded Software Engineering Intern"
+    },
+    "State Farm | Financial Operations Data Analytics Intern": {
+      "company": "State Farm",
+      "role": "Financial Operations Data Analytics Intern"
+    },
+    "Steel Dynamics | Software Development Intern": {
+      "company": "Steel Dynamics",
+      "role": "Software Development Intern"
+    },
+    "StepStone Group | AI Intern": {
+      "company": "StepStone Group",
+      "role": "AI Intern"
+    },
+    "Steven's Capital Management | Software Engineer": {
+      "company": "Steven's Capital Management",
+      "role": "Software Engineer"
+    },
+    "Stoke Space | Software Intern": {
+      "company": "Stoke Space",
+      "role": "Software Intern"
+    },
+    "Stryker | Data Analytics Intern - Multiple Teams": {
+      "company": "Stryker",
+      "role": "Data Analytics Intern - Multiple Teams"
+    },
+    "Stryker | Software Engineering Intern - Multiple Teams": {
+      "company": "Stryker",
+      "role": "Software Engineering Intern - Multiple Teams"
+    },
+    "Stryten | System Engineer Intern": {
+      "company": "Stryten",
+      "role": "System Engineer Intern"
+    },
+    "Susquehanna International Group | FPGA Engineer Intern": {
+      "company": "Susquehanna International Group",
+      "role": "FPGA Engineer Intern"
+    },
+    "Susquehanna International Group | Quantitative Trading Internship": {
+      "company": "Susquehanna International Group",
+      "role": "Quantitative Trading Internship"
+    },
+    "Susquehanna International Group | Trading Systems Engineer Intern": {
+      "company": "Susquehanna International Group",
+      "role": "Trading Systems Engineer Intern"
+    },
+    "Syngenta Group | Data Entry Intern - Product Safety": {
+      "company": "Syngenta Group",
+      "role": "Data Entry Intern - Product Safety"
+    },
+    "T. Rowe Price | Global Trading Intern": {
+      "company": "T. Rowe Price",
+      "role": "Global Trading Intern"
+    },
+    "TD Bank | Software Engineer Intern - Software Engineering Rotational Program": {
+      "company": "TD Bank",
+      "role": "Software Engineer Intern - Software Engineering Rotational Program"
+    },
+    "TELUS Digital | Product Analyst Intern": {
+      "company": "TELUS Digital",
+      "role": "Product Analyst Intern"
+    },
+    "TELUS Digital | Software Engineer Intern - US - Summer 2027": {
+      "company": "TELUS Digital",
+      "role": "Software Engineer Intern - US - Summer 2027"
+    },
+    "TJX | IT Engineer Intern": {
+      "company": "TJX",
+      "role": "IT Engineer Intern"
+    },
+    "TMEIC Corporation Americas | Applications Intern - AI and Machine Learning": {
+      "company": "TMEIC Corporation Americas",
+      "role": "Applications Intern - AI and Machine Learning"
+    },
+    "TWG Global | AI Engineer Intern - Summer 2027": {
+      "company": "TWG Global",
+      "role": "AI Engineer Intern - Summer 2027"
+    },
+    "Tarrant Regional Water District | Energy Intern": {
+      "company": "Tarrant Regional Water District",
+      "role": "Energy Intern"
+    },
+    "Teledyne | Software Engineer Intern": {
+      "company": "Teledyne",
+      "role": "Software Engineer Intern"
+    },
+    "Teledyne | Software Engineer Intern - NHRC": {
+      "company": "Teledyne",
+      "role": "Software Engineer Intern - NHRC"
+    },
+    "Tesla | Embedded Software Engineer Intern - Optimus": {
+      "company": "Tesla",
+      "role": "Embedded Software Engineer Intern - Optimus"
+    },
+    "Tesla | Physics Engine Development Engineer Intern - Optimus": {
+      "company": "Tesla",
+      "role": "Physics Engine Development Engineer Intern - Optimus"
+    },
+    "Tesla | Software Engineer Intern - Vehicle Software - Summer 2027": {
+      "company": "Tesla",
+      "role": "Software Engineer Intern - Vehicle Software - Summer 2027"
+    },
+    "Textron | Data Product & Analytics Intern": {
+      "company": "Textron",
+      "role": "Data Product & Analytics Intern"
+    },
+    "Textron | Integration Test Engineer Intern - Marine": {
+      "company": "Textron",
+      "role": "Integration Test Engineer Intern - Marine"
+    },
+    "Textron | Software Engineer Intern": {
+      "company": "Textron",
+      "role": "Software Engineer Intern"
+    },
+    "Textron | Software Engineer Intern - Electronic Systems": {
+      "company": "Textron",
+      "role": "Software Engineer Intern - Electronic Systems"
+    },
+    "The Boeing Company | Data Analytics Intern": {
+      "company": "The Boeing Company",
+      "role": "Data Analytics Intern"
+    },
+    "The Exploration Company | Engineering Intern - Software": {
+      "company": "The Exploration Company",
+      "role": "Engineering Intern - Software"
+    },
+    "The Federal Reserve System | Statistics Intern": {
+      "company": "The Federal Reserve System",
+      "role": "Statistics Intern"
+    },
+    "The Hartford | Data Engineer Intern - Technology, Data, AI, and Operations": {
+      "company": "The Hartford",
+      "role": "Data Engineer Intern - Technology, Data, AI, and Operations"
+    },
+    "The Hartford | Software Engineer Intern - Tech & Data Program": {
+      "company": "The Hartford",
+      "role": "Software Engineer Intern - Tech & Data Program"
+    },
+    "The Hartford | Software Engineer Intern - Technology & Data": {
+      "company": "The Hartford",
+      "role": "Software Engineer Intern - Technology & Data"
+    },
+    "The Hartford | Software Engineer Intern - Technology, Data, AI, and Operations": {
+      "company": "The Hartford",
+      "role": "Software Engineer Intern - Technology, Data, AI, and Operations"
+    },
+    "The Home Depot | Data Science & Analytics Intern": {
+      "company": "The Home Depot",
+      "role": "Data Science & Analytics Intern"
+    },
+    "The Home Depot | Product Management Intern": {
+      "company": "The Home Depot",
+      "role": "Product Management Intern"
+    },
+    "The Home Depot | Software Engineer Intern": {
+      "company": "The Home Depot",
+      "role": "Software Engineer Intern"
+    },
+    "The Nuclear Company | Data Science & Machine Learning Fellow Intern": {
+      "company": "The Nuclear Company",
+      "role": "Data Science & Machine Learning Fellow Intern"
+    },
+    "The Nuclear Company | Data Science Intern": {
+      "company": "The Nuclear Company",
+      "role": "Data Science Intern"
+    },
+    "The Nuclear Company | Software Engineering Intern - Product - Platform": {
+      "company": "The Nuclear Company",
+      "role": "Software Engineering Intern - Product - Platform"
+    },
+    "The Voleon Group | Software Engineer Intern": {
+      "company": "The Voleon Group",
+      "role": "Software Engineer Intern"
+    },
+    "The Walt Disney Company | Pricing & Product Development Intern - Spring 2027": {
+      "company": "The Walt Disney Company",
+      "role": "Pricing & Product Development Intern - Spring 2027"
+    },
+    "TikTok | AI Agent Product Manager Intern - Product Infrastructure-Customer Service Platform": {
+      "company": "TikTok",
+      "role": "AI Agent Product Manager Intern - Product Infrastructure-Customer Service Platform"
+    },
+    "TikTok | AI Governance Strategy Product Manager Intern - Platform Trust and Ecosystem": {
+      "company": "TikTok",
+      "role": "AI Governance Strategy Product Manager Intern - Platform Trust and Ecosystem"
+    },
+    "TikTok | AI Infrastructure Engineer Intern - Recommendation & LLM": {
+      "company": "TikTok",
+      "role": "AI Infrastructure Engineer Intern - Recommendation & LLM"
+    },
+    "TikTok | AI Product Manager Intern - Product Social": {
+      "company": "TikTok",
+      "role": "AI Product Manager Intern - Product Social"
+    },
+    "TikTok | AI Safety Evaluation & Governance Product Manager Intern - Multiple Teams": {
+      "company": "TikTok",
+      "role": "AI Safety Evaluation & Governance Product Manager Intern - Multiple Teams"
+    },
+    "TikTok | AI/ML Infrastructure Engineer Intern - Data-Arch-Tiktok Live": {
+      "company": "TikTok",
+      "role": "AI/ML Infrastructure Engineer Intern - Data-Arch-Tiktok Live"
+    },
+    "TikTok | Backend Software Engineer Intern - Creation Platform": {
+      "company": "TikTok",
+      "role": "Backend Software Engineer Intern - Creation Platform"
+    },
+    "TikTok | Backend Software Engineer Intern - LIVE Foundation Governance Engineering": {
+      "company": "TikTok",
+      "role": "Backend Software Engineer Intern - LIVE Foundation Governance Engineering"
+    },
+    "TikTok | Backend Software Engineer Intern - Product Infrastructure": {
+      "company": "TikTok",
+      "role": "Backend Software Engineer Intern - Product Infrastructure"
+    },
+    "TikTok | Data Analyst Intern - LIVE": {
+      "company": "TikTok",
+      "role": "Data Analyst Intern - LIVE"
+    },
+    "TikTok | Data Analyst and Business Projects Intern": {
+      "company": "TikTok",
+      "role": "Data Analyst and Business Projects Intern"
+    },
+    "TikTok | Data Engineer Intern - Monetization Data": {
+      "company": "TikTok",
+      "role": "Data Engineer Intern - Monetization Data"
+    },
+    "TikTok | Data Science Intern - Advertisement Team": {
+      "company": "TikTok",
+      "role": "Data Science Intern - Advertisement Team"
+    },
+    "TikTok | Ecosystem Analyst Intern - TikTok LIVE": {
+      "company": "TikTok",
+      "role": "Ecosystem Analyst Intern - TikTok LIVE"
+    },
+    "TikTok | Frontend Engineer Intern - Ads Interface": {
+      "company": "TikTok",
+      "role": "Frontend Engineer Intern - Ads Interface"
+    },
+    "TikTok | Fullstack Software Engineer Intern - Global E-Commerce": {
+      "company": "TikTok",
+      "role": "Fullstack Software Engineer Intern - Global E-Commerce"
+    },
+    "TikTok | LLM Post-training Engineer Intern - Research & Product": {
+      "company": "TikTok",
+      "role": "LLM Post-training Engineer Intern - Research & Product"
+    },
+    "TikTok | Machine Learning Engineer Intern": {
+      "company": "TikTok",
+      "role": "Machine Learning Engineer Intern"
+    },
+    "TikTok | Machine Learning Engineer Intern - Data-Global E-Commerce-Search": {
+      "company": "TikTok",
+      "role": "Machine Learning Engineer Intern - Data-Global E-Commerce-Search"
+    },
+    "TikTok | Machine Learning Engineer Intern - E-Commerce Knowledge Graph": {
+      "company": "TikTok",
+      "role": "Machine Learning Engineer Intern - E-Commerce Knowledge Graph"
+    },
+    "TikTok | Machine Learning Engineer Intern - E-Commerce Recommendation Foundation": {
+      "company": "TikTok",
+      "role": "Machine Learning Engineer Intern - E-Commerce Recommendation Foundation"
+    },
+    "TikTok | Machine Learning Engineer Intern - Recommendation": {
+      "company": "TikTok",
+      "role": "Machine Learning Engineer Intern - Recommendation"
+    },
+    "TikTok | Machine Learning Engineer Intern - Search": {
+      "company": "TikTok",
+      "role": "Machine Learning Engineer Intern - Search"
+    },
+    "TikTok | Mobile Software Engineer Intern - Global E-Commerce": {
+      "company": "TikTok",
+      "role": "Mobile Software Engineer Intern - Global E-Commerce"
+    },
+    "TikTok | Product Manager Intern - Signal and Identity Product": {
+      "company": "TikTok",
+      "role": "Product Manager Intern - Signal and Identity Product"
+    },
+    "TikTok | Product Manager Intern - TikTok LIVE-AI & Ecosystem Governance": {
+      "company": "TikTok",
+      "role": "Product Manager Intern - TikTok LIVE-AI & Ecosystem Governance"
+    },
+    "TikTok | Product Operations Intern": {
+      "company": "TikTok",
+      "role": "Product Operations Intern"
+    },
+    "TikTok | Product Operations Intern - Apps and API": {
+      "company": "TikTok",
+      "role": "Product Operations Intern - Apps and API"
+    },
+    "TikTok | Product Operations Intern - TikTok Shop Apps and API": {
+      "company": "TikTok",
+      "role": "Product Operations Intern - TikTok Shop Apps and API"
+    },
+    "TikTok | Product Operations Intern - TikTok Shop Apps and API - MBA": {
+      "company": "TikTok",
+      "role": "Product Operations Intern - TikTok Shop Apps and API - MBA"
+    },
+    "TikTok | Product Solutions and Operations Intern - Commerce Ads": {
+      "company": "TikTok",
+      "role": "Product Solutions and Operations Intern - Commerce Ads"
+    },
+    "TikTok | Recommendation Product Manager Intern - Content Ecosystem": {
+      "company": "TikTok",
+      "role": "Recommendation Product Manager Intern - Content Ecosystem"
+    },
+    "TikTok | Research Engineer Intern - Monetization Technology - Business Integrity": {
+      "company": "TikTok",
+      "role": "Research Engineer Intern - Monetization Technology - Business Integrity"
+    },
+    "TikTok | Software Engineer Intern": {
+      "company": "TikTok",
+      "role": "Software Engineer Intern"
+    },
+    "TikTok | Software Engineer Intern - Foundation Platform": {
+      "company": "TikTok",
+      "role": "Software Engineer Intern - Foundation Platform"
+    },
+    "TikTok | Software Engineer Intern - Global E-commerce-Search": {
+      "company": "TikTok",
+      "role": "Software Engineer Intern - Global E-commerce-Search"
+    },
+    "TikTok | Software Engineer Intern - Recommendation Infra - Performance Efficiency": {
+      "company": "TikTok",
+      "role": "Software Engineer Intern - Recommendation Infra - Performance Efficiency"
+    },
+    "TikTok | Software Engineer Intern - TikTok Search Data Infra": {
+      "company": "TikTok",
+      "role": "Software Engineer Intern - TikTok Search Data Infra"
+    },
+    "Tower Research Capital | Quantitative Trader/Researcher Intern": {
+      "company": "Tower Research Capital",
+      "role": "Quantitative Trader/Researcher Intern"
+    },
+    "Trane Technologies | AI Intern - AI Product Management - AI Controls Integration": {
+      "company": "Trane Technologies",
+      "role": "AI Intern - AI Product Management - AI Controls Integration"
+    },
+    "Transcard Payments | Artificial Intelligence Intern": {
+      "company": "Transcard Payments",
+      "role": "Artificial Intelligence Intern"
+    },
+    "Transcard Payments | Software Engineer Intern": {
+      "company": "Transcard Payments",
+      "role": "Software Engineer Intern"
+    },
+    "Travelers | Business Insights & Analytics Intern - BI&A LDP": {
+      "company": "Travelers",
+      "role": "Business Insights & Analytics Intern - BI&A LDP"
+    },
+    "Trillium | Equity Trader Intern": {
+      "company": "Trillium",
+      "role": "Equity Trader Intern"
+    },
+    "Two Sigma | AI Research Scientist Intern - 2027 Summer": {
+      "company": "Two Sigma",
+      "role": "AI Research Scientist Intern - 2027 Summer"
+    },
+    "Two Sigma | Quantitative Researcher Intern": {
+      "company": "Two Sigma",
+      "role": "Quantitative Researcher Intern"
+    },
+    "Uline | Executive Operations Analyst Intern - Summer 2027": {
+      "company": "Uline",
+      "role": "Executive Operations Analyst Intern - Summer 2027"
+    },
+    "Uline | International Operations Analyst Intern": {
+      "company": "Uline",
+      "role": "International Operations Analyst Intern"
+    },
+    "Uline | Marketing Intern": {
+      "company": "Uline",
+      "role": "Marketing Intern"
+    },
+    "Uline | Software Development Intern": {
+      "company": "Uline",
+      "role": "Software Development Intern"
+    },
+    "United Airlines | Air Traffic Strategy Data Analytics Intern - Summer 2027": {
+      "company": "United Airlines",
+      "role": "Air Traffic Strategy Data Analytics Intern - Summer 2027"
+    },
+    "United Airlines | Clubs & Lounges Intern - Summer 2027": {
+      "company": "United Airlines",
+      "role": "Clubs & Lounges Intern - Summer 2027"
+    },
+    "United Airlines | Operations Data & Analytics Intern - Summer 2027": {
+      "company": "United Airlines",
+      "role": "Operations Data & Analytics Intern - Summer 2027"
+    },
+    "United Airlines | Pricing & Revenue Management Intern": {
+      "company": "United Airlines",
+      "role": "Pricing & Revenue Management Intern"
+    },
+    "United Airlines | Tech Ops Analytics & Business Intelligence Intern - Summer 2027": {
+      "company": "United Airlines",
+      "role": "Tech Ops Analytics & Business Intelligence Intern - Summer 2027"
+    },
+    "United Parcel Service | Business Analytics Intern - Americas Region": {
+      "company": "United Parcel Service",
+      "role": "Business Analytics Intern - Americas Region"
+    },
+    "Universal Health Services | Software Engineer Intern - Data Analytics": {
+      "company": "Universal Health Services",
+      "role": "Software Engineer Intern - Data Analytics"
+    },
+    "V2X | Electrical Engineer Intern - Hardware Engineering": {
+      "company": "V2X",
+      "role": "Electrical Engineer Intern - Hardware Engineering"
+    },
+    "Vanguard | Application Development Intern": {
+      "company": "Vanguard",
+      "role": "Application Development Intern"
+    },
+    "Vanguard | Data Science Intern - College to Corporate IT": {
+      "company": "Vanguard",
+      "role": "Data Science Intern - College to Corporate IT"
+    },
+    "Vanguard | IT Intern - Application Development": {
+      "company": "Vanguard",
+      "role": "IT Intern - Application Development"
+    },
+    "Vanguard | Technical Product Manager Intern": {
+      "company": "Vanguard",
+      "role": "Technical Product Manager Intern"
+    },
+    "Verisk | AI Intern - Summer Internship Program": {
+      "company": "Verisk",
+      "role": "AI Intern - Summer Internship Program"
+    },
+    "Verisk | Technology Intern - Summer Internship Program": {
+      "company": "Verisk",
+      "role": "Technology Intern - Summer Internship Program"
+    },
+    "Verkada | Embedded Software Engineer Intern": {
+      "company": "Verkada",
+      "role": "Embedded Software Engineer Intern"
+    },
+    "Verkada | Mobile Software Engineer Intern": {
+      "company": "Verkada",
+      "role": "Mobile Software Engineer Intern"
+    },
+    "Vermeer | Data Analytics Intern": {
+      "company": "Vermeer",
+      "role": "Data Analytics Intern"
+    },
+    "Vermeer | Embedded Software Engineer Intern": {
+      "company": "Vermeer",
+      "role": "Embedded Software Engineer Intern"
+    },
+    "Vermeer | Software Engineer Intern - IT": {
+      "company": "Vermeer",
+      "role": "Software Engineer Intern - IT"
+    },
+    "Vermeer | Test Engineer Intern": {
+      "company": "Vermeer",
+      "role": "Test Engineer Intern"
+    },
+    "Vertiv | Business Analytics Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Business Analytics Intern - Summer 2027"
+    },
+    "Vertiv | DC Power Product Management Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "DC Power Product Management Intern - Summer 2027"
+    },
+    "Vertiv | Firmware Engineer Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Firmware Engineer Intern - Summer 2027"
+    },
+    "Vertiv | IT Systems Product Management Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "IT Systems Product Management Intern - Summer 2027"
+    },
+    "Vertiv | Planning Analytics Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Planning Analytics Intern - Summer 2027"
+    },
+    "Vertiv | Power Management Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Power Management Intern - Summer 2027"
+    },
+    "Vertiv | Product Management Intern": {
+      "company": "Vertiv",
+      "role": "Product Management Intern"
+    },
+    "Vertiv | Product Marketing Intern": {
+      "company": "Vertiv",
+      "role": "Product Marketing Intern"
+    },
+    "Vertiv | Sales Data Analytics Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Sales Data Analytics Intern - Summer 2027"
+    },
+    "Vertiv | Service Technology Research Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Service Technology Research Intern - Summer 2027"
+    },
+    "Vertiv | Thermal Engineer Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Thermal Engineer Intern - Summer 2027"
+    },
+    "Virtu Financial | Frontend Developer Internship": {
+      "company": "Virtu Financial",
+      "role": "Frontend Developer Internship"
+    },
+    "Virtu Financial | Hardware Engineer Intern - FPGA": {
+      "company": "Virtu Financial",
+      "role": "Hardware Engineer Intern - FPGA"
+    },
+    "Virtu Financial | Quantitative Researcher Internship": {
+      "company": "Virtu Financial",
+      "role": "Quantitative Researcher Internship"
+    },
+    "Virtu Financial | Quantitative Trading Intern": {
+      "company": "Virtu Financial",
+      "role": "Quantitative Trading Intern"
+    },
+    "Virtu Financial | Software Engineer Intern - Software Engineer": {
+      "company": "Virtu Financial",
+      "role": "Software Engineer Intern - Software Engineer"
+    },
+    "Voloridge | Quantitative Research Intern": {
+      "company": "Voloridge",
+      "role": "Quantitative Research Intern"
+    },
+    "W.W. Grainger | Software Engineer Intern - Grainger Technology Group": {
+      "company": "W.W. Grainger",
+      "role": "Software Engineer Intern - Grainger Technology Group"
+    },
+    "WEC Energy Group | Energy Analytics Intern": {
+      "company": "WEC Energy Group",
+      "role": "Energy Analytics Intern"
+    },
+    "WEC Energy Group | Renewables Data Analytics Intern": {
+      "company": "WEC Energy Group",
+      "role": "Renewables Data Analytics Intern"
+    },
+    "Walmart | Data Scientist 3 Intern - 2026 Intern Conversion: 2027 FT": {
+      "company": "Walmart",
+      "role": "Data Scientist 3 Intern - 2026 Intern Conversion: 2027 FT"
+    },
+    "Waymo | Data Science Intern - Commercialization Testing": {
+      "company": "Waymo",
+      "role": "Data Science Intern - Commercialization Testing"
+    },
+    "Waymo | Software Engineering Intern - Behavior Test - MS": {
+      "company": "Waymo",
+      "role": "Software Engineering Intern - Behavior Test - MS"
+    },
+    "Wells Fargo | Applied Computational Intelligence Intern - ACI Masters - Early Careers": {
+      "company": "Wells Fargo",
+      "role": "Applied Computational Intelligence Intern - ACI Masters - Early Careers"
+    },
+    "Wells Fargo | Quantitative Analytics Intern - Capital Markets - Masters": {
+      "company": "Wells Fargo",
+      "role": "Quantitative Analytics Intern - Capital Markets - Masters"
+    },
+    "Wells Fargo | Quantitative Analytics Intern - Multiple Teams": {
+      "company": "Wells Fargo",
+      "role": "Quantitative Analytics Intern - Multiple Teams"
+    },
+    "Wells Fargo | Quantitative Analytics Intern - Risk Analytics and Decision Sciences": {
+      "company": "Wells Fargo",
+      "role": "Quantitative Analytics Intern - Risk Analytics and Decision Sciences"
+    },
+    "Western & Southern Financial Group | Actuarial Intern - Summer 2027": {
+      "company": "Western & Southern Financial Group",
+      "role": "Actuarial Intern - Summer 2027"
+    },
+    "Western & Southern Financial Group | Digital Analytics Intern - Spring or Summer 2027": {
+      "company": "Western & Southern Financial Group",
+      "role": "Digital Analytics Intern - Spring or Summer 2027"
+    },
+    "Western & Southern Financial Group | Software Development Intern": {
+      "company": "Western & Southern Financial Group",
+      "role": "Software Development Intern"
+    },
+    "Western & Southern Financial Group | Software Engineer Intern": {
+      "company": "Western & Southern Financial Group",
+      "role": "Software Engineer Intern"
+    },
+    "Western Digital | Hardware Engineering Intern": {
+      "company": "Western Digital",
+      "role": "Hardware Engineering Intern"
+    },
+    "Westinghouse Electric Company | Application Development Intern": {
+      "company": "Westinghouse Electric Company",
+      "role": "Application Development Intern"
+    },
+    "Westinghouse Electric Company | Computer Engineering / Software Engineering Intern": {
+      "company": "Westinghouse Electric Company",
+      "role": "Computer Engineering / Software Engineering Intern"
+    },
+    "WhatNot | Software Engineer Intern": {
+      "company": "WhatNot",
+      "role": "Software Engineer Intern"
+    },
+    "WhiteWater Midstream | Data Science Intern - Summer 2027": {
+      "company": "WhiteWater Midstream",
+      "role": "Data Science Intern - Summer 2027"
+    },
+    "Williams-Sonoma | Merchandising Intern": {
+      "company": "Williams-Sonoma",
+      "role": "Merchandising Intern"
+    },
+    "Wipfli | Data and Analytics Consulting Intern - Summer 2027": {
+      "company": "Wipfli",
+      "role": "Data and Analytics Consulting Intern - Summer 2027"
+    },
+    "Wipfli | Product Development Intern": {
+      "company": "Wipfli",
+      "role": "Product Development Intern"
+    },
+    "Xantium | Quantitative Developer Intern": {
+      "company": "Xantium",
+      "role": "Quantitative Developer Intern"
+    },
+    "Zip | Software Engineer Intern": {
+      "company": "Zip",
+      "role": "Software Engineer Intern"
+    },
+    "Zipline | Aircraft Software Integration Intern": {
+      "company": "Zipline",
+      "role": "Aircraft Software Integration Intern"
+    },
+    "Zipline | Embedded Systems Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Embedded Systems Intern - Summer 2027"
+    },
+    "Zipline | Hardware Test Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Hardware Test Intern - Summer 2027"
+    },
+    "Zipline | Long Range Platform Embedded Firmware Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Long Range Platform Embedded Firmware Intern - Summer 2027"
+    },
+    "Zipline | Maps Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Maps Intern - Summer 2027"
+    },
+    "Zipline | Perception Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Perception Intern - Summer 2027"
+    },
+    "Zipline | Software Engineer Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Software Engineer Intern - Summer 2027"
+    }
+  },
+  "inactive": {
+    "AArete | Business Analytics Intern - Summer 2027": {
+      "company": "AArete",
+      "role": "Business Analytics Intern - Summer 2027"
+    },
+    "AMD | Field Applications Engineer Intern - Masters": {
+      "company": "AMD",
+      "role": "Field Applications Engineer Intern - Masters"
+    },
+    "AQR Capital Management | Engineering Summer Analyst Intern": {
+      "company": "AQR Capital Management",
+      "role": "Engineering Summer Analyst Intern"
+    },
+    "AQR Capital Management | Portfolio Solutions Group Summer Analyst Intern - Portfolio Solutions Group": {
+      "company": "AQR Capital Management",
+      "role": "Portfolio Solutions Group Summer Analyst Intern - Portfolio Solutions Group"
+    },
+    "AQR Capital Management | Research and Portfolio Management Engineering Summer Analyst Intern": {
+      "company": "AQR Capital Management",
+      "role": "Research and Portfolio Management Engineering Summer Analyst Intern"
+    },
+    "AQR Capital Management | Risk Summer Analyst Intern": {
+      "company": "AQR Capital Management",
+      "role": "Risk Summer Analyst Intern"
+    },
+    "Air Products | Information Technology/Digital Technology Intern - Infrastructure Services": {
+      "company": "Air Products",
+      "role": "Information Technology/Digital Technology Intern - Infrastructure Services"
+    },
+    "AlixPartners | Data Scientist Intern": {
+      "company": "AlixPartners",
+      "role": "Data Scientist Intern"
+    },
+    "Ameren | DERMS Co-op/Intern": {
+      "company": "Ameren",
+      "role": "DERMS Co-op/Intern"
+    },
+    "American Express | Campus Undergraduate Summer Internship - Strategy & Analytics - Credit & Fraud Risk": {
+      "company": "American Express",
+      "role": "Campus Undergraduate Summer Internship - Strategy & Analytics - Credit & Fraud Risk"
+    },
+    "American Express | Product Development Intern - Product Development - Consumer Services": {
+      "company": "American Express",
+      "role": "Product Development Intern - Product Development - Consumer Services"
+    },
+    "American Express | Software Engineering Apprentice - Technology": {
+      "company": "American Express",
+      "role": "Software Engineering Apprentice - Technology"
+    },
+    "Analysis Group | Research Professional Intern - Generalist": {
+      "company": "Analysis Group",
+      "role": "Research Professional Intern - Generalist"
+    },
+    "Anduril | Electrical Engineer Intern": {
+      "company": "Anduril",
+      "role": "Electrical Engineer Intern"
+    },
+    "Anduril | Software Engineer Intern": {
+      "company": "Anduril",
+      "role": "Software Engineer Intern"
+    },
+    "Anheuser-Busch | Technology Intern": {
+      "company": "Anheuser-Busch",
+      "role": "Technology Intern"
+    },
+    "Apex Fintech Solutions | Technology Fintern - Software Engineering - Product Management": {
+      "company": "Apex Fintech Solutions",
+      "role": "Technology Fintern - Software Engineering - Product Management"
+    },
+    "Apollo Global | Credit Trading Analyst Intern": {
+      "company": "Apollo Global",
+      "role": "Credit Trading Analyst Intern"
+    },
+    "Atoms | Software Engineer Intern - Summer 2027": {
+      "company": "Atoms",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Auto-Owners Insurance | Predictive Modeler Intern - Summer 2027": {
+      "company": "Auto-Owners Insurance",
+      "role": "Predictive Modeler Intern - Summer 2027"
+    },
+    "Avery Dennison | RFID Applications Engineer Co-op - Summer 2027 - Plus one semester": {
+      "company": "Avery Dennison",
+      "role": "RFID Applications Engineer Co-op - Summer 2027 - Plus one semester"
+    },
+    "Axon | Software Engineer Intern": {
+      "company": "Axon",
+      "role": "Software Engineer Intern"
+    },
+    "Axon | Software Engineering Intern": {
+      "company": "Axon",
+      "role": "Software Engineering Intern"
+    },
+    "BNY | Trading Intern - Trading": {
+      "company": "BNY",
+      "role": "Trading Intern - Trading"
+    },
+    "BerryDunn | Consulting Intern - Healthcare Data Management and Strategy": {
+      "company": "BerryDunn",
+      "role": "Consulting Intern - Healthcare Data Management and Strategy"
+    },
+    "Blackhawk Network Holdings | Technology Intern": {
+      "company": "Blackhawk Network Holdings",
+      "role": "Technology Intern"
+    },
+    "Blackstone | Blackstone Credit and Insurance \u2013 Quant and Portfolio Analytics Summer Analyst Intern": {
+      "company": "Blackstone",
+      "role": "Blackstone Credit and Insurance \u2013 Quant and Portfolio Analytics Summer Analyst Intern"
+    },
+    "Bloxd | Software Engineer Intern": {
+      "company": "Bloxd",
+      "role": "Software Engineer Intern"
+    },
+    "Blue Origin | Avionics Software Intern": {
+      "company": "Blue Origin",
+      "role": "Avionics Software Intern"
+    },
+    "Boom Supersonic | Engineering and Tech Intern": {
+      "company": "Boom Supersonic",
+      "role": "Engineering and Tech Intern"
+    },
+    "Booz Allen | AI RAN Telecommunications Engineer Intern": {
+      "company": "Booz Allen",
+      "role": "AI RAN Telecommunications Engineer Intern"
+    },
+    "Booz Allen | Health Account Intern": {
+      "company": "Booz Allen",
+      "role": "Health Account Intern"
+    },
+    "Booz Allen | Product Engineer Intern": {
+      "company": "Booz Allen",
+      "role": "Product Engineer Intern"
+    },
+    "Bosch Home Comfort | Calibration Process Optimization Intern": {
+      "company": "Bosch Home Comfort",
+      "role": "Calibration Process Optimization Intern"
+    },
+    "Bosch Home Comfort | Software Engineer Intern - 8 months/40hrs per week": {
+      "company": "Bosch Home Comfort",
+      "role": "Software Engineer Intern - 8 months/40hrs per week"
+    },
+    "Boston Scientific | R&D Hardware Engineer Intern - Interns/Graduates": {
+      "company": "Boston Scientific",
+      "role": "R&D Hardware Engineer Intern - Interns/Graduates"
+    },
+    "Boston Scientific | Research Data Science Intern - Active Implantable Systems": {
+      "company": "Boston Scientific",
+      "role": "Research Data Science Intern - Active Implantable Systems"
+    },
+    "Brunswick | Electrical Engineer Intern": {
+      "company": "Brunswick",
+      "role": "Electrical Engineer Intern"
+    },
+    "ByteDance | Applied Machine Learning Production Engineer Intern - AML Production Engineer": {
+      "company": "ByteDance",
+      "role": "Applied Machine Learning Production Engineer Intern - AML Production Engineer"
+    },
+    "ByteDance | Intelligent Sensing Intern - Global Frontier Tech Recruitment Program": {
+      "company": "ByteDance",
+      "role": "Intelligent Sensing Intern - Global Frontier Tech Recruitment Program"
+    },
+    "ByteDance | Machine Learning Engineer Intern": {
+      "company": "ByteDance",
+      "role": "Machine Learning Engineer Intern"
+    },
+    "ByteDance | Machine Learning Engineer Intern - AML-Engine-Orchestration": {
+      "company": "ByteDance",
+      "role": "Machine Learning Engineer Intern - AML-Engine-Orchestration"
+    },
+    "ByteDance | Research Intern - AI Compute": {
+      "company": "ByteDance",
+      "role": "Research Intern - AI Compute"
+    },
+    "ByteDance | Research Scientist Intern": {
+      "company": "ByteDance",
+      "role": "Research Scientist Intern"
+    },
+    "ByteDance | Software Engineer Intern - AML-Engine-Orchestration": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - AML-Engine-Orchestration"
+    },
+    "ByteDance | Software Engineer Intern - Traffic Infrastructure": {
+      "company": "ByteDance",
+      "role": "Software Engineer Intern - Traffic Infrastructure"
+    },
+    "CACI | GMU Scholar Program Intern": {
+      "company": "CACI",
+      "role": "GMU Scholar Program Intern"
+    },
+    "CIBC | AI Scientist Co-op": {
+      "company": "CIBC",
+      "role": "AI Scientist Co-op"
+    },
+    "CNO Financial Group | Reporting Analyst Intern": {
+      "company": "CNO Financial Group",
+      "role": "Reporting Analyst Intern"
+    },
+    "CSX | Technology Intern - Paid": {
+      "company": "CSX",
+      "role": "Technology Intern - Paid"
+    },
+    "CTGT | Software Engineer Intern": {
+      "company": "CTGT",
+      "role": "Software Engineer Intern"
+    },
+    "Capital One | Data Analyst Intern": {
+      "company": "Capital One",
+      "role": "Data Analyst Intern"
+    },
+    "Capital One | Product Development Intern": {
+      "company": "Capital One",
+      "role": "Product Development Intern"
+    },
+    "Capital One | Technology Intern": {
+      "company": "Capital One",
+      "role": "Technology Intern"
+    },
+    "Castleton Commodities International | Commodities Trading Analyst Internship": {
+      "company": "Castleton Commodities International",
+      "role": "Commodities Trading Analyst Internship"
+    },
+    "Castleton Commodities International | Data Science Machine Learning Intern": {
+      "company": "Castleton Commodities International",
+      "role": "Data Science Machine Learning Intern"
+    },
+    "Castleton Commodities International | Front Office Software Engineer Intern": {
+      "company": "Castleton Commodities International",
+      "role": "Front Office Software Engineer Intern"
+    },
+    "Caterpillar Inc. | Corporate Intern - Digital and Analytics": {
+      "company": "Caterpillar Inc.",
+      "role": "Corporate Intern - Digital and Analytics"
+    },
+    "Centene | People Analytics Intern - Undergraduate": {
+      "company": "Centene",
+      "role": "People Analytics Intern - Undergraduate"
+    },
+    "CesiumAstro | Software Engineering Intern - Advanced Projects Group": {
+      "company": "CesiumAstro",
+      "role": "Software Engineering Intern - Advanced Projects Group"
+    },
+    "Ciena | FPGA Development Intern": {
+      "company": "Ciena",
+      "role": "FPGA Development Intern"
+    },
+    "Ciena | Software Engineer Intern": {
+      "company": "Ciena",
+      "role": "Software Engineer Intern"
+    },
+    "Cigna Group | Healthcare Policy & Regulated Markets Intern": {
+      "company": "Cigna Group",
+      "role": "Healthcare Policy & Regulated Markets Intern"
+    },
+    "Citi | Markets Analyst Intern - Sales and Trading": {
+      "company": "Citi",
+      "role": "Markets Analyst Intern - Sales and Trading"
+    },
+    "Clorox | Sales Analyst Intern - Customer Analytics": {
+      "company": "Clorox",
+      "role": "Sales Analyst Intern - Customer Analytics"
+    },
+    "Compeer Financial | New Markets Intern": {
+      "company": "Compeer Financial",
+      "role": "New Markets Intern"
+    },
+    "Conagra Brands | Demand Science Rotational Analyst": {
+      "company": "Conagra Brands",
+      "role": "Demand Science Rotational Analyst"
+    },
+    "ConocoPhillips | GIS Intern": {
+      "company": "ConocoPhillips",
+      "role": "GIS Intern"
+    },
+    "Continental Resources | Geoscience Intern": {
+      "company": "Continental Resources",
+      "role": "Geoscience Intern"
+    },
+    "Corning | Digital & IT Intern - Analyst - Machine Learning": {
+      "company": "Corning",
+      "role": "Digital & IT Intern - Analyst - Machine Learning"
+    },
+    "Corning | Optical Fiber and Cable Engineer Intern - Summer 2027": {
+      "company": "Corning",
+      "role": "Optical Fiber and Cable Engineer Intern - Summer 2027"
+    },
+    "Crum & Forster Insurance | Actuarial, Data Science or Product Services Intern - Commercial Lines": {
+      "company": "Crum & Forster Insurance",
+      "role": "Actuarial, Data Science or Product Services Intern - Commercial Lines"
+    },
+    "Cushman & Wakefield | Intern": {
+      "company": "Cushman & Wakefield",
+      "role": "Intern"
+    },
+    "DTCC | Product Management Intern": {
+      "company": "DTCC",
+      "role": "Product Management Intern"
+    },
+    "DTCC | Product Management Intern - 2027 Internship Program": {
+      "company": "DTCC",
+      "role": "Product Management Intern - 2027 Internship Program"
+    },
+    "DV Trading | Trading Intern - Summer 2027 - DV Commodities": {
+      "company": "DV Trading",
+      "role": "Trading Intern - Summer 2027 - DV Commodities"
+    },
+    "Deloitte | AI Innovation Summer Scholar Intern - AI Innovation": {
+      "company": "Deloitte",
+      "role": "AI Innovation Summer Scholar Intern - AI Innovation"
+    },
+    "Deloitte | Forensic Analytics Summer Scholar Intern - Forensic Analytics": {
+      "company": "Deloitte",
+      "role": "Forensic Analytics Summer Scholar Intern - Forensic Analytics"
+    },
+    "Deutsche Bank | Quantitative Analyst Intern - GSA": {
+      "company": "Deutsche Bank",
+      "role": "Quantitative Analyst Intern - GSA"
+    },
+    "Diamondback Energy | Geoscience Intern": {
+      "company": "Diamondback Energy",
+      "role": "Geoscience Intern"
+    },
+    "Dimensional Fund Advisors | Global Client Group Operations Insights Intern - Undergraduate & Master's": {
+      "company": "Dimensional Fund Advisors",
+      "role": "Global Client Group Operations Insights Intern - Undergraduate & Master's"
+    },
+    "DraftKings | Data Science Intern - Summer 2027": {
+      "company": "DraftKings",
+      "role": "Data Science Intern - Summer 2027"
+    },
+    "Engenious Design | Systems Architecture Intern": {
+      "company": "Engenious Design",
+      "role": "Systems Architecture Intern"
+    },
+    "Etched | Electrical Platform Intern": {
+      "company": "Etched",
+      "role": "Electrical Platform Intern"
+    },
+    "Etched | Inference Intern": {
+      "company": "Etched",
+      "role": "Inference Intern"
+    },
+    "FTI Consulting | Technology Intern": {
+      "company": "FTI Consulting",
+      "role": "Technology Intern"
+    },
+    "Fannie Mae | Technology Program Intern": {
+      "company": "Fannie Mae",
+      "role": "Technology Program Intern"
+    },
+    "Fidelity Investments | Equity Research Associate Intern": {
+      "company": "Fidelity Investments",
+      "role": "Equity Research Associate Intern"
+    },
+    "Fidelity Investments | Undergraduate Intern": {
+      "company": "Fidelity Investments",
+      "role": "Undergraduate Intern"
+    },
+    "Fifth Third Bank | Sales and Trading Intern - Sales and Trading": {
+      "company": "Fifth Third Bank",
+      "role": "Sales and Trading Intern - Sales and Trading"
+    },
+    "Fifth Third Bank | Software Engineer Co-op - Enterprise Finance Applications - Summer 2027": {
+      "company": "Fifth Third Bank",
+      "role": "Software Engineer Co-op - Enterprise Finance Applications - Summer 2027"
+    },
+    "First National Bank | Capital Markets Intern": {
+      "company": "First National Bank",
+      "role": "Capital Markets Intern"
+    },
+    "First National Bank | Systems Analyst Intern - Consumer and Commercial Banking Technology": {
+      "company": "First National Bank",
+      "role": "Systems Analyst Intern - Consumer and Commercial Banking Technology"
+    },
+    "Freddie Mac | Capital Markets Intern - Summer 2027": {
+      "company": "Freddie Mac",
+      "role": "Capital Markets Intern - Summer 2027"
+    },
+    "Freeform | Materials Engineer Intern": {
+      "company": "Freeform",
+      "role": "Materials Engineer Intern"
+    },
+    "GE Aerospace | Digital Technology Intern": {
+      "company": "GE Aerospace",
+      "role": "Digital Technology Intern"
+    },
+    "GE Aerospace | Digital Technology Intern - Multiple Teams": {
+      "company": "GE Aerospace",
+      "role": "Digital Technology Intern - Multiple Teams"
+    },
+    "GE Aerospace | Product Definition Engineer Intern - Designer": {
+      "company": "GE Aerospace",
+      "role": "Product Definition Engineer Intern - Designer"
+    },
+    "GE Aerospace | Systems Engineer Intern - Electrical Engineering & Computer Engineering/Science - Avionics": {
+      "company": "GE Aerospace",
+      "role": "Systems Engineer Intern - Electrical Engineering & Computer Engineering/Science - Avionics"
+    },
+    "GE Appliances | Engineering Co-op": {
+      "company": "GE Appliances",
+      "role": "Engineering Co-op"
+    },
+    "GE Vernova | Application Engineer Co-op/Intern - PCS": {
+      "company": "GE Vernova",
+      "role": "Application Engineer Co-op/Intern - PCS"
+    },
+    "GE Vernova | Digital Technology Intern": {
+      "company": "GE Vernova",
+      "role": "Digital Technology Intern"
+    },
+    "GE Vernova | Energy Optimization Software Engineer Intern - Summer 2027": {
+      "company": "GE Vernova",
+      "role": "Energy Optimization Software Engineer Intern - Summer 2027"
+    },
+    "GE Vernova | Engineering Intern": {
+      "company": "GE Vernova",
+      "role": "Engineering Intern"
+    },
+    "Geico | Artificial Intelligence Applied Research & Machine Learning Intern - PhD": {
+      "company": "Geico",
+      "role": "Artificial Intelligence Applied Research & Machine Learning Intern - PhD"
+    },
+    "General Dynamics Information Technology | Artificial Intelligence/Machine Learning Intern": {
+      "company": "General Dynamics Information Technology",
+      "role": "Artificial Intelligence/Machine Learning Intern"
+    },
+    "General Dynamics Information Technology | Software Developer Intern": {
+      "company": "General Dynamics Information Technology",
+      "role": "Software Developer Intern"
+    },
+    "General Matter | Electrical Engineering Intern": {
+      "company": "General Matter",
+      "role": "Electrical Engineering Intern"
+    },
+    "General Motors | Electrical & SDV Intern - Global Manufacturing": {
+      "company": "General Motors",
+      "role": "Electrical & SDV Intern - Global Manufacturing"
+    },
+    "Genworth Financial | IT Development Program Intern - IT Development Program": {
+      "company": "Genworth Financial",
+      "role": "IT Development Program Intern - IT Development Program"
+    },
+    "GlobalFoundries | Robotics and Automation Engineering Intern - Junior": {
+      "company": "GlobalFoundries",
+      "role": "Robotics and Automation Engineering Intern - Junior"
+    },
+    "GlossGenius | Engineering Intern": {
+      "company": "GlossGenius",
+      "role": "Engineering Intern"
+    },
+    "GoDaddy | Software Development Engineer Intern": {
+      "company": "GoDaddy",
+      "role": "Software Development Engineer Intern"
+    },
+    "Goldman Sachs | Quantitative Strategist Associate Intern - The Core Quantitative Strats": {
+      "company": "Goldman Sachs",
+      "role": "Quantitative Strategist Associate Intern - The Core Quantitative Strats"
+    },
+    "Goldman Sachs | Quantitative Strategist Intern - Investment Banking": {
+      "company": "Goldman Sachs",
+      "role": "Quantitative Strategist Intern - Investment Banking"
+    },
+    "Goldman Sachs | Summer Analyst Intern - Americas - AWM Product Management": {
+      "company": "Goldman Sachs",
+      "role": "Summer Analyst Intern - Americas - AWM Product Management"
+    },
+    "Goldman Sachs | Summer Analyst Intern - Americas - Engineering": {
+      "company": "Goldman Sachs",
+      "role": "Summer Analyst Intern - Americas - Engineering"
+    },
+    "Goldman Sachs | Summer Analyst Intern - Wealth Management - Product Management and Design": {
+      "company": "Goldman Sachs",
+      "role": "Summer Analyst Intern - Wealth Management - Product Management and Design"
+    },
+    "Google | Software Developer Intern - BS": {
+      "company": "Google",
+      "role": "Software Developer Intern - BS"
+    },
+    "Grant Thornton | AI, Data & Technology Intern - Summer 2027": {
+      "company": "Grant Thornton",
+      "role": "AI, Data & Technology Intern - Summer 2027"
+    },
+    "Grant Thornton | Tax Technology Intern - Summer 2027": {
+      "company": "Grant Thornton",
+      "role": "Tax Technology Intern - Summer 2027"
+    },
+    "Gulfstream | Computer Science Intern - Advanced Structures and Materials": {
+      "company": "Gulfstream",
+      "role": "Computer Science Intern - Advanced Structures and Materials"
+    },
+    "H3X Technologies | Electromagnetics Engineering Intern - Spring": {
+      "company": "H3X Technologies",
+      "role": "Electromagnetics Engineering Intern - Spring"
+    },
+    "HNTB | Strategic Technology Intern": {
+      "company": "HNTB",
+      "role": "Strategic Technology Intern"
+    },
+    "HNTB | Strategic Technology Intern - SED Division": {
+      "company": "HNTB",
+      "role": "Strategic Technology Intern - SED Division"
+    },
+    "HP IQ | Software Engineer Intern - Product Security": {
+      "company": "HP IQ",
+      "role": "Software Engineer Intern - Product Security"
+    },
+    "Hermeus | Software Engineer Intern - Hardware in the Loop": {
+      "company": "Hermeus",
+      "role": "Software Engineer Intern - Hardware in the Loop"
+    },
+    "Heron Power | Power Electronics Engineer Intern": {
+      "company": "Heron Power",
+      "role": "Power Electronics Engineer Intern"
+    },
+    "Hershey | Product Development Intern - R&D": {
+      "company": "Hershey",
+      "role": "Product Development Intern - R&D"
+    },
+    "Hitachi | Engineering Intern": {
+      "company": "Hitachi",
+      "role": "Engineering Intern"
+    },
+    "Honeywell | Electrical Engineer Intern": {
+      "company": "Honeywell",
+      "role": "Electrical Engineer Intern"
+    },
+    "Honeywell | Information Systems Intern - IT - Cyber Engineer & Data Science": {
+      "company": "Honeywell",
+      "role": "Information Systems Intern - IT - Cyber Engineer & Data Science"
+    },
+    "Hormel Foods | Packaging Intern": {
+      "company": "Hormel Foods",
+      "role": "Packaging Intern"
+    },
+    "Humana | Technology Intern": {
+      "company": "Humana",
+      "role": "Technology Intern"
+    },
+    "Humana | Technology Intern - Early ID Participants": {
+      "company": "Humana",
+      "role": "Technology Intern - Early ID Participants"
+    },
+    "IMC Trading | Hardware Engineer Intern": {
+      "company": "IMC Trading",
+      "role": "Hardware Engineer Intern"
+    },
+    "IMC Trading | Machine Learning Research Intern": {
+      "company": "IMC Trading",
+      "role": "Machine Learning Research Intern"
+    },
+    "IMC Trading | Quantitative Trader Intern": {
+      "company": "IMC Trading",
+      "role": "Quantitative Trader Intern"
+    },
+    "IMC Trading | Software Engineer Intern": {
+      "company": "IMC Trading",
+      "role": "Software Engineer Intern"
+    },
+    "IMEG | Electrical Engineer Intern": {
+      "company": "IMEG",
+      "role": "Electrical Engineer Intern"
+    },
+    "IMEG | Innovation Services Intern": {
+      "company": "IMEG",
+      "role": "Innovation Services Intern"
+    },
+    "ING | Technology Intern - Innovation": {
+      "company": "ING",
+      "role": "Technology Intern - Innovation"
+    },
+    "ISN Software | Software Developer Intern - Fall 2026": {
+      "company": "ISN Software",
+      "role": "Software Developer Intern - Fall 2026"
+    },
+    "Iberdrola Group | Technology \u2013 Cyber & Data Intern": {
+      "company": "Iberdrola Group",
+      "role": "Technology \u2013 Cyber & Data Intern"
+    },
+    "InfiniteQuant | Quantitative Developer Internship - Summer 2027": {
+      "company": "InfiniteQuant",
+      "role": "Quantitative Developer Internship - Summer 2027"
+    },
+    "InfiniteQuant | Quantitative Researcher Intern": {
+      "company": "InfiniteQuant",
+      "role": "Quantitative Researcher Intern"
+    },
+    "InfiniteQuant | Quantitative Researcher Intern - Summer 2027": {
+      "company": "InfiniteQuant",
+      "role": "Quantitative Researcher Intern - Summer 2027"
+    },
+    "Intel | System Technology PhD Intern - Research Engineer": {
+      "company": "Intel",
+      "role": "System Technology PhD Intern - Research Engineer"
+    },
+    "Intuit | Software Engineer Intern - Full Stack": {
+      "company": "Intuit",
+      "role": "Software Engineer Intern - Full Stack"
+    },
+    "JINGDONG | Business Analysis Intern": {
+      "company": "JINGDONG",
+      "role": "Business Analysis Intern"
+    },
+    "JP Morgan Chase | Data Internship - Data & AI Program": {
+      "company": "JP Morgan Chase",
+      "role": "Data Internship - Data & AI Program"
+    },
+    "JP Morgan Chase | Product Manager Intern - Chase Digital Development Programme": {
+      "company": "JP Morgan Chase",
+      "role": "Product Manager Intern - Chase Digital Development Programme"
+    },
+    "JP Morgan Chase | Software Engineer Intern - Software Engineer Program": {
+      "company": "JP Morgan Chase",
+      "role": "Software Engineer Intern - Software Engineer Program"
+    },
+    "JP Morgan Chase | Summer Analyst Intern - Corporate Functions - Corporate Analyst Development Program": {
+      "company": "JP Morgan Chase",
+      "role": "Summer Analyst Intern - Corporate Functions - Corporate Analyst Development Program"
+    },
+    "Jane Street | Sales and Trading Intern": {
+      "company": "Jane Street",
+      "role": "Sales and Trading Intern"
+    },
+    "John Deere | Product Engineering Intern": {
+      "company": "John Deere",
+      "role": "Product Engineering Intern"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Acoustic Algorithm Development Engineer Intern": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Acoustic Algorithm Development Engineer Intern"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Modeling, Simulation & Analysis Intern - Engagement Optimization Group": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Modeling, Simulation & Analysis Intern - Engagement Optimization Group"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Signal Processing Intern - Multiple Teams": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Signal Processing Intern - Multiple Teams"
+    },
+    "Johns Hopkins Applied Physics Laboratory | Systems Exploitation Intern - Reverse Engineer - Systems Exploitation": {
+      "company": "Johns Hopkins Applied Physics Laboratory",
+      "role": "Systems Exploitation Intern - Reverse Engineer - Systems Exploitation"
+    },
+    "Johnson & Johnson | Materials Engineer Co-op": {
+      "company": "Johnson & Johnson",
+      "role": "Materials Engineer Co-op"
+    },
+    "Johnson & Johnson | Technology Intern - Technology LDP": {
+      "company": "Johnson & Johnson",
+      "role": "Technology Intern - Technology LDP"
+    },
+    "K2 Space | Radio Frequency Engineer Intern - Summer 2027": {
+      "company": "K2 Space",
+      "role": "Radio Frequency Engineer Intern - Summer 2027"
+    },
+    "KPMG | Technical Consultant Intern Co-op - Global Compliance and Transformation": {
+      "company": "KPMG",
+      "role": "Technical Consultant Intern Co-op - Global Compliance and Transformation"
+    },
+    "KeyBank | Analytics and Quantitative Modeling Intern - Analytics & Quantitative Modeling": {
+      "company": "KeyBank",
+      "role": "Analytics and Quantitative Modeling Intern - Analytics & Quantitative Modeling"
+    },
+    "KeyBank | Technology Track Intern - Key Technology and Services": {
+      "company": "KeyBank",
+      "role": "Technology Track Intern - Key Technology and Services"
+    },
+    "Kimley-Horn | Software Developer Intern": {
+      "company": "Kimley-Horn",
+      "role": "Software Developer Intern"
+    },
+    "LPL Financial Holdings | Internal Audit Intern - Multiple Teams": {
+      "company": "LPL Financial Holdings",
+      "role": "Internal Audit Intern - Multiple Teams"
+    },
+    "LPL Financial Holdings | Service Transformation & Data Analytics Intern": {
+      "company": "LPL Financial Holdings",
+      "role": "Service Transformation & Data Analytics Intern"
+    },
+    "Lawrence Livermore National Laboratory | Computational Engineering Graduate Intern": {
+      "company": "Lawrence Livermore National Laboratory",
+      "role": "Computational Engineering Graduate Intern"
+    },
+    "Lawrence Livermore National Laboratory | Graduate Engineer Intern - National Security Engineering Division": {
+      "company": "Lawrence Livermore National Laboratory",
+      "role": "Graduate Engineer Intern - National Security Engineering Division"
+    },
+    "Leidos | Computer Engineering Co-op": {
+      "company": "Leidos",
+      "role": "Computer Engineering Co-op"
+    },
+    "Leidos | Software Developer Intern": {
+      "company": "Leidos",
+      "role": "Software Developer Intern"
+    },
+    "Leidos | Software Developer Intern - Cyber & Analytics Business Area - Security Engineering": {
+      "company": "Leidos",
+      "role": "Software Developer Intern - Cyber & Analytics Business Area - Security Engineering"
+    },
+    "Leidos | Software Engineer Intern - Artificial Intelligence": {
+      "company": "Leidos",
+      "role": "Software Engineer Intern - Artificial Intelligence"
+    },
+    "Leidos | Visualization Engineer Intern": {
+      "company": "Leidos",
+      "role": "Visualization Engineer Intern"
+    },
+    "MKS Instruments | Business Intelligence/Data Analytics Intern": {
+      "company": "MKS Instruments",
+      "role": "Business Intelligence/Data Analytics Intern"
+    },
+    "Mackenzie Investments | Investment Management Intern - Canadian Equities": {
+      "company": "Mackenzie Investments",
+      "role": "Investment Management Intern - Canadian Equities"
+    },
+    "Marmon Holdings | Data Engineering Intern Co-op": {
+      "company": "Marmon Holdings",
+      "role": "Data Engineering Intern Co-op"
+    },
+    "Marsh | Summer Analyst - Data and Analytics": {
+      "company": "Marsh",
+      "role": "Summer Analyst - Data and Analytics"
+    },
+    "Marshall Wace | Technology Intern": {
+      "company": "Marshall Wace",
+      "role": "Technology Intern"
+    },
+    "Maven Securities | Trader Intern": {
+      "company": "Maven Securities",
+      "role": "Trader Intern"
+    },
+    "McKesson | Technology Intern": {
+      "company": "McKesson",
+      "role": "Technology Intern"
+    },
+    "Medline | Business Systems Intern - Summer 2027": {
+      "company": "Medline",
+      "role": "Business Systems Intern - Summer 2027"
+    },
+    "Medline | Product Management Intern - Summer 2027": {
+      "company": "Medline",
+      "role": "Product Management Intern - Summer 2027"
+    },
+    "Medline | RPA & Agentic AI Software Technologies Intern - Summer 2027": {
+      "company": "Medline",
+      "role": "RPA & Agentic AI Software Technologies Intern - Summer 2027"
+    },
+    "Medtronic | Engineering Intern": {
+      "company": "Medtronic",
+      "role": "Engineering Intern"
+    },
+    "Menasha Corporation | Custom Packaging Design Engineer Co-Op": {
+      "company": "Menasha Corporation",
+      "role": "Custom Packaging Design Engineer Co-Op"
+    },
+    "Merchants Bank of Indiana | Business Technology Intern - Application Development": {
+      "company": "Merchants Bank of Indiana",
+      "role": "Business Technology Intern - Application Development"
+    },
+    "Merchants Bank of Indiana | Capital Markets Intern - Single-Family": {
+      "company": "Merchants Bank of Indiana",
+      "role": "Capital Markets Intern - Single-Family"
+    },
+    "Meshy | Machine Learning Systems Intern": {
+      "company": "Meshy",
+      "role": "Machine Learning Systems Intern"
+    },
+    "Micron Technology | Advanced Spectroscopy and Nanoscale Materials Characterization Intern": {
+      "company": "Micron Technology",
+      "role": "Advanced Spectroscopy and Nanoscale Materials Characterization Intern"
+    },
+    "Microsoft | Product Manager Intern": {
+      "company": "Microsoft",
+      "role": "Product Manager Intern"
+    },
+    "Montenson | Investment Analyst Intern": {
+      "company": "Montenson",
+      "role": "Investment Analyst Intern"
+    },
+    "Montenson | Sustainability Engineer Intern": {
+      "company": "Montenson",
+      "role": "Sustainability Engineer Intern"
+    },
+    "Moog | Hardware Engineer Intern": {
+      "company": "Moog",
+      "role": "Hardware Engineer Intern"
+    },
+    "Motorola | Android Platform Software Engineer Intern - Summer 2027": {
+      "company": "Motorola",
+      "role": "Android Platform Software Engineer Intern - Summer 2027"
+    },
+    "Motorola | Data Engineering Co-op": {
+      "company": "Motorola",
+      "role": "Data Engineering Co-op"
+    },
+    "Motorola | Supply Chain Data Analyst Intern": {
+      "company": "Motorola",
+      "role": "Supply Chain Data Analyst Intern"
+    },
+    "NVIDIA | Computer Architecture Intern": {
+      "company": "NVIDIA",
+      "role": "Computer Architecture Intern"
+    },
+    "National Reconnaissance Office | Summer Internship - Dr. Chris Scolese": {
+      "company": "National Reconnaissance Office",
+      "role": "Summer Internship - Dr. Chris Scolese"
+    },
+    "Nationwide | Economics Intern": {
+      "company": "Nationwide",
+      "role": "Economics Intern"
+    },
+    "Nationwide | Technology Intern": {
+      "company": "Nationwide",
+      "role": "Technology Intern"
+    },
+    "Netsmart | Software Engineer Intern": {
+      "company": "Netsmart",
+      "role": "Software Engineer Intern"
+    },
+    "NiSource | Engineering Intern": {
+      "company": "NiSource",
+      "role": "Engineering Intern"
+    },
+    "Nokia | Optical Test Co-op": {
+      "company": "Nokia",
+      "role": "Optical Test Co-op"
+    },
+    "Northrop Grumman | Software Engineer Intern": {
+      "company": "Northrop Grumman",
+      "role": "Software Engineer Intern"
+    },
+    "Northrop Grumman | Software Engineer Intern - Aeronautics Systems": {
+      "company": "Northrop Grumman",
+      "role": "Software Engineer Intern - Aeronautics Systems"
+    },
+    "Northrop Grumman | Software Engineer Intern - Strategic Deterrent Systems Division - Sentinel": {
+      "company": "Northrop Grumman",
+      "role": "Software Engineer Intern - Strategic Deterrent Systems Division - Sentinel"
+    },
+    "Northwestern Mutual | Investment Analyst Intern - Private Debt & Equity": {
+      "company": "Northwestern Mutual",
+      "role": "Investment Analyst Intern - Private Debt & Equity"
+    },
+    "Northwood Space | RF Engineer Intern - Summer Internship": {
+      "company": "Northwood Space",
+      "role": "RF Engineer Intern - Summer Internship"
+    },
+    "Northwood Space | Supply Chain Data & Analytics Intern": {
+      "company": "Northwood Space",
+      "role": "Supply Chain Data & Analytics Intern"
+    },
+    "Ontario Teachers' Pension Plan | Investments Intern": {
+      "company": "Ontario Teachers' Pension Plan",
+      "role": "Investments Intern"
+    },
+    "Ontario Teachers' Pension Plan | Product & Data Engineering Intern": {
+      "company": "Ontario Teachers' Pension Plan",
+      "role": "Product & Data Engineering Intern"
+    },
+    "Ontario Teachers' Pension Plan | Risk Intern - Total Fund Risk": {
+      "company": "Ontario Teachers' Pension Plan",
+      "role": "Risk Intern - Total Fund Risk"
+    },
+    "Oppenheimer & Co. Inc. | Equities Sales & Trading Intern - Business Segments and Corporate Infrastructure": {
+      "company": "Oppenheimer & Co. Inc.",
+      "role": "Equities Sales & Trading Intern - Business Segments and Corporate Infrastructure"
+    },
+    "Optiver | FPGA Engineer Intern": {
+      "company": "Optiver",
+      "role": "FPGA Engineer Intern"
+    },
+    "Optiver | Quantitative Research Intern": {
+      "company": "Optiver",
+      "role": "Quantitative Research Intern"
+    },
+    "Optiver | Software Engineer Intern": {
+      "company": "Optiver",
+      "role": "Software Engineer Intern"
+    },
+    "PEAK6 | Trading Intern": {
+      "company": "PEAK6",
+      "role": "Trading Intern"
+    },
+    "PGIM | Private Credit \u2013 Investment Analyst Program": {
+      "company": "PGIM",
+      "role": "Private Credit \u2013 Investment Analyst Program"
+    },
+    "PGIM | Product and Institutional Client Intern - Multiple Teams": {
+      "company": "PGIM",
+      "role": "Product and Institutional Client Intern - Multiple Teams"
+    },
+    "PGIM | Public Credit Summer Investment Analyst Intern - Portfolio Analysis Group": {
+      "company": "PGIM",
+      "role": "Public Credit Summer Investment Analyst Intern - Portfolio Analysis Group"
+    },
+    "PGIM | Real Estate Originations Investment Analyst Program": {
+      "company": "PGIM",
+      "role": "Real Estate Originations Investment Analyst Program"
+    },
+    "PIMCO | Product Analyst Intern": {
+      "company": "PIMCO",
+      "role": "Product Analyst Intern"
+    },
+    "PIMCO | Trading Analyst Intern": {
+      "company": "PIMCO",
+      "role": "Trading Analyst Intern"
+    },
+    "POET | Plant Engineer Intern - Summer 2027": {
+      "company": "POET",
+      "role": "Plant Engineer Intern - Summer 2027"
+    },
+    "POET | Process Engineering Intern": {
+      "company": "POET",
+      "role": "Process Engineering Intern"
+    },
+    "PSP Investments | AI Solutions Intern - External Manager Selection & Monitoring": {
+      "company": "PSP Investments",
+      "role": "AI Solutions Intern - External Manager Selection & Monitoring"
+    },
+    "Palantir | Forward Deployed Software Engineer Intern - Commercial": {
+      "company": "Palantir",
+      "role": "Forward Deployed Software Engineer Intern - Commercial"
+    },
+    "Palantir | Privacy and Civil Liberties Software Engineer Intern": {
+      "company": "Palantir",
+      "role": "Privacy and Civil Liberties Software Engineer Intern"
+    },
+    "Panasonic Holdings | Back-End Cloud Developer Intern": {
+      "company": "Panasonic Holdings",
+      "role": "Back-End Cloud Developer Intern"
+    },
+    "Panasonic Holdings | Data Engineering Intern": {
+      "company": "Panasonic Holdings",
+      "role": "Data Engineering Intern"
+    },
+    "Parsons | Software Intern - Summer 2027": {
+      "company": "Parsons",
+      "role": "Software Intern - Summer 2027"
+    },
+    "Pella | Product Engineer Intern - Summer 2027": {
+      "company": "Pella",
+      "role": "Product Engineer Intern - Summer 2027"
+    },
+    "Pennsylvania State University | Guidance and Control Research & Development Intern": {
+      "company": "Pennsylvania State University",
+      "role": "Guidance and Control Research & Development Intern"
+    },
+    "Philips | Data AI/ML Engineer Intern - Image Guided Therapy Devices - Software R&D": {
+      "company": "Philips",
+      "role": "Data AI/ML Engineer Intern - Image Guided Therapy Devices - Software R&D"
+    },
+    "Philips | Software Engineer Co-op - R&D": {
+      "company": "Philips",
+      "role": "Software Engineer Co-op - R&D"
+    },
+    "Post Holdings | Product R&D Intern - Summer 2027": {
+      "company": "Post Holdings",
+      "role": "Product R&D Intern - Summer 2027"
+    },
+    "PricewaterhouseCoopers | Cloud, Data and AI Intern": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Cloud, Data and AI Intern"
+    },
+    "PricewaterhouseCoopers | Cloud, Data and AI Intern - Cloud, Data and AI": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Cloud, Data and AI Intern - Cloud, Data and AI"
+    },
+    "PricewaterhouseCoopers | Diligence Analytics Intern - Deals": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Diligence Analytics Intern - Deals"
+    },
+    "PricewaterhouseCoopers | Summer Intern - SAP": {
+      "company": "PricewaterhouseCoopers",
+      "role": "Summer Intern - SAP"
+    },
+    "Procter & Gamble | IT Project & Product Manager Intern": {
+      "company": "Procter & Gamble",
+      "role": "IT Project & Product Manager Intern"
+    },
+    "Procter & Gamble | Research & Development Scientist/Engineer Intern - Freshmen, Sophomores, And Juniors": {
+      "company": "Procter & Gamble",
+      "role": "Research & Development Scientist/Engineer Intern - Freshmen, Sophomores, And Juniors"
+    },
+    "Protiviti | Technology Consulting Intern - 2027": {
+      "company": "Protiviti",
+      "role": "Technology Consulting Intern - 2027"
+    },
+    "Prudential Financial | Private Credit \u2013 Investment Analyst Program": {
+      "company": "Prudential Financial",
+      "role": "Private Credit \u2013 Investment Analyst Program"
+    },
+    "Prudential Financial | Product and Institutional Client Intern - Multiple Teams": {
+      "company": "Prudential Financial",
+      "role": "Product and Institutional Client Intern - Multiple Teams"
+    },
+    "Prudential Financial | Public Credit Summer Investment Analyst Intern - Portfolio Analysis Group": {
+      "company": "Prudential Financial",
+      "role": "Public Credit Summer Investment Analyst Intern - Portfolio Analysis Group"
+    },
+    "Prudential Financial | Real Estate Originations Investment Analyst Program": {
+      "company": "Prudential Financial",
+      "role": "Real Estate Originations Investment Analyst Program"
+    },
+    "QTS | Data Center Infrastructure Management Intern - DCIM": {
+      "company": "QTS",
+      "role": "Data Center Infrastructure Management Intern - DCIM"
+    },
+    "Quantbot Technologies | Quantitative Developer Intern": {
+      "company": "Quantbot Technologies",
+      "role": "Quantitative Developer Intern"
+    },
+    "Quantbot Technologies | Software Engineer Intern": {
+      "company": "Quantbot Technologies",
+      "role": "Software Engineer Intern"
+    },
+    "RRS Group | Investment Analyst Intern": {
+      "company": "RRS Group",
+      "role": "Investment Analyst Intern"
+    },
+    "RRS Group | Software Engineer Intern - Placement Year": {
+      "company": "RRS Group",
+      "role": "Software Engineer Intern - Placement Year"
+    },
+    "RSM | Enterprise Data Integration and Migration Intern": {
+      "company": "RSM",
+      "role": "Enterprise Data Integration and Migration Intern"
+    },
+    "RSM | ServiceNow Developer Associate": {
+      "company": "RSM",
+      "role": "ServiceNow Developer Associate"
+    },
+    "RTX | Digital Technology Intern": {
+      "company": "RTX",
+      "role": "Digital Technology Intern"
+    },
+    "RTX | Electrical Engineer Intern": {
+      "company": "RTX",
+      "role": "Electrical Engineer Intern"
+    },
+    "RTX | Electrical Engineering Intern": {
+      "company": "RTX",
+      "role": "Electrical Engineering Intern"
+    },
+    "RTX | Methods Intern - Hot Section Engineering": {
+      "company": "RTX",
+      "role": "Methods Intern - Hot Section Engineering"
+    },
+    "RTX | Modeling, Simulation & Analysis Intern": {
+      "company": "RTX",
+      "role": "Modeling, Simulation & Analysis Intern"
+    },
+    "RTX | Modeling, Simulation & Analysis Intern - Summer 2027": {
+      "company": "RTX",
+      "role": "Modeling, Simulation & Analysis Intern - Summer 2027"
+    },
+    "RTX | Software Engineer Co-op - Avionics Platform Software": {
+      "company": "RTX",
+      "role": "Software Engineer Co-op - Avionics Platform Software"
+    },
+    "RTX | Software Engineer Intern": {
+      "company": "RTX",
+      "role": "Software Engineer Intern"
+    },
+    "RTX | Software Engineer Intern - Spring 2027": {
+      "company": "RTX",
+      "role": "Software Engineer Intern - Spring 2027"
+    },
+    "RTX | Software Engineer Intern - Summer 2027": {
+      "company": "RTX",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "RTX | Software Engineering Intern": {
+      "company": "RTX",
+      "role": "Software Engineering Intern"
+    },
+    "RTX | Software Engineering Intern - Summer 2027": {
+      "company": "RTX",
+      "role": "Software Engineering Intern - Summer 2027"
+    },
+    "RTX | Systems Engineering Intern": {
+      "company": "RTX",
+      "role": "Systems Engineering Intern"
+    },
+    "RTX | Systems Technology Intern": {
+      "company": "RTX",
+      "role": "Systems Technology Intern"
+    },
+    "Readystate Asset Management | Investment Intern - Summer 2027 & 2028": {
+      "company": "Readystate Asset Management",
+      "role": "Investment Intern - Summer 2027 & 2028"
+    },
+    "Regions Bank | Technology, Operations, Digital and Data Development Program Associate - Operations - Digital": {
+      "company": "Regions Bank",
+      "role": "Technology, Operations, Digital and Data Development Program Associate - Operations - Digital"
+    },
+    "Replit | Software Engineer Intern - Summer 2027": {
+      "company": "Replit",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Repsol | Geology & Geophysics Intern": {
+      "company": "Repsol",
+      "role": "Geology & Geophysics Intern"
+    },
+    "Repsol | Production Allocation Engineering Intern": {
+      "company": "Repsol",
+      "role": "Production Allocation Engineering Intern"
+    },
+    "Robert Bosch Venture Capital | Multi-Fidelity Intern - Computational Materials Science": {
+      "company": "Robert Bosch Venture Capital",
+      "role": "Multi-Fidelity Intern - Computational Materials Science"
+    },
+    "Rockwell Automation | Embedded Software Engineer Co-op": {
+      "company": "Rockwell Automation",
+      "role": "Embedded Software Engineer Co-op"
+    },
+    "Royal Bank of Canada | Capital Markets Quant Summer Associate - Quantitative Technology Services": {
+      "company": "Royal Bank of Canada",
+      "role": "Capital Markets Quant Summer Associate - Quantitative Technology Services"
+    },
+    "Royal Bank of Canada | Global Markets Sales & Trading Summer Analyst - Capital Markets": {
+      "company": "Royal Bank of Canada",
+      "role": "Global Markets Sales & Trading Summer Analyst - Capital Markets"
+    },
+    "Royal Bank of Canada | Quantitative Analyst Associate - Quantitative Technology Services": {
+      "company": "Royal Bank of Canada",
+      "role": "Quantitative Analyst Associate - Quantitative Technology Services"
+    },
+    "Salesforce | Associate Product Manager Intern - Associate Product Manager": {
+      "company": "Salesforce",
+      "role": "Associate Product Manager Intern - Associate Product Manager"
+    },
+    "Salesforce | Software Engineer Intern": {
+      "company": "Salesforce",
+      "role": "Software Engineer Intern"
+    },
+    "Sargent & Lundy | AI & Automation Intern - Enterprise Data & Analytics": {
+      "company": "Sargent & Lundy",
+      "role": "AI & Automation Intern - Enterprise Data & Analytics"
+    },
+    "Sargent & Lundy | AI & Automation Intern - Summer 2027": {
+      "company": "Sargent & Lundy",
+      "role": "AI & Automation Intern - Summer 2027"
+    },
+    "Sargent & Lundy | Software Engineer Intern": {
+      "company": "Sargent & Lundy",
+      "role": "Software Engineer Intern"
+    },
+    "Schweitzer Engineering Laboratories | Software Engineering Intern": {
+      "company": "Schweitzer Engineering Laboratories",
+      "role": "Software Engineering Intern"
+    },
+    "SentinelOne | AI/Machine Learning Engineer Intern": {
+      "company": "SentinelOne",
+      "role": "AI/Machine Learning Engineer Intern"
+    },
+    "Sentry | Software Engineer Intern - Summer 2027": {
+      "company": "Sentry",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Sherwin-Williams | R&D Product Engineering Co-op - Commercialization Engineering - Process Engineering": {
+      "company": "Sherwin-Williams",
+      "role": "R&D Product Engineering Co-op - Commercialization Engineering - Process Engineering"
+    },
+    "SimonComputing | Software Development Internship": {
+      "company": "SimonComputing",
+      "role": "Software Development Internship"
+    },
+    "Springs Window Fashions | Application Engineering Intern - Summer 2027": {
+      "company": "Springs Window Fashions",
+      "role": "Application Engineering Intern - Summer 2027"
+    },
+    "Stash | Engineer Intern": {
+      "company": "Stash",
+      "role": "Engineer Intern"
+    },
+    "Stripe | PhD Data Scientist Intern": {
+      "company": "Stripe",
+      "role": "PhD Data Scientist Intern"
+    },
+    "Stryker | Statistical Programming Intern": {
+      "company": "Stryker",
+      "role": "Statistical Programming Intern"
+    },
+    "Stryten | Procurement Intern": {
+      "company": "Stryten",
+      "role": "Procurement Intern"
+    },
+    "Susquehanna International Group | Derivatives Sales Trader Intern - Summer 2027": {
+      "company": "Susquehanna International Group",
+      "role": "Derivatives Sales Trader Intern - Summer 2027"
+    },
+    "Susquehanna International Group | Electricity + Natural Gas Analyst Intern": {
+      "company": "Susquehanna International Group",
+      "role": "Electricity + Natural Gas Analyst Intern"
+    },
+    "Susquehanna International Group | Quantitative Systematic Trading Intern": {
+      "company": "Susquehanna International Group",
+      "role": "Quantitative Systematic Trading Intern"
+    },
+    "Susquehanna International Group | Quantitative Trader Intern": {
+      "company": "Susquehanna International Group",
+      "role": "Quantitative Trader Intern"
+    },
+    "Susquehanna International Group | Trading Operations Analyst Intern": {
+      "company": "Susquehanna International Group",
+      "role": "Trading Operations Analyst Intern"
+    },
+    "Susquehanna International Group | Trading System Engineer Intern": {
+      "company": "Susquehanna International Group",
+      "role": "Trading System Engineer Intern"
+    },
+    "T. Rowe Price | Global Product Intern": {
+      "company": "T. Rowe Price",
+      "role": "Global Product Intern"
+    },
+    "T. Rowe Price | Technology and Data Intern": {
+      "company": "T. Rowe Price",
+      "role": "Technology and Data Intern"
+    },
+    "TC Energy | Engineering Intern - Engineering": {
+      "company": "TC Energy",
+      "role": "Engineering Intern - Engineering"
+    },
+    "TD Bank | Quantitative Associate - Quantitative Rotation Program": {
+      "company": "TD Bank",
+      "role": "Quantitative Associate - Quantitative Rotation Program"
+    },
+    "TMEIC Corporation Americas | Engineer Intern - Spring 2027": {
+      "company": "TMEIC Corporation Americas",
+      "role": "Engineer Intern - Spring 2027"
+    },
+    "Textron | IT Programmer Intern": {
+      "company": "Textron",
+      "role": "IT Programmer Intern"
+    },
+    "Textron | Software Engineer Intern": {
+      "company": "Textron",
+      "role": "Software Engineer Intern"
+    },
+    "The Federal Reserve System | Graduate Intern - Markets Group - New York Innovation Center": {
+      "company": "The Federal Reserve System",
+      "role": "Graduate Intern - Markets Group - New York Innovation Center"
+    },
+    "The Federal Reserve System | Technical Intern - Federal Reserve - National IT": {
+      "company": "The Federal Reserve System",
+      "role": "Technical Intern - Federal Reserve - National IT"
+    },
+    "The Trade Desk | Software Engineering Intern": {
+      "company": "The Trade Desk",
+      "role": "Software Engineering Intern"
+    },
+    "The Voleon Group | Research Intern": {
+      "company": "The Voleon Group",
+      "role": "Research Intern"
+    },
+    "TikTok | AI Product Manager Intern - Content Ecosystem": {
+      "company": "TikTok",
+      "role": "AI Product Manager Intern - Content Ecosystem"
+    },
+    "TikTok | Applied Scientist Intern - Multiple Teams": {
+      "company": "TikTok",
+      "role": "Applied Scientist Intern - Multiple Teams"
+    },
+    "TikTok | Client Solutions Intern": {
+      "company": "TikTok",
+      "role": "Client Solutions Intern"
+    },
+    "TikTok | Issue Discovery Operations Intern - Content Ecosystem": {
+      "company": "TikTok",
+      "role": "Issue Discovery Operations Intern - Content Ecosystem"
+    },
+    "TikTok | Machine Learning MLOps Intern - Global Site Reliability Engineering": {
+      "company": "TikTok",
+      "role": "Machine Learning MLOps Intern - Global Site Reliability Engineering"
+    },
+    "Toast | Engineer Intern": {
+      "company": "Toast",
+      "role": "Engineer Intern"
+    },
+    "Tower Research Capital | Quantitative Trader Intern": {
+      "company": "Tower Research Capital",
+      "role": "Quantitative Trader Intern"
+    },
+    "TransMarket Group | Quantitative Trader Intern": {
+      "company": "TransMarket Group",
+      "role": "Quantitative Trader Intern"
+    },
+    "Travelers | Engineering Development Intern": {
+      "company": "Travelers",
+      "role": "Engineering Development Intern"
+    },
+    "Travelers | Product Management Development Program Intern": {
+      "company": "Travelers",
+      "role": "Product Management Development Program Intern"
+    },
+    "Trillium | Equity Trader Intern": {
+      "company": "Trillium",
+      "role": "Equity Trader Intern"
+    },
+    "Trillium | Software Engineer Intern - Summer 2027": {
+      "company": "Trillium",
+      "role": "Software Engineer Intern - Summer 2027"
+    },
+    "Truist Bank | Technology and Operations Intern - Data": {
+      "company": "Truist Bank",
+      "role": "Technology and Operations Intern - Data"
+    },
+    "Truist Bank | Technology and Operations Intern Conversion - Data": {
+      "company": "Truist Bank",
+      "role": "Technology and Operations Intern Conversion - Data"
+    },
+    "U.S. Bank | Global Capital Markets Intern - Sales & Trading": {
+      "company": "U.S. Bank",
+      "role": "Global Capital Markets Intern - Sales & Trading"
+    },
+    "Uline | Business Intelligence Developer Intern": {
+      "company": "Uline",
+      "role": "Business Intelligence Developer Intern"
+    },
+    "United Airlines | Airport Operations Intern - Safety Strategy": {
+      "company": "United Airlines",
+      "role": "Airport Operations Intern - Safety Strategy"
+    },
+    "United Airlines | Digital Technology Intern - Summer 2027": {
+      "company": "United Airlines",
+      "role": "Digital Technology Intern - Summer 2027"
+    },
+    "United Airlines | Sales Product Intern": {
+      "company": "United Airlines",
+      "role": "Sales Product Intern"
+    },
+    "United Parcel Service | Information Technology Intern - Multiple Teams": {
+      "company": "United Parcel Service",
+      "role": "Information Technology Intern - Multiple Teams"
+    },
+    "Universal Health Services | Revenue Cycle Analyst Intern": {
+      "company": "Universal Health Services",
+      "role": "Revenue Cycle Analyst Intern"
+    },
+    "University of Virginia Investment Management Company | Investment Analyst Intern": {
+      "company": "University of Virginia Investment Management Company",
+      "role": "Investment Analyst Intern"
+    },
+    "Vanguard | College to Corporate IT Intern - Data Analyst": {
+      "company": "Vanguard",
+      "role": "College to Corporate IT Intern - Data Analyst"
+    },
+    "Vanguard | College to Corporate Internship - Application Development": {
+      "company": "Vanguard",
+      "role": "College to Corporate Internship - Application Development"
+    },
+    "Vanguard | Data Analysis Intern": {
+      "company": "Vanguard",
+      "role": "Data Analysis Intern"
+    },
+    "Vanguard | IT Intern - Data Science": {
+      "company": "Vanguard",
+      "role": "IT Intern - Data Science"
+    },
+    "Verdantas | Data Analytics Intern": {
+      "company": "Verdantas",
+      "role": "Data Analytics Intern"
+    },
+    "Verition Fund Management | Technology Intern": {
+      "company": "Verition Fund Management",
+      "role": "Technology Intern"
+    },
+    "Vertiv | Electrical Engineer Intern - Energy Storage": {
+      "company": "Vertiv",
+      "role": "Electrical Engineer Intern - Energy Storage"
+    },
+    "Vertiv | Product Management Intern - Product Marketing": {
+      "company": "Vertiv",
+      "role": "Product Management Intern - Product Marketing"
+    },
+    "Vertiv | Services Product Management Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Services Product Management Intern - Summer 2027"
+    },
+    "Vertiv | Software Engineer Intern": {
+      "company": "Vertiv",
+      "role": "Software Engineer Intern"
+    },
+    "Vertiv | Thermal Application Engineer Intern - Summer 2027": {
+      "company": "Vertiv",
+      "role": "Thermal Application Engineer Intern - Summer 2027"
+    },
+    "Virtu Financial | Quantitative Research Intern - Quant Research - Undergrad": {
+      "company": "Virtu Financial",
+      "role": "Quantitative Research Intern - Quant Research - Undergrad"
+    },
+    "W.W. Grainger | Business Systems Analyst Intern": {
+      "company": "W.W. Grainger",
+      "role": "Business Systems Analyst Intern"
+    },
+    "Wabtec | Digital Intern": {
+      "company": "Wabtec",
+      "role": "Digital Intern"
+    },
+    "Walleye Capital | Risk Technology Analyst Intern": {
+      "company": "Walleye Capital",
+      "role": "Risk Technology Analyst Intern"
+    },
+    "Walleye Capital | Technology Intern": {
+      "company": "Walleye Capital",
+      "role": "Technology Intern"
+    },
+    "Walleye Capital | Volatility Trading Developer Intern": {
+      "company": "Walleye Capital",
+      "role": "Volatility Trading Developer Intern"
+    },
+    "Wells Fargo | Corporate Risk Development Program Intern - Core Risk - Early Careers": {
+      "company": "Wells Fargo",
+      "role": "Corporate Risk Development Program Intern - Core Risk - Early Careers"
+    },
+    "Wells Fargo | Quantitative Analytics Intern - Multiple Teams": {
+      "company": "Wells Fargo",
+      "role": "Quantitative Analytics Intern - Multiple Teams"
+    },
+    "Western Digital | Software Engineer Intern": {
+      "company": "Western Digital",
+      "role": "Software Engineer Intern"
+    },
+    "WhiteWater Midstream | Trading Operations Intern - Summer 2027": {
+      "company": "WhiteWater Midstream",
+      "role": "Trading Operations Intern - Summer 2027"
+    },
+    "Williams | Engineering Intern": {
+      "company": "Williams",
+      "role": "Engineering Intern"
+    },
+    "Winland Foods | Product Development Intern": {
+      "company": "Winland Foods",
+      "role": "Product Development Intern"
+    },
+    "Woodward Governor | SAP S/4HANA Analyst Intern": {
+      "company": "Woodward Governor",
+      "role": "SAP S/4HANA Analyst Intern"
+    },
+    "Xcel Energy | Gas & Electric Design Analytics and Process Improvement Intern - MN": {
+      "company": "Xcel Energy",
+      "role": "Gas & Electric Design Analytics and Process Improvement Intern - MN"
+    },
+    "Zipline | Computational Physics Intern - Summer 2027": {
+      "company": "Zipline",
+      "role": "Computational Physics Intern - Summer 2027"
+    },
+    "Zipline | Long Range Platform Hardware Engineering Intern": {
+      "company": "Zipline",
+      "role": "Long Range Platform Hardware Engineering Intern"
+    }
+  },
+  "timestamp": "2026-09-05T05:18:49Z"
+}
