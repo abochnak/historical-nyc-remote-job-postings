@@ -615,6 +615,11 @@ def main():
     #     has no capture yet, and the lookup would only add latency.
     fresh = [j for j in pending_queue
              if not details_map.get(j["id"], {}).get("raw_text", "").strip()]
+    # Newest first. The queue is loaded from disk in insertion order, so with a
+    # backlog larger than MAX_TEXT_PER_RUN the slice below would spend the whole
+    # budget on old postings and today's arrivals would never be fetched
+    # "immediately" at all -- which is the entire point of this step.
+    fresh.sort(key=lambda j: j.get("first_seen_date", ""), reverse=True)
     if fresh:
         batch = fresh[:MAX_TEXT_PER_RUN]
         deferred = len(fresh) - len(batch)
@@ -729,27 +734,33 @@ def main():
             have_text = bool(details_map.get(jid, {}).get("raw_text", "").strip())
             arc_url, arc_src, arc_status, raw_text = fetch_or_archive(job["job_url"], have_text)
             time.sleep(3)
-            # Update existing entry preserving status and category
-            existing = details_map.get(jid, {})
-            details_map[jid] = {
-                "id":              jid,
-                "company_name":    job["company_name"],
-                "title":           job["title"],
-                "job_url":         job["job_url"],
-                "archive_url":     arc_url,
-                "archive_source":  arc_src,
-                "archive_status":  arc_status,
-                "category":        existing.get("category", ""),
-                "date_archived":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "status":          existing.get("status", "unreviewed"),
-                "source":          existing.get("source", "simplify"),
-                "recruiting_season": existing.get("recruiting_season", ""),
-                "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
-                # Step 5b already captured this from the live posting, which is
-                # a better source than an archive rendering of it. Only take the
-                # archive's text if we don't already have some.
-                "raw_text":        existing.get("raw_text", "").strip() or raw_text,
-            }
+            # Update the existing entry in place, rather than rebuilding it.
+            #
+            # This used to construct a fresh dict and copy across the handful of
+            # fields someone remembered, which silently blanked every other
+            # column on the next save_details() -- class_year,
+            # degree_enrollment, additional_skills, language_requirements,
+            # application_closes, and each new column after them. Archiving a
+            # posting wiped its classification. Listing what to *keep* is the
+            # wrong default; only the archive fields belong to this step.
+            entry = dict(details_map.get(jid, {}))
+            entry.setdefault("id", jid)
+            entry.setdefault("status", "unreviewed")
+            entry.setdefault("source", "simplify")
+            entry.setdefault("first_seen_date", job.get("first_seen_date", ""))
+            entry["company_name"]   = job["company_name"]
+            entry["title"]          = job["title"]
+            entry["job_url"]        = job["job_url"]
+            entry["archive_url"]    = arc_url
+            entry["archive_source"] = arc_src
+            entry["archive_status"] = arc_status
+            entry["date_archived"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            # Step 5b already captured this from the live posting, which is a
+            # better source than an archive rendering of it. Only take the
+            # archive's text if we don't already have some.
+            if not entry.get("raw_text", "").strip():
+                entry["raw_text"] = raw_text
+            details_map[jid] = entry
             if arc_status == "success":
                 archived_ids.add(jid)  # success — remove from queue
             else:

@@ -151,7 +151,11 @@ jobs:
             cp /tmp/action-data/pending_archive.csv data/pending_archive.csv
             # The Discord announcement ledger. Losing it means every posting
             # queued at the time gets announced a second time.
-            cp /tmp/action-data/notified_ids.txt   data/notified_ids.txt 2>/dev/null || true
+            # Both ledgers: update.py keeps a separate one per notification
+            # target, and losing the test ledger re-announces to the test
+            # channel just as losing the prod one re-announces to prod.
+            cp /tmp/action-data/notified_ids.txt      data/notified_ids.txt      2>/dev/null || true
+            cp /tmp/action-data/notified_ids.test.txt data/notified_ids.test.txt 2>/dev/null || true
             # Written by the render step. Losing it means re-attempting pages
             # already known to be unreadable, every cycle, forever.
             cp /tmp/action-data/render_status.csv  data/render_status.csv 2>/dev/null || true
