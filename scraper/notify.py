@@ -182,21 +182,26 @@ def format_posting(job):
     """
     One posting, as two lines:
 
-        💼  Web Development Engineer Intern (Summer 2026)
-        🔗 https://job-boards.greenhouse.io/eulerity/jobs/4689194006
+        💼   American Express - 2027 Software Engineer, Technology (Summer 2027)
+        🔗 https://careers.americanexpress.com/en/sites/CX_1/job/26010970
 
-    The season is omitted when it is missing or "N/A" rather than printing an
-    empty or literal-N/A parenthetical -- 106 postings in the archive have no
-    usable term.
+    Company and role joined with " - ", the recruiting term in parentheses.
+    Either of the first two dropping out takes its separator with it rather than
+    leaving a dangling dash, and a posting with no usable term simply has no
+    parenthetical -- 61 of the archived postings have none, and "(N/A)" would be
+    worse than nothing.
     """
-    title = (job.get("title") or "").strip() or "(untitled posting)"
+    company = (job.get("company_name") or "").strip()
+    title   = (job.get("title") or "").strip() or "(untitled posting)"
+
+    head = " - ".join(p for p in (company, title) if p)
+
     season = (job.get("recruiting_season") or "").strip()
-
-    head = f"💼  {title}"
     if season and season.upper() not in ("N/A", "NA", "NONE"):
-        head += f" ({season})"
+        # Multi-term postings ("Summer 2026 | Fall 2026") show the first.
+        head += f" ({season.split('|')[0].strip()})"
 
-    lines = [head]
+    lines = [f"💼   {head}"]
     url = (job.get("url") or "").strip()
     if url:
         lines.append(f"🔗 {url}")
