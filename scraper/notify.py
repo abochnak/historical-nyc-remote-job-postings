@@ -36,11 +36,16 @@ import time
 import urllib.error
 import urllib.request
 
-# Two channels. NOTIFY_TARGET picks between them; anything other than "test"
+# NOTIFY_TARGET picks between production and test; anything other than "test"
 # means production, so the default with no configuration at all is production.
-ENV_VAR      = "DISCORD_WEBHOOK_URL"
-ENV_VAR_TEST = "DISCORD_WEBHOOK_URL_TEST"
-TARGET_VAR   = "NOTIFY_TARGET"
+#
+# Production can fan out to several channels: DISCORD_WEBHOOK_URL plus
+# DISCORD_WEBHOOK_URL_2 and _3. Only the ones that are set are used, and the
+# numbering may be sparse -- setting _3 without _2 works.
+ENV_VAR       = "DISCORD_WEBHOOK_URL"
+ENV_VAR_EXTRA = ("DISCORD_WEBHOOK_URL_2", "DISCORD_WEBHOOK_URL_3")
+ENV_VAR_TEST  = "DISCORD_WEBHOOK_URL_TEST"
+TARGET_VAR    = "NOTIFY_TARGET"
 
 USERNAME = "TTP Job Bot"
 
@@ -69,31 +74,48 @@ def target():
     return "test" if (os.environ.get(TARGET_VAR) or "").strip().lower() == "test" else "prod"
 
 
-def webhook_url():
+def webhook_urls():
     """
-    The webhook for the selected target, or "".
+    Every webhook for the selected target, in order, skipping unset ones.
 
-    A test target NEVER falls back to the production webhook. Falling back
-    would mean the one command you ran to avoid touching the real channel is
-    the command that posts to it -- so an unset test webhook disables
+    A test target NEVER falls back to the production webhooks. Falling back
+    would mean the one command you ran to avoid touching the real channels is
+    the command that posts to them -- so an unset test webhook disables
     notifications instead.
     """
     if target() == "test":
-        return (os.environ.get(ENV_VAR_TEST) or "").strip()
-    return (os.environ.get(ENV_VAR) or "").strip()
+        url = (os.environ.get(ENV_VAR_TEST) or "").strip()
+        return [url] if url else []
+
+    urls = []
+    for var in (ENV_VAR,) + ENV_VAR_EXTRA:
+        url = (os.environ.get(var) or "").strip()
+        if url and url not in urls:      # a duplicated secret shouldn't double-post
+            urls.append(url)
+    return urls
+
+
+def webhook_url():
+    """First configured webhook for the target, or "". Kept for callers that
+    only need to know whether anything is configured."""
+    urls = webhook_urls()
+    return urls[0] if urls else ""
 
 
 def enabled():
-    return bool(webhook_url())
+    return bool(webhook_urls())
 
 
 def describe_target():
-    """One line for run output, naming the channel but never the URL."""
+    """One line for run output, naming the channels by count but never the URL."""
     t = target()
-    if not webhook_url():
+    n = len(webhook_urls())
+    if not n:
         var = ENV_VAR_TEST if t == "test" else ENV_VAR
         return f"notifications off ({var} not set)"
-    return f"notifying the {t} channel"
+    if n == 1:
+        return f"notifying the {t} channel"
+    return f"notifying {n} {t} channels"
 
 
 def _truncate(s, limit):
@@ -108,10 +130,6 @@ def post_embed(title, lines, color=COLOR_INFO, footer=None):
     Returns True if Discord accepted it, False otherwise. Never raises: a
     notification failing must not take a scrape down with it.
     """
-    url = webhook_url()
-    if not url:
-        return False
-
     description = "\n".join(str(l) for l in lines if str(l).strip())
     payload = {
         "username": USERNAME,
@@ -124,7 +142,7 @@ def post_embed(title, lines, color=COLOR_INFO, footer=None):
     if footer:
         payload["embeds"][0]["footer"] = {"text": _truncate(footer, 2048)}
 
-    return _send(url, payload)
+    return _broadcast(payload)
 
 
 def post_message(content):
@@ -134,11 +152,43 @@ def post_message(content):
     Used for job postings, whose format is deliberately plain: Discord renders
     a preview card for the link, which an embed would suppress.
     """
-    url = webhook_url()
-    if not url:
-        return False
-    return _send(url, {"username": USERNAME,
+    return _broadcast({"username": USERNAME,
                        "content": _truncate(content, MAX_CONTENT)})
+
+
+def _broadcast(payload):
+    """
+    Deliver one payload to every configured webhook for the current target.
+
+    Returns True if **at least one** channel accepted it, which is what the
+    caller records as "announced".
+
+    That choice is deliberate. Requiring every channel to succeed sounds safer
+    but behaves worse: a webhook that has been deleted returns 404 forever, the
+    posting is never recorded as announced, and every healthy channel receives
+    it again on the next run -- forty-eight duplicate posts a day rather than
+    one missed one. Accepting a partial delivery bounds the damage to the dead
+    channel, and the failure is printed with its position so it can be found and
+    fixed.
+
+    Channels are identified by position, never by URL: the URL is a credential
+    and CI logs are not private.
+    """
+    urls = webhook_urls()
+    if not urls:
+        return False
+
+    delivered = 0
+    for i, url in enumerate(urls, 1):
+        if _send(url, payload):
+            delivered += 1
+        else:
+            label = f"{target()} webhook {i}" if len(urls) > 1 else f"{target()} webhook"
+            print(f"  [discord] {label} did not accept the message")
+
+    if delivered and delivered < len(urls):
+        print(f"  [discord] delivered to {delivered} of {len(urls)} channels")
+    return delivered > 0
 
 
 def _send(url, payload):

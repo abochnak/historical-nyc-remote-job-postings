@@ -175,8 +175,15 @@ as repository secrets under **Settings → Secrets and variables → Actions**:
 
 | Secret | Channel |
 |---|---|
-| `DISCORD_WEBHOOK_URL` | the real one |
+| `DISCORD_WEBHOOK_URL` | production |
+| `DISCORD_WEBHOOK_URL_2` | production, optional |
+| `DISCORD_WEBHOOK_URL_3` | production, optional |
 | `DISCORD_WEBHOOK_URL_TEST` | the scratch one |
+
+Production posts to every one of the three that is set — one message per
+channel, same content. Only `DISCORD_WEBHOOK_URL` is required; the numbering may
+be sparse, so setting `_3` without `_2` works, and the same URL in two secrets
+posts once rather than twice.
 
 Check them locally:
 
@@ -202,10 +209,15 @@ the real one.
 
 Two properties worth knowing, both tested:
 
-- **A test target never falls back to the real webhook.** If
+- **A test target never falls back to the real webhooks.** If
   `DISCORD_WEBHOOK_URL_TEST` is unset, notifications are simply off. Falling
-  back would mean the one command you ran to avoid the real channel is the
-  command that posts to it.
+  back would mean the one command you ran to avoid the real channels is the
+  command that posts to them.
+- **A posting counts as announced if any channel accepted it.** Requiring all of
+  them sounds safer and behaves worse: a deleted webhook returns 404 forever,
+  the posting is never recorded, and every healthy channel gets it again on the
+  next run — 48 duplicates a day rather than one miss. Partial delivery is
+  printed (`delivered to 2 of 3 channels`) so a dead channel is findable.
 - **Each target has its own ledger** — `notified_ids.txt` and
   `notified_ids.test.txt`. Sharing one would let a test run mark postings as
   announced, and the real channel would then never hear about them.
