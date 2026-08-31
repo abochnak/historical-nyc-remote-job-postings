@@ -1,0 +1,3 @@
+# Only classify.py needs these. update.py, backfill_text.py and jobtext.py are
+# deliberately standard-library-only so they run anywhere with no install step.
+anthropic>=0.40.0

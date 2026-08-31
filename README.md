@@ -50,6 +50,7 @@ immediately rather than tomorrow.
 | `scraper/jobtext.py` | Shared extraction: fetch, JSON-LD/container/body extraction, quality gate. The one place this logic lives. |
 | `scraper/update.py` | Incremental updater. New commits → new jobs → CSVs, immediate text capture, archives. |
 | `scraper/backfill_text.py` | Bulk backfill of missing `raw_text`. Resumable, checkpointed, safe to re-run. |
+| `scraper/classify.py` | Fills the five review fields from the description text. Scores itself against human labels with `--eval`. |
 | `scraper/scrape.py` | Full historical build from scratch (rarely needed). |
 
 ## Backfilling by hand
@@ -69,6 +70,32 @@ Outcomes are recorded per job in `data/backfill_status.csv`:
 | `error` | couldn't reach it (blocked, 4xx, network) | yes |
 | `empty` | pages loaded, no posting text (JS-rendered board) | only with `--retry-failed` |
 | `gone` | a page said the posting was taken down | only with `--retry-failed` |
+
+## Automatic classification
+
+`classify.py` assigns `category`, `class_year`, `degree_enrollment`,
+`additional_skills`, and `language_requirements` by reading the posting text,
+so nobody has to do it by hand. It needs `ANTHROPIC_API_KEY` and
+`pip install -r scraper/requirements.txt`.
+
+194 postings were classified by hand before this existed. Score against them
+before trusting it:
+
+```bash
+python scraper/classify.py --eval --limit 40   # writes nothing
+python scraper/classify.py --limit 20          # classify for real
+python scraper/classify.py                     # the whole backlog
+```
+
+The model is constrained to the exact taxonomy already in the data — it cannot
+invent a category — and values are re-checked against that list on the way out.
+
+Two things it deliberately does not do:
+
+- **It never sets `status`.** Automatically classified is not the same as
+  human-reviewed, and merging the two would lose that distinction for good.
+- **It never guesses without text.** A posting with no `raw_text` is reported
+  as blocked, not classified from its title.
 
 ## What can't be recovered
 
