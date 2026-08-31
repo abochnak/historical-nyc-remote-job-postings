@@ -152,6 +152,7 @@ jobs:
             # The Discord announcement ledger. Losing it means every posting
             # queued at the time gets announced a second time.
             cp /tmp/action-data/notified_ids.txt   data/notified_ids.txt 2>/dev/null || true
+            cp /tmp/action-data/notified_ids.test.txt data/notified_ids.test.txt 2>/dev/null || true
             # Written by the render step. Losing it means re-attempting pages
             # already known to be unreadable, every cycle, forever.
             cp /tmp/action-data/render_status.csv  data/render_status.csv 2>/dev/null || true
