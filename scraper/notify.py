@@ -61,7 +61,7 @@ MAX_RETRIES = 3
 
 
 def target():
-    """"test" or "prod". Anything unrecognised is treated as production."""
+    """Return "test" or "prod". Anything unrecognised is treated as production."""
     return "test" if (os.environ.get(TARGET_VAR) or "").strip().lower() == "test" else "prod"
 
 
