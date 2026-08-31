@@ -144,9 +144,14 @@ the existing behaviour of simply omitting the parenthetical.
 | Backfill run | nightly (`backfill-text.yml`) | how many descriptions were recovered |
 
 **Grad-only postings are not announced.** An undergraduate cannot apply to them,
-so the alert is noise. Only a positive grad call suppresses — a posting whose
-text could not be captured is still announced, because "we don't know" must not
-become "don't tell them".
+so the alert is noise. The **title** is checked as well as the description,
+which matters because JS-rendered boards often yield no description at all — a
+posting titled "Technical Intern - Masters or PhD" was announced purely because
+nothing could be read from its page.
+
+Only a positive grad call suppresses. A posting with neither a telling title nor
+readable text is still announced, because "we don't know" must not become
+"don't tell them".
 
 This is a real trade, and worth understanding before relying on it: the grad
 call runs at **70% precision**, so roughly three of every ten suppressed
