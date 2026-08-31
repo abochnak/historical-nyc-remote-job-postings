@@ -51,6 +51,8 @@ jobs:
 
       # No pip install: simplify_closes.py is standard-library only.
       - name: Track close times
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch

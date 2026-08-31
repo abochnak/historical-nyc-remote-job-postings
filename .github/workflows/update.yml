@@ -57,6 +57,8 @@ jobs:
           python-version: "3.12"
 
       - name: Run updater
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch

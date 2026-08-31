@@ -50,6 +50,7 @@ immediately rather than tomorrow.
 | `scraper/jobtext.py` | Shared extraction: fetch, JSON-LD/container/body extraction, quality gate. The one place this logic lives. |
 | `scraper/update.py` | Incremental updater. New commits → new jobs → CSVs, immediate text capture, archives. |
 | `scraper/backfill_text.py` | Bulk backfill of missing `raw_text`. Resumable, checkpointed, safe to re-run. |
+| `scraper/notify.py` | Posts run results to a Discord webhook. Inert unless `DISCORD_WEBHOOK_URL` is set. |
 | `scraper/simplify_closes.py` | Records when postings stop accepting applications, from Simplify's active/inactive lists. |
 | `scraper/classify.py` | Fills the five review fields from the description text. Scores itself against human labels with `--eval`. |
 | `scraper/scrape.py` | Full historical build from scratch (rarely needed). |
@@ -106,6 +107,41 @@ labels call it "Open to All Degrees" on some postings and
 a binary: either way, an undergraduate can apply.
 
 Only `degree_enrollment` is written. The other review fields are left alone.
+
+## Discord notifications (optional)
+
+The pipeline runs unattended, so it can report to a Discord channel instead of
+you checking the data branch:
+
+| Event | Message |
+|---|---|
+| New postings found | company, title, and estimated degree level |
+| Posting closed or reopened | which ones |
+| Backfill run | how many descriptions were recovered |
+
+### Setup
+
+1. In Discord: **Server Settings → Integrations → Webhooks → New Webhook**,
+   pick the channel, and copy the URL.
+2. In GitHub: **Settings → Secrets and variables → Actions → New repository
+   secret**, named exactly `DISCORD_WEBHOOK_URL`.
+3. Check it, locally:
+
+```bash
+export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'
+python scraper/notify.py --test
+```
+
+That's all — the three workflows already pass the secret through.
+
+**Treat the webhook URL as a credential.** Anyone holding it can post to your
+channel. It belongs in the repository secret and nowhere else: not in a file,
+not in a commit, not in a workflow's `run:` block. `notify.py` never prints it,
+including in error messages, because a failed webhook call can echo the URL
+back and CI logs are not private.
+
+With no secret set, notifications are a silent no-op — the scrapers run exactly
+as they do now, and a Discord outage can never fail a scrape.
 
 ## What can't be recovered
 

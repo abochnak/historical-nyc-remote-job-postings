@@ -28,7 +28,9 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import classify
 import jobtext
+import notify
 
 # -- URL deduplication --------------------------------------------------------
 def extract_job_id(url):
@@ -610,6 +612,26 @@ def main():
                              "error": "ERR "}.get(res["status"], "ERR ")
                     print(f"    {label} {job['company_name'][:24]}: {res['note'][:44]}")
         print(f"  Captured text for {captured}/{len(batch)}")
+
+        # Announce the new postings, with the degree level where we managed to
+        # read the description. No-op when DISCORD_WEBHOOK_URL isn't set.
+        if notify.enabled():
+            announce = []
+            for job in batch:
+                entry = details_map.get(job["id"], {})
+                text = entry.get("raw_text", "").strip()
+                level = None
+                if text:
+                    try:
+                        level, _ = classify.classify_text(text)
+                    except Exception:
+                        level = None
+                announce.append({
+                    "company_name": job["company_name"],
+                    "title":        job["title"],
+                    "degree_level": level,
+                })
+            notify.notify_new_postings(announce, captured, len(batch))
 
     # 6. Archive from persistent queue
     if pending_queue and not args.skip_archive:

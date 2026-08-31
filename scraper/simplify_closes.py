@@ -50,6 +50,9 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import notify
+
 ROOT        = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR    = os.path.join(ROOT, "data")
 STATE_JSON  = os.path.join(DATA_DIR, "simplify_job_state.json")
@@ -308,6 +311,9 @@ def main():
 
     save_transitions(transitions)
     save_state(active, inactive, now)
+
+    if transitions:
+        notify.notify_closes(transitions)
 
     if transitions and not args.no_stamp:
         stamped, ambiguous = stamp_closes(transitions, now)
