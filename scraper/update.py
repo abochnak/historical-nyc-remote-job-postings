@@ -25,7 +25,9 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
-from html.parser import HTMLParser
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import jobtext
 
 # -- URL deduplication --------------------------------------------------------
 def extract_job_id(url):
@@ -152,42 +154,22 @@ def fetch_raw(sha):
 
 
 # -- Text extraction -----------------------------------------------------------
-class _TextExtractor(HTMLParser):
-    _SKIP = {"script", "style", "head", "noscript", "iframe", "nav", "footer"}
-
-    def __init__(self):
-        super().__init__()
-        self._depth = 0
-        self.parts = []
-
-    def handle_starttag(self, tag, attrs):
-        if tag.lower() in self._SKIP:
-            self._depth += 1
-
-    def handle_endtag(self, tag):
-        if tag.lower() in self._SKIP:
-            self._depth = max(0, self._depth - 1)
-
-    def handle_data(self, data):
-        if not self._depth:
-            s = data.strip()
-            if s:
-                self.parts.append(s)
-
-
+# Extraction lives in jobtext.py, shared with backfill_text.py and the review
+# app, so a posting scraped here and one scraped there come out the same.
 def fetch_page_text(url, timeout=30):
-    """Fetch a URL and return its visible text with HTML tags stripped."""
-    try:
-        req = urllib.request.Request(
-            url, headers={"User-Agent": "Mozilla/5.0 (compatible; job-archiver/1.0)"}
-        )
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            html = r.read().decode(errors="replace")
-        p = _TextExtractor()
-        p.feed(html)
-        return "\n".join(p.parts)
-    except Exception:
+    """
+    Fetch a URL and return its description text, or "" if the page holds none.
+
+    Unlike a bare tag-strip, this returns "" for pages that load fine but carry
+    no posting -- a Workday JS shell, a nav-only stub, a cookie wall. That's
+    what lets fetch_or_archive() correctly fall through to archiving instead of
+    recording a page of navigation links as the job description.
+    """
+    html, err = jobtext.fetch(url, timeout=timeout)
+    if err:
         return ""
+    text = jobtext.html_to_text(html)
+    return text if jobtext.looks_like_job_text(text) else ""
 
 
 # -- Archiving -----------------------------------------------------------------
@@ -352,7 +334,11 @@ def save_details(details_map):
     save_jsonl(rows)
 
 def save_jsonl(rows):
-    archived = [r for r in rows if r.get("archive_url") and r.get("raw_text", "").strip()]
+    # Any row with text is worth keeping. This used to also require archive_url,
+    # which silently dropped every posting whose text came from a live fetch
+    # (archive_source="live" leaves archive_url empty) — the text was scraped,
+    # written to the CSV, then deleted from the JSONL on the next run.
+    archived = [r for r in rows if r.get("raw_text", "").strip()]
     with open(DETAILS_JSONL, "w", encoding="utf-8") as f:
         for row in archived:
             f.write(json.dumps({

@@ -1,0 +1,112 @@
+name: Backfill job description text
+
+# Fills raw_text for postings that don't have it yet, so nobody has to scrape
+# a URL by hand. update.py already tries once per job as it's discovered; this
+# catches everything that first attempt missed -- pages that were slow, briefly
+# blocked, or only became available in the Wayback Machine later.
+#
+# Daily rather than every 30 minutes: the incremental updater handles fresh
+# postings, and what's left here is a long tail worth retrying occasionally,
+# not constantly.
+
+on:
+  schedule:
+    - cron: "20 6 * * *"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max postings this run (0 = all missing)"
+        required: false
+        default: "120"
+      retry_failed:
+        description: "Also revisit postings previously marked gone/thin"
+        type: boolean
+        required: false
+        default: false
+
+# Shares the lock with update.yml -- both force-push the data branch.
+concurrency:
+  group: data-branch-write
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch (for scraper code)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data-branch
+
+      - name: Verify data files exist before running
+        run: |
+          if [ ! -f "data-branch/data/job_details.csv" ]; then
+            echo "ERROR: data/job_details.csv missing — aborting to prevent data loss"
+            exit 1
+          fi
+          echo "job_details.csv: $(wc -l < data-branch/data/job_details.csv) lines"
+          if [ -f "data-branch/data/job_details.jsonl" ]; then
+            echo "job_details.jsonl: $(wc -l < data-branch/data/job_details.jsonl) entries with text"
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run backfill
+        run: |
+          cp -r main/scraper data-branch/scraper
+          cd data-branch
+          LIMIT="${{ github.event.inputs.limit || '120' }}"
+          ARGS="--limit $LIMIT --workers 6 --host-delay 2"
+          if [ "${{ github.event.inputs.retry_failed }}" = "true" ]; then
+            ARGS="$ARGS --retry-failed"
+          fi
+          echo "Running: backfill_text.py $ARGS"
+          python scraper/backfill_text.py $ARGS
+
+      - name: Commit results to data branch
+        run: |
+          cd data-branch
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # The scraper directory is copied in, not tracked — don't commit it.
+          rm -rf scraper
+
+          # Pick up anything (Flask edits, an update.py run) that landed while
+          # we were scraping, then reapply only the two files this job writes.
+          git fetch origin data
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/data)" ]; then
+            echo "Remote moved while backfilling — replaying our two files onto it"
+            mkdir -p /tmp/backfill-out
+            cp data/job_details.jsonl    /tmp/backfill-out/ 2>/dev/null || true
+            cp data/backfill_status.csv  /tmp/backfill-out/ 2>/dev/null || true
+            git reset --hard origin/data
+            cp /tmp/backfill-out/job_details.jsonl   data/job_details.jsonl   2>/dev/null || true
+            cp /tmp/backfill-out/backfill_status.csv data/backfill_status.csv 2>/dev/null || true
+          fi
+
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No new text — nothing to commit."
+          else
+            # The data branch is kept as a single squashed commit, matching update.yml.
+            git commit --amend --no-edit \
+              -m "data: latest job data $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push --force origin data
+            echo "Data branch updated with backfilled descriptions"
+          fi
