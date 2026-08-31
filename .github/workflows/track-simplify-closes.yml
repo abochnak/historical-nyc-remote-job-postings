@@ -1,0 +1,93 @@
+name: Track Simplify close times
+
+# Records when postings stop accepting applications, by watching Simplify move
+# them between README.md and README-Inactive.md. Daily is the right cadence:
+# the signal only changes when Simplify updates its lists, and the recorded
+# timestamp is "when we observed the change", so a daily run puts close times
+# within a day of the truth.
+#
+# Ported from the nyc-job-review-app repo, where it ran daily and never once
+# committed anything — two bugs, both fixed in scraper/simplify_closes.py:
+# transitions could never be detected (state keys were written as Python tuple
+# reprs and read back as if still tuples), and the git add referenced a file
+# that was only created when there were transitions to write.
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+# Shares the lock with update.yml and backfill-text.yml — every workflow that
+# writes the data branch force-pushes it.
+concurrency:
+  group: data-branch-write
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch (for scraper code)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data-branch
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # No pip install: simplify_closes.py is standard-library only.
+      - name: Track close times
+        run: |
+          cp -r main/scraper data-branch/scraper
+          cd data-branch
+          python scraper/simplify_closes.py
+
+      - name: Commit results to data branch
+        run: |
+          cd data-branch
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # The scraper directory is copied in, not tracked — don't commit it.
+          rm -rf scraper
+
+          # Pick up anything that landed while we were fetching, then reapply
+          # only the files this job writes.
+          git fetch origin data
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/data)" ]; then
+            echo "Remote moved — replaying our files onto it"
+            mkdir -p /tmp/closes-out
+            cp data/simplify_transitions.csv /tmp/closes-out/ 2>/dev/null || true
+            cp data/simplify_job_state.json  /tmp/closes-out/ 2>/dev/null || true
+            cp data/job_details.csv          /tmp/closes-out/ 2>/dev/null || true
+            git reset --hard origin/data
+            cp /tmp/closes-out/simplify_transitions.csv data/ 2>/dev/null || true
+            cp /tmp/closes-out/simplify_job_state.json  data/ 2>/dev/null || true
+            cp /tmp/closes-out/job_details.csv          data/ 2>/dev/null || true
+          fi
+
+          # `git add data/` rather than naming files — the old version listed a
+          # path that did not exist yet, which failed the step every single run.
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No transitions today — nothing to commit."
+          else
+            git commit --amend --no-edit \
+              -m "data: latest job data $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push --force origin data
+            echo "Data branch updated with close-time transitions"
+          fi

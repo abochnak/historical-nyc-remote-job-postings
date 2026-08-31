@@ -108,7 +108,12 @@ DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status",
-    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived", "status", "source", "first_seen_date",
+    "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived",
+    # Written by simplify_closes.py. It must be listed here: save_details() uses
+    # these as the CSV fieldnames with extrasaction="ignore", so a column absent
+    # from this list is silently dropped on the next updater run.
+    "application_closes",
+    "status", "source", "first_seen_date",
 ]
 
 EXCL_HEADERS = [

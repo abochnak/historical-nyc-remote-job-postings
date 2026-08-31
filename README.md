@@ -50,6 +50,7 @@ immediately rather than tomorrow.
 | `scraper/jobtext.py` | Shared extraction: fetch, JSON-LD/container/body extraction, quality gate. The one place this logic lives. |
 | `scraper/update.py` | Incremental updater. New commits → new jobs → CSVs, immediate text capture, archives. |
 | `scraper/backfill_text.py` | Bulk backfill of missing `raw_text`. Resumable, checkpointed, safe to re-run. |
+| `scraper/simplify_closes.py` | Records when postings stop accepting applications, from Simplify's active/inactive lists. |
 | `scraper/classify.py` | Fills the five review fields from the description text. Scores itself against human labels with `--eval`. |
 | `scraper/scrape.py` | Full historical build from scratch (rarely needed). |
 
@@ -119,6 +120,8 @@ These are recorded as `empty` / `gone` rather than retried forever.
 | `data/job_details.csv` | Per-posting metadata, archive URL, review status |
 | `data/job_details.jsonl` | `{id, raw_text}` — the description text |
 | `data/backfill_status.csv` | Per-posting scrape outcome |
+| `data/simplify_transitions.csv` | Append-only log of observed open/close transitions |
+| `data/simplify_job_state.json` | Last seen Simplify state, for the next diff |
 | `data/excluded_jobs.csv` | Postings filtered out, with the reason |
 | `data/pending_archive.csv` | Queue of jobs still awaiting an archive attempt |
 
