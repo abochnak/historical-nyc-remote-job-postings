@@ -95,6 +95,13 @@ jobs:
           key: playwright-chromium-${{ runner.os }}
 
       - name: Install Playwright
+        # Must not fail the run. The commit step comes after this one, so a
+        # transient pip or browser-download failure here would throw away the
+        # CSV updates the run had already produced -- 48 times a day -- for the
+        # sake of an enhancement step that is itself optional. If the install
+        # fails, render_scrape.py exits with its own message and the
+        # continue-on-error render step swallows it.
+        continue-on-error: true
         run: |
           pip install -r main/scraper/requirements-render.txt
           if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
