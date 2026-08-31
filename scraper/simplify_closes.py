@@ -53,6 +53,11 @@ from datetime import datetime, timezone
 ROOT        = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR    = os.path.join(ROOT, "data")
 STATE_JSON  = os.path.join(DATA_DIR, "simplify_job_state.json")
+# The review app wrote its state to the repo root, and that file is live on the
+# data branch. Read it when the data/ copy doesn't exist yet, so the first run
+# here continues from the existing baseline instead of starting blind — a fresh
+# start would silently miss every posting that closed in between.
+LEGACY_STATE_JSON = os.path.join(ROOT, "simplify_job_state.json")
 TRANS_CSV   = os.path.join(DATA_DIR, "simplify_transitions.csv")
 DETAILS_CSV = os.path.join(DATA_DIR, "job_details.csv")
 
@@ -114,10 +119,16 @@ def job_key(company, role):
 
 # -- State ---------------------------------------------------------------------
 def load_state():
-    if not os.path.exists(STATE_JSON):
-        return {"active": {}, "inactive": {}}
+    path = STATE_JSON
+    if not os.path.exists(path):
+        if os.path.exists(LEGACY_STATE_JSON):
+            print(f"  Using legacy state from {os.path.basename(LEGACY_STATE_JSON)} "
+                  "(repo root); future runs write to data/")
+            path = LEGACY_STATE_JSON
+        else:
+            return {"active": {}, "inactive": {}}
     try:
-        with open(STATE_JSON, encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             state = json.load(f)
     except Exception:
         return {"active": {}, "inactive": {}}
