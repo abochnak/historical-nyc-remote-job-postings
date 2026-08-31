@@ -10,6 +10,12 @@ on:
         required: false
         default: "5"
 
+# Every workflow that writes the data branch force-pushes it, so they must
+# never run concurrently -- two overlapping runs mean one silently wins.
+concurrency:
+  group: data-branch-write
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -91,6 +97,12 @@ jobs:
             fi
             if ! diff -q /tmp/action-data/excluded_jobs.csv data/excluded_jobs.csv > /dev/null 2>&1; then
               cp /tmp/action-data/excluded_jobs.csv data/excluded_jobs.csv
+            fi
+            # job_details.jsonl holds the scraped description text. Without this
+            # the reset --hard above throws away everything this run scraped
+            # whenever a Flask edit landed while the action was working.
+            if ! diff -q /tmp/action-data/job_details.jsonl data/job_details.jsonl > /dev/null 2>&1; then
+              cp /tmp/action-data/job_details.jsonl data/job_details.jsonl
             fi
           fi
 
