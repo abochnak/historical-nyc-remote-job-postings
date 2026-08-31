@@ -684,11 +684,14 @@ def main():
             for jid, row in to_announce.items():
                 text = details_map.get(jid, {}).get("raw_text", "").strip()
                 level = None
-                if text:
-                    try:
-                        level, _ = classify.classify_text(text)
-                    except Exception:
-                        level = None
+                # Title as well as text. The title is often the only thing
+                # available: JS-rendered boards yield no description, and a
+                # Centific posting titled "Technical Intern - Masters or PhD"
+                # was announced for exactly that reason.
+                try:
+                    level, _ = classify.classify_posting(row.get("title", ""), text)
+                except Exception:
+                    level = None
 
                 # Grad-only postings are not announced -- an undergraduate
                 # cannot apply to them, so the alert is noise.

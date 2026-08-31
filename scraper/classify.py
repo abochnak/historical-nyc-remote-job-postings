@@ -216,6 +216,64 @@ def classify_text(text):
     return OPEN, evidence
 
 
+# A title is terse, so it needs its own patterns. "Technical Intern - Masters"
+# never says "master's degree", and GRAD_RE deliberately requires that noun
+# because prose contains "master your craft". A job title does not.
+#
+# Bare "graduate" is deliberately excluded: "Graduate Analyst Programme" is
+# standard UK phrasing for a scheme open to new bachelor's graduates, so
+# treating it as grad-only would suppress exactly the postings wanted.
+TITLE_GRAD_RE = re.compile(
+    r"\bmaster'?s?\b"
+    r"|\bph\.?\s?d\b"
+    r"|\bdoctoral\b|\bdoctorate\b"
+    # "MS" needs guarding in a title: "Database Administrator MS Access,
+    # Emerging Talent Intern" is Microsoft Access, not a Master of Science, and
+    # it was being suppressed as grad-only.
+    r"|\bm\.?s\.?\b(?!\s*(?:access|office|excel|word|project|sql|teams|"
+    r"dynamics|visio|powerpoint|outlook|azure|sharepoint|365))"
+    r"|\bm\.?eng\b|\bm\.?b\.?a\b"
+    r"|\bgraduate\s+(?:degree|student)\b",
+    re.I,
+)
+
+TITLE_UNDERGRAD_RE = re.compile(
+    r"\bbachelor'?s?\b|\bundergrad(uate)?\b|\bb\.?s\.?\b|\bb\.?a\.?\b",
+    re.I,
+)
+
+
+def classify_posting(title, text):
+    """
+    Return (label, evidence) for a posting, reading the title as well as the text.
+
+    The title is checked first and can decide on its own. A title is by
+    definition about the role -- "Technical Intern - Masters or PhD" states the
+    requirement more plainly than most description prose -- and, critically, it
+    is available when the description is not. JS-rendered boards (Workday,
+    Ashby, Oracle) often yield no text at all, and a grad-only posting on one of
+    those was reaching the notification channel purely because nothing could be
+    read from the page.
+
+    Text-only classification remains available as classify_text() and is what
+    --eval scores, so the measured figures stay comparable.
+    """
+    title = (title or "").strip()
+    if title:
+        t_grad  = TITLE_GRAD_RE.search(title)
+        t_under = TITLE_UNDERGRAD_RE.search(title)
+        if t_grad and not t_under:
+            return MS, [("title", title)]
+        if t_under and not t_grad:
+            return BS, [("title", title)]
+
+    if text and text.strip():
+        return classify_text(text)
+
+    # Nothing to read and nothing in the title.
+    return OPEN, []
+
+
 def needs_grad(label):
     return label == MS
 
