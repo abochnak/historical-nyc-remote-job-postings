@@ -23,6 +23,11 @@ on:
         type: boolean
         required: false
         default: false
+      drop_bad:
+        description: "One-off cleanup: discard stored text that isn't a job posting, then refetch it"
+        type: boolean
+        required: false
+        default: false
 
 # Shares the lock with update.yml -- both force-push the data branch.
 concurrency:
@@ -74,6 +79,12 @@ jobs:
           ARGS="--limit $LIMIT --workers 6 --host-delay 2"
           if [ "${{ github.event.inputs.retry_failed }}" = "true" ]; then
             ARGS="$ARGS --retry-failed"
+          fi
+          # Deliberately not part of the schedule: --drop-bad rewrites stored
+          # text and is a one-off repair, not something to run unattended every
+          # night. Trigger it by hand when there is junk to clear out.
+          if [ "${{ github.event.inputs.drop_bad }}" = "true" ]; then
+            ARGS="$ARGS --drop-bad"
           fi
           echo "Running: backfill_text.py $ARGS"
           python scraper/backfill_text.py $ARGS
