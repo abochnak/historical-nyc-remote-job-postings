@@ -74,6 +74,8 @@ ROOT          = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR      = os.path.join(ROOT, "data")
 DETAILS_CSV   = os.path.join(DATA_DIR, "job_details.csv")
 DETAILS_JSONL = os.path.join(DATA_DIR, "job_details.jsonl")
+NYC_CSV       = os.path.join(DATA_DIR, "nyc_jobs.csv")
+REM_CSV       = os.path.join(DATA_DIR, "remote_jobs.csv")
 
 MS   = "MS Required"
 BS   = "BS/BA Required"
@@ -225,6 +227,58 @@ def load_texts():
     return texts
 
 
+def load_seasons():
+    """
+    recruiting_season by job id, from the two job CSVs.
+
+    listings.json is the authority for the term, but it only reaches
+    nyc_jobs.csv / remote_jobs.csv -- job_details.csv had no season column at
+    all until it was added, so existing rows need it joined back in.
+    """
+    seasons = {}
+    for path in (NYC_CSV, REM_CSV):
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                jid = (row.get("id") or "").strip()
+                val = (row.get("recruiting_season") or "").strip()
+                if jid and val and jid not in seasons:
+                    seasons[jid] = val
+    return seasons
+
+
+def usable(value):
+    v = (value or "").strip()
+    return v if v and v.upper() not in ("N/A", "NA") else ""
+
+
+def resolve_season(row, seasons, text):
+    """
+    Term for one posting: listings.json first, the description second.
+
+    Returns (value, source) where source is "existing", "listings", "text", or
+    "" when nothing usable was found -- which is better than recording "N/A" as
+    though it were a term. The source is returned rather than inferred by the
+    caller: a posting whose listings entry says "N/A" still has an entry, so
+    checking only for presence reported description-derived terms as having come
+    from listings.json.
+    """
+    existing = usable(row.get("recruiting_season"))
+    if existing:
+        return existing, "existing"
+
+    from_listings = usable(seasons.get(row["id"]))
+    if from_listings:
+        return from_listings, "listings"
+
+    if text:
+        from_text = extract_season(text)
+        if from_text:
+            return from_text, "text"
+    return "", ""
+
+
 def save_details(rows, fieldnames):
     tmp = DETAILS_CSV + ".tmp"
     with open(tmp, "w", newline="", encoding="utf-8") as f:
@@ -309,6 +363,10 @@ def main():
 
     rows, fieldnames = load_details()
     texts = load_texts()
+    if "recruiting_season" not in fieldnames:
+        # Insert where update.py's DETAILS_HEADERS puts it, so the two agree.
+        at = fieldnames.index("archive_status") + 1 if "archive_status" in fieldnames else len(fieldnames)
+        fieldnames.insert(at, "recruiting_season")
 
     if args.explain:
         row = next((r for r in rows if r["id"] == args.explain), None)
@@ -346,12 +404,36 @@ def main():
     print(f"  to classify this run  : {len(todo):,}")
     print()
 
+    # Season is filled for every posting, not just the ones being classified:
+    # it comes from listings.json for most, and needs no description text.
+    seasons = load_seasons()
+    season_filled = season_from_text = 0
+    for row in rows:
+        before = (row.get("recruiting_season") or "").strip()
+        if before and before.upper() not in ("N/A", "NA"):
+            continue
+        resolved, source = resolve_season(row, seasons, texts.get(row["id"], ""))
+        if not resolved:
+            continue
+        if not args.dry_run:
+            row["recruiting_season"] = resolved
+        season_filled += 1
+        if source == "text":
+            season_from_text += 1
+
     counts = {}
     for row in todo:
         label, _ = classify_text(texts[row["id"]])
         counts[label] = counts.get(label, 0) + 1
         if not args.dry_run:
             row["degree_enrollment"] = label
+
+    if season_filled:
+        from_listings = season_filled - season_from_text
+        print(f"  recruiting_season filled for {season_filled:,} posting(s): "
+              f"{from_listings:,} from listings.json, "
+              f"{season_from_text:,} read from the description")
+        print()
 
     for label, c in sorted(counts.items(), key=lambda kv: -kv[1]):
         print(f"    {c:>4}  {label}")

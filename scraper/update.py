@@ -111,6 +111,7 @@ DETAILS_HEADERS = [
     "id", "company_name", "title", "job_url",
     "archive_url", "archive_source",
     "archive_status",
+    "recruiting_season",
     "category", "class_year", "degree_enrollment", "additional_skills", "language_requirements", "date_archived",
     # Written by simplify_closes.py. It must be listed here: save_details() uses
     # these as the CSV fieldnames with extrasaction="ignore", so a column absent
@@ -578,6 +579,7 @@ def main():
                     "company_name":     row["company_name"],
                     "title":            row["title"],
                     "job_url":          row["url"],
+                    "recruiting_season": row.get("recruiting_season", ""),
                     "archive_url":      "",
                     "archive_source":   "",
                     "archive_status":   "pending",
@@ -682,6 +684,11 @@ def main():
                         season = classify.extract_season(text) or ""
                     except Exception:
                         season = ""
+                    # Keep it. This used to be computed for the Discord message
+                    # and thrown away, so a term recovered from the description
+                    # never reached the dataset.
+                    if season and jid in details_map:
+                        details_map[jid]["recruiting_season"] = season
 
                 announce.append({
                     "company_name":      row["company_name"],
@@ -727,6 +734,7 @@ def main():
                 "date_archived":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "status":          existing.get("status", "unreviewed"),
                 "source":          existing.get("source", "simplify"),
+                "recruiting_season": existing.get("recruiting_season", ""),
                 "first_seen_date": existing.get("first_seen_date", job.get("first_seen_date", "")),
                 # Step 5b already captured this from the live posting, which is
                 # a better source than an archive rendering of it. Only take the

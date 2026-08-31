@@ -125,7 +125,12 @@ One message per posting, up to ten; beyond that they are grouped so a catch-up
 run can't fire dozens of requests at a webhook that allows about thirty a
 minute. The season is dropped when the posting has none.
 
-The term comes from `listings.json`. When that says `N/A` — 11% of the archive —
+The term is stored on every posting in `job_details.csv` as `recruiting_season`,
+joined from `listings.json` (via the two job CSVs) by `classify.py`. Of 543
+archived postings, 486 have one: 481 from `listings.json`, 5 read from the
+description.
+
+When `listings.json` says `N/A` — 11% of the archive —
 `classify.extract_season()` reads it out of the description instead, but only
 when the description names one term unambiguously (93% precision, commits on
 26% of postings). In practice this recovers few: of 61 archived postings with
@@ -226,7 +231,7 @@ These are recorded as `empty` / `gone` rather than retried forever.
 |---|---|
 | `data/nyc_jobs.csv` | Postings located in NYC |
 | `data/remote_jobs.csv` | Postings where every location is remote |
-| `data/job_details.csv` | Per-posting metadata, archive URL, review status |
+| `data/job_details.csv` | Per-posting metadata, recruiting term, archive URL, review status |
 | `data/job_details.jsonl` | `{id, raw_text}` — the description text |
 | `data/backfill_status.csv` | Per-posting scrape outcome |
 | `data/simplify_transitions.csv` | Append-only log of observed open/close transitions |
