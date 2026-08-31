@@ -316,7 +316,7 @@ def main():
         page = context.new_page()
         # Images and fonts are pure cost here -- the text is what matters.
         page.route("**/*.{png,jpg,jpeg,gif,svg,webp,woff,woff2,ttf,otf}",
-                   lambda route: route.abort())
+                   lambda route, request: route.abort())
 
         try:
             for i, row in enumerate(todo, 1):
