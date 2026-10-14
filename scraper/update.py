@@ -106,6 +106,16 @@ MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
 # The cap here only exists so a catch-up run (--commits 200) can't fetch
 # thousands of pages in one go. Anything over it is left to backfill-text.yml.
 MAX_TEXT_PER_RUN = 80
+
+# How grad-only postings are handled when announcing (env GRAD_FILTER):
+#   full  -- suppress on title OR description (the original behaviour; default)
+#   title -- suppress only when the title alone says grad-only
+#   tag   -- never suppress; announce with a "possibly grad-only" marker
+# The classifier is ~70% precise on grad-only, so "full" hides roughly three
+# undergrad-eligible postings in every ten it suppresses.
+GRAD_FILTER = (os.environ.get("GRAD_FILTER") or "full").strip().lower()
+if GRAD_FILTER not in ("full", "title", "tag"):
+    GRAD_FILTER = "full"
 TEXT_WORKERS     = 6   # concurrent fetches, throttled per host by jobtext
 TEXT_HOST_DELAY  = 2.0
 
@@ -462,7 +472,7 @@ def main():
     print(f"  Auth    : unauthenticated (public repo)")
     print(f"  Fetch   : last {args.commits} commits touching {FILE_PATH}")
     print(f"  Archive : {'skipped (--skip-archive)' if args.skip_archive else 'enabled'}")
-    print(f"  Discord : {notify.describe_target()}")
+    print(f"  Discord : {notify.describe_target()} (grad filter: {GRAD_FILTER})")
     print()
 
     # 1. Load exclusions
@@ -707,7 +717,16 @@ def main():
                 # undergraduate could have applied to. That is why the count is
                 # printed rather than dropped quietly, and why the ledger still
                 # records them -- a suppressed posting is not announced later.
-                if level and classify.needs_grad(level):
+                grad_flag = bool(level and classify.needs_grad(level))
+                if grad_flag and GRAD_FILTER == "title":
+                    # Re-classify on the title alone; text-driven calls don't suppress.
+                    try:
+                        t_level, _ = classify.classify_posting(row.get("title", ""), "")
+                    except Exception:
+                        t_level = None
+                    if not (t_level and classify.needs_grad(t_level)):
+                        grad_flag = False
+                if grad_flag and GRAD_FILTER != "tag":
                     suppressed.append((row, level))
                     continue
                 # listings.json is authoritative for the term. Only when it
@@ -728,7 +747,8 @@ def main():
 
                 announce.append({
                     "company_name":      row["company_name"],
-                    "title":             row["title"],
+                    "title":             (("[possibly grad-only] " if grad_flag else "")
+                                          + row["title"]),
                     "url":               row["url"],
                     "recruiting_season": season,
                     "degree_level":      level,
