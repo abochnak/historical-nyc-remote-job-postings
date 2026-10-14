@@ -10,7 +10,6 @@ on:
         type: choice
         options: ["test", "prod"]
         required: false
-        default: "test"
       commits:
         description: "Number of commits to check (default 5, use 100+ for catch-up)"
         required: false
@@ -70,10 +69,12 @@ jobs:
           DISCORD_WEBHOOK_URL_2: ${{ secrets.DISCORD_WEBHOOK_URL_2 }}
           DISCORD_WEBHOOK_URL_3: ${{ secrets.DISCORD_WEBHOOK_URL_3 }}
           DISCORD_WEBHOOK_URL_TEST: ${{ secrets.DISCORD_WEBHOOK_URL_TEST }}
-          # A scheduled run has no inputs, so it resolves to prod. A
-          # hand-triggered run defaults to test, because a manual run is
-          # usually an experiment.
+          # Anything that does not explicitly ask for "test" resolves to prod:
+          # scheduled runs, and API/cron-triggered dispatches with no inputs.
+          # (A "default: test" on the input used to send those to test.)
           NOTIFY_TARGET: ${{ github.event.inputs.notify_target || 'prod' }}
+          # full | title | tag -- see update.py. Set as a repository variable.
+          GRAD_FILTER: ${{ vars.GRAD_FILTER || 'full' }}
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch
