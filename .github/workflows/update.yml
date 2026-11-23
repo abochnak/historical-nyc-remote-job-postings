@@ -73,8 +73,8 @@ jobs:
           # scheduled runs, and API/cron-triggered dispatches with no inputs.
           # (A "default: test" on the input used to send those to test.)
           NOTIFY_TARGET: ${{ github.event.inputs.notify_target || 'prod' }}
-          # full | title | tag -- see update.py. Set as a repository variable.
-          GRAD_FILTER: ${{ vars.GRAD_FILTER || 'full' }}
+          # Announce all postings; grad-only calls are marked, not suppressed.
+          GRAD_FILTER: tag
         run: |
           cp -r main/scraper data-branch/scraper
           cd data-branch

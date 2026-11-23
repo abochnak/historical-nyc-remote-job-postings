@@ -108,14 +108,14 @@ MAX_ARCHIVE_ATTEMPTS = 3  # stop retrying after this many failures
 MAX_TEXT_PER_RUN = 80
 
 # How grad-only postings are handled when announcing (env GRAD_FILTER):
-#   full  -- suppress on title OR description (the original behaviour; default)
+#   full  -- suppress on title OR description
 #   title -- suppress only when the title alone says grad-only
-#   tag   -- never suppress; announce with a "possibly grad-only" marker
+#   tag   -- never suppress; announce with a "possibly grad-only" marker (default)
 # The classifier is ~70% precise on grad-only, so "full" hides roughly three
 # undergrad-eligible postings in every ten it suppresses.
-GRAD_FILTER = (os.environ.get("GRAD_FILTER") or "full").strip().lower()
+GRAD_FILTER = (os.environ.get("GRAD_FILTER") or "tag").strip().lower()
 if GRAD_FILTER not in ("full", "title", "tag"):
-    GRAD_FILTER = "full"
+    GRAD_FILTER = "tag"
 TEXT_WORKERS     = 6   # concurrent fetches, throttled per host by jobtext
 TEXT_HOST_DELAY  = 2.0
 
@@ -703,20 +703,15 @@ def main():
                 except Exception:
                     level = None
 
-                # Grad-only postings are not announced -- an undergraduate
-                # cannot apply to them, so the alert is noise.
+                # In the default "tag" mode, every posting is announced and
+                # positive grad calls receive a marker. Explicit "full" and
+                # "title" modes suppress only positive calls; unclassified
+                # postings are still announced because unknown must not mean
+                # "don't tell them".
                 #
-                # Only a positive grad call suppresses. A posting whose text
-                # could not be captured is announced, because "we don't know"
-                # must not silently become "don't tell them": text capture fails
-                # often on JS-rendered boards, and suppressing everything
-                # unclassifiable would hide most of them.
-                #
-                # This is a real trade. The grad call runs at 70% precision, so
-                # roughly three of every ten suppressed postings are ones an
-                # undergraduate could have applied to. That is why the count is
-                # printed rather than dropped quietly, and why the ledger still
-                # records them -- a suppressed posting is not announced later.
+                # The classifier is ~70% precise, so suppressing modes can hide
+                # undergrad-eligible postings. Their suppression count is
+                # printed, and the ledger records them so they are not retried.
                 grad_flag = bool(level and classify.needs_grad(level))
                 if grad_flag and GRAD_FILTER == "title":
                     # Re-classify on the title alone; text-driven calls don't suppress.
