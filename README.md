@@ -143,21 +143,17 @@ the existing behaviour of simply omitting the parenthetical.
 | Posting closed or reopened | daily (`track-simplify-closes.yml`) | which ones |
 | Backfill run | nightly (`backfill-text.yml`) | how many descriptions were recovered |
 
-**Grad-only postings are not announced.** An undergraduate cannot apply to them,
-so the alert is noise. The **title** is checked as well as the description,
-which matters because JS-rendered boards often yield no description at all — a
-posting titled "Technical Intern - Masters or PhD" was announced purely because
-nothing could be read from its page.
+**Every posting is announced**, including ones classified as grad-only. The
+**title** is checked as well as the description, which matters because
+JS-rendered boards often yield no description at all. Positive grad calls are
+marked `[possibly grad-only]` in the notification title; postings without a
+positive call are still announced unmarked.
 
-Only a positive grad call suppresses. A posting with neither a telling title nor
-readable text is still announced, because "we don't know" must not become
-"don't tell them".
-
-This is a real trade, and worth understanding before relying on it: the grad
-call runs at **70% precision**, so roughly three of every ten suppressed
-postings are ones an undergraduate could have applied to. Every suppression is
-printed in the run log with the posting's name, so the cost is visible rather
-than silent.
+The grad call runs at **70% precision**, so roughly three of every ten marked
+postings may be ones an undergraduate could have applied to. Treat the marker
+as a hint, not a definitive eligibility decision. The scheduled workflow uses
+the non-suppressing `tag` mode; `full` and `title` remain available as explicit
+`GRAD_FILTER` settings for local runs.
 
 Each posting is announced **exactly once**. The announcement is driven by what
 a run actually discovered, and `data/notified_ids.txt` records what has been
